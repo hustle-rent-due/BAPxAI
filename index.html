@@ -1,1706 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Breakthrough AI Protocols - AI-Powered Business Solutions</title>
- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
- <style>
- :root {
- --primary: #2563EB;
- --primary-dark: #1D4ED8;
- --secondary: #0EA5E9;
- --accent: #06B6D4;
- --dark: #0F172A;
- --darker: #020617;
- --light: #F1F5F9;
- }
- 
- body {
- font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
- background: transparent;
- min-height: 100vh;
- position: relative;
- z-index: 1;
- color: #e6f0fb;
- }
- 
- .section-overlay {
- background: rgba(15, 23, 42, 0.9);
- padding: 2rem 0;
- border-radius: 8px;
- }
- 
- .dashboard-card {
- transition: transform 0.3s ease, box-shadow 0.3s ease;
- border-left: 4px solid;
- }
- .dashboard-card:hover {
- transform: translateY(-5px);
- box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
- }
- 
- .navigation { 
- background: linear-gradient(to right, var(--primary-dark), var(--primary)); 
- box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
- }
- 
- .notification-dot { 
- position: absolute; 
- top: -5px; 
- right: -5px; 
- width: 12px; 
- height: 12px; 
- background-color: #EF4444; 
- border-radius: 50%; 
- }
- 
- .pulse { 
- animation: pulse 1.5s infinite; 
- }
- @keyframes pulse {
- 0% { transform: scale(1); opacity: 1; }
- 50% { transform: scale(1.1); opacity: 0.8; }
- 100% { transform: scale(1); opacity: 1; }
- }
- 
- #map { 
- height: 400px; 
- max-height: 70vh; 
- border-radius: 8px;
- z-index: 1;
- }
- 
- .chart-container {
- position: relative;
- height: 300px;
- width: 100%;
- }
- 
- .demo-header {
- background: linear-gradient(to right, var(--primary-dark), var(--primary));
- color: white;
- padding: 0.5rem;
- text-align: center;
- border-bottom: 1px solid #e5e7eb;
- }
- 
- /* Enhanced Dashboard Styles */
- .quantum-grid {
- background-image: 
-     linear-gradient(rgba(37, 99, 235, 0.1) 1px, transparent 1px),
-     linear-gradient(90deg, rgba(37, 99, 235, 0.1) 1px, transparent 1px);
- background-size: 20px 20px;
- animation: gridShift 20s linear infinite;
- }
- 
- @keyframes gridShift {
- 0% { background-position: 0 0; }
- 100% { background-position: 20px 20px; }
- }
- 
- .kpi-card {
- transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
- position: relative;
- overflow: hidden;
- transform-style: preserve-3d;
- cursor: pointer;
- background: rgba(15, 23, 42, 0.9);
- border: 1px solid rgba(37, 99, 235, 0.3);
- border-radius: 12px;
- }
- 
- .kpi-card:hover {
- transform: translateY(-10px) rotateX(5deg) rotateY(2deg);
- box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(37, 99, 235, 0.5);
- }
- 
- .holographic-display {
- background: linear-gradient(135deg, 
-     rgba(37, 99, 235, 0.1) 0%, 
-     rgba(14, 165, 233, 0.1) 50%, 
-     rgba(6, 182, 212, 0.1) 100%);
- border: 1px solid rgba(37, 99, 235, 0.3);
- position: relative;
- border-radius: 12px;
- }
- 
- .neon-border {
- border: 2px solid var(--primary);
- box-shadow: 0 0 20px var(--primary);
- animation: neonPulse 3s ease-in-out infinite alternate;
- }
- 
- @keyframes neonPulse {
- from { box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 40px var(--primary); }
- to { box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary); }
- }
- 
- .scenario-impact {
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 1.8rem;
- font-weight: bold;
- color: var(--primary);
- text-shadow: 0 0 20px var(--primary);
- animation: impactGlow 2s ease-in-out infinite alternate;
- }
- 
- @keyframes impactGlow {
- from { text-shadow: 0 0 20px var(--primary); }
- to { text-shadow: 0 0 40px var(--primary), 0 0 80px var(--primary); }
- }
- 
- .advanced-slider {
- position: relative;
- height: 8px;
- background: linear-gradient(90deg, var(--dark), var(--primary));
- border-radius: 4px;
- overflow: hidden;
- }
- 
- .advanced-slider input {
- width: 100%;
- height: 100%;
- appearance: none;
- background: transparent;
- cursor: pointer;
- }
- 
- .advanced-slider input::-webkit-slider-thumb {
- appearance: none;
- width: 20px;
- height: 20px;
- border-radius: 50%;
- background: var(--primary);
- box-shadow: 0 0 20px var(--primary);
- cursor: pointer;
- }
- 
- .quantum-button {
- background: linear-gradient(45deg, var(--primary), var(--secondary));
- border: none;
- color: var(--dark);
- font-weight: bold;
- position: relative;
- overflow: hidden;
- transition: all 0.3s ease;
- }
- 
- .quantum-button:hover {
- transform: scale(1.05);
- box-shadow: 0 0 20px var(--primary);
- }
- 
- .ai-recommendation {
- background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(37, 99, 235, 0.1));
- border-left: 4px solid var(--secondary);
- position: relative;
- overflow: hidden;
- border-radius: 8px;
- }
- 
- .real-time-feed {
- max-height: 300px;
- overflow-y: auto;
- scrollbar-width: thin;
- scrollbar-color: var(--primary) transparent;
- }
- 
- .real-time-feed::-webkit-scrollbar {
- width: 8px;
- }
- 
- .real-time-feed::-webkit-scrollbar-track {
- background: rgba(0, 0, 0, 0.2);
- }
- 
- .real-time-feed::-webkit-scrollbar-thumb {
- background: var(--primary);
- border-radius: 4px;
- }
- 
- .risk-radar {
- position: relative;
- width: 200px;
- height: 200px;
- margin: 0 auto;
- background: radial-gradient(circle, rgba(37, 99, 235, 0.1), transparent);
- border-radius: 50%;
- overflow: hidden;
- }
- 
- .radar-sweep {
- position: absolute;
- width: 50%;
- height: 2px;
- background: linear-gradient(90deg, var(--primary), transparent);
- top: 50%;
- left: 50%;
- transform-origin: 0 50%;
- animation: radarSweep 3s linear infinite;
- }
- 
- @keyframes radarSweep {
- 0% { transform: rotate(0deg); }
- 100% { transform: rotate(360deg); }
- }
- 
- .threat-indicator {
- position: absolute;
- width: 10px;
- height: 10px;
- background: #EF4444;
- border-radius: 50%;
- animation: threatPulse 1s ease-in-out infinite;
- }
- 
- @keyframes threatPulse {
- 0%, 100% { opacity: 1; transform: scale(1); }
- 50% { opacity: 0.5; transform: scale(1.5); }
- }
- 
- /* Particle Container */
- #particles-js {
- position: fixed;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- z-index: -1;
- background: linear-gradient(to bottom, #0f172a, #1e293b);
- overflow: hidden;
- }
- 
- /* Social Media Icons */
- .social-icon {
- display: inline-flex;
- align-items: center;
- justify-content: center;
- width: 36px;
- height: 36px;
- border-radius: 50%;
- background: rgba(255, 255, 255, 0.1);
- color: #e6f0fb;
- transition: all 0.3s ease;
- margin-right: 8px;
- }
- .social-icon:hover {
- background: var(--primary);
- transform: translateY(-3px);
- }
- 
- @media (max-width: 768px) {
- .grid-cols-1 { grid-template-columns: 1fr; }
- .map-container { height: 250px; }
- .kpi-card:hover { transform: translateY(-5px); }
- .text-3xl { font-size: 1.5rem; }
- .text-4xl { font-size: 2rem; }
- }
- </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BAP UI™ — SecOps & Compliance Command Center</title>
+  <meta name="description" content="Live Security Ops → SOC2/ISO/NIST export in minutes. Works with Splunk, CrowdStrike, Okta. Read-only keys, SSO, RBAC, audit logs. Managed or Private deploy." />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="BAP UI — SecOps & Compliance Command Center" />
+  <meta property="og:description" content="Live risk + Next Best Actions → SOC2/ISO/NIST export in minutes. Works with Splunk, CrowdStrike, Okta." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- CDNs -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root { --primary:#2563EB; --accent:#06B6D4; }
+    body { background:#0b1220; color:#e6f0fb; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; }
+    .glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.08); }
+    .btn-primary { background: linear-gradient(90deg,#22c55e,#16a34a); color: #fff; padding:.7rem 1rem; border-radius:.6rem; font-weight:700; }
+    .btn-ghost { border:1px solid rgba(255,255,255,0.15); padding:.6rem .9rem; border-radius:.6rem; font-weight:700; }
+    .kpi { background: rgba(255,255,255,0.05); padding:.75rem; border-radius:.6rem; }
+    .section { padding: 3rem 0; }
+    .brand-dot { height: 32px; width: 32px; border-radius: 6px;
+      background: linear-gradient(135deg, #60a5fa, #22c55e 50%, #d946ef 100%);
+      display: grid; place-items: center; color:#0b1220; font-weight:800; }
+    a { transition: opacity .15s ease; }
+    a:hover { opacity: .9; }
+  </style>
 </head>
-<body class="quantum-grid">
- <div id="particles-js"></div>
+<body>
 
- <!-- Main Website Navigation -->
- <nav class="bg-white shadow-lg fixed w-full z-50">
- <div class="container mx-auto px-4">
- <div class="flex justify-between items-center py-4">
- <div class="flex items-center space-x-3">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" alt="Breakthrough AI Protocols Logo" class="logo-img h-8">
- <h1 class="text-xl font-bold text-gray-800">Breakthrough AI Protocols</h1>
- </div>
- <div class="hidden md:flex items-center space-x-8">
- <a href="#services" class="nav-link text-gray-600 hover:text-blue-600">Services</a>
- <a href="#methodology" class="nav-link text-gray-600 hover:text-blue-600">Methodology</a>
- <a href="#case-studies" class="nav-link text-gray-600 hover:text-blue-600">Case Studies</a>
- <a href="#demo" class="nav-link text-gray-600 hover:text-blue-600">Demo</a>
- <a href="#faq" class="nav-link text-gray-600 hover:text-blue-600">FAQ</a>
- <a href="#contact" class="nav-link text-gray-600 hover:text-blue-600">Contact</a>
- <a href="#demo" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">View Demo</a>
- </div>
- <button id="mobile-menu-btn" class="md:hidden text-xl text-gray-600">
- <i class="fas fa-bars"></i>
- </button>
- </div>
- </div>
- </nav>
+  <!-- NAV -->
+  <nav class="fixed top-0 inset-x-0 z-50 glass">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="brand-dot">B</div>
+        <div class="font-bold tracking-tight">BAP UI™</div>
+      </div>
+      <div class="hidden md:flex items-center space-x-6 text-sm">
+        <a href="#hubs" class="hover:text-blue-300">Hubs</a>
+        <a href="#integrations" class="hover:text-blue-300">Integrations</a>
+        <a href="#packages" class="hover:text-blue-300">Packages</a>
+        <a href="#free" class="hover:text-blue-300">Free Pack</a>
+        <a href="#demo" class="btn-primary">Book Walkthrough</a>
+        <!-- Optional: link to your previous general page if you keep it -->
+        <!-- <a href="all-services.html" class="hover:text-blue-300">All Services</a> -->
+      </div>
+    </div>
+  </nav>
 
- <!-- Mobile Menu -->
- <div id="mobile-menu" class="fixed inset-0 bg-white z-40 hidden">
- <div class="container mx-auto px-4 py-8">
- <div class="flex justify-between items-center mb-8">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" alt="Breakthrough AI Protocols Logo" class="logo-img h-8">
- <button id="close-menu" class="text-2xl text-gray-600">
- <i class="fas fa-times"></i>
- </button>
- </div>
- <div class="flex flex-col space-y-6 text-center">
- <a href="#services" class="text-xl font-medium text-gray-800">Services</a>
- <a href="#methodology" class="text-xl font-medium text-gray-800">Methodology</a>
- <a href="#case-studies" class="text-xl font-medium text-gray-800">Case Studies</a>
- <a href="#demo" class="text-xl font-medium text-gray-800">Demo</a>
- <a href="#faq" class="text-xl font-medium text-gray-800">FAQ</a>
- <a href="#contact" class="text-xl font-medium text-gray-800">Contact</a>
- <a href="#demo" class="bg-blue-600 text-white py-3 px-6 rounded-lg text-xl font-medium">View Demo</a>
- </div>
- </div>
- </div>
+  <!-- HERO -->
+  <header class="pt-28 pb-10">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="uppercase tracking-wide text-xs mb-2 opacity-70">Security Ops & Compliance</div>
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+            Live Ops → <span class="text-blue-300">SOC2/ISO/NIST</span> export in minutes.
+          </h1>
+          <p class="mt-4 opacity-90">
+            Works with your stack: <b>Splunk • CrowdStrike • Okta</b>. Read-only keys, SSO, RBAC, audit logs.
+            Deploy managed by us or in your cloud (single container).
+          </p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="#free" class="btn-primary"><i class="fa-solid fa-gift mr-2"></i>Get Free Pack</a>
+            <a href="#integrations" class="btn-ghost"><i class="fa-solid fa-plug mr-2"></i>See Integrations</a>
+          </div>
+        </div>
 
- <!-- Hero Section -->
- <section class="hero-section section-overlay">
- <div class="container mx-auto px-4 py-16 text-center">
- <h1 class="text-4xl md:text-5xl font-bold mb-6">AI That Thinks, Dashboards That Deliver</h1>
- <p class="text-xl mb-10 max-w-3xl mx-auto">
- Unlock the power of custom AI solutions, interactive dashboards, and real-time data hubs. 
- Scale faster, automate smarter, and make business decisions with precision that outpaces the competition.
- </p>
- <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
- <a href="#services" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg text-lg font-medium transition">
- Explore Services
- </a>
- <a href="#demo" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-3 px-8 rounded-lg text-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition">
- See Our Tech In Action
- </a>
- </div>
- </div>
- </section>
+        <div class="glass rounded-xl p-3">
+          <div class="text-sm mb-2 flex items-center justify-between">
+            <div class="font-semibold">SecOps Command Center (demo)</div>
+            <div class="text-xs opacity-70">live simulated data</div>
+          </div>
 
- <!-- Stats Section -->
- <section class="section-overlay">
- <div class="container mx-auto px-4">
- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
- <div class="p-4">
- <div class="stat-number">98%</div>
- <h3 class="text-lg font-semibold text-gray-200 mt-2">CLIENT SATISFACTION</h3>
- <p class="text-gray-400 mt-1 text-sm">Clients consistently praise our AI solutions and service quality</p>
- </div>
- <div class="p-4">
- <div class="stat-number">50+</div>
- <h3 class="text-lg font-semibold text-gray-200 mt-2">PROJECTS COMPLETED</h3>
- <p class="text-gray-400 mt-1 text-sm">Delivered tailored AI systems across diverse industries</p>
- </div>
- <div class="p-4">
- <div class="stat-number">45%</div>
- <h3 class="text-lg font-semibold text-gray-200 mt-2">AVG. REVENUE GROWTH</h3>
- <p class="text-gray-400 mt-1 text-sm">Clients see measurable ROI after implementing our solutions</p>
- </div>
- </div>
- </div>
- </section>
+          <!-- DEMO IFRAME: keep the file in same folder -->
+          <iframe src="cyber_command_center-2_plus.html"
+                  class="w-full h-80 rounded-lg border border-white border-opacity-10"></iframe>
 
- <!-- Services Section -->
- <section id="services" class="section-overlay">
- <div class="container mx-auto px-4">
- <h2 class="text-3xl font-bold text-center text-gray-200 mb-8">Our Services</h2>
- <p class="text-lg text-center text-gray-400 mb-8 max-w-3xl mx-auto">AI solutions designed for measurable business results across all industries.</p>
- 
- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- <div class="kpi-card p-6 rounded-lg">
- <div class="flex items-center mb-4">
- <div class="bg-blue-100 p-2 rounded-full mr-2">
- <i class="fas fa-clock text-blue-600 text-xl"></i>
- </div>
- <h3 class="text-xl font-bold text-gray-200">Hourly AI Consultation</h3>
- </div>
- <p class="text-gray-400 mb-4 text-sm">Expert AI strategy, process optimization, and implementation guidance tailored to your specific business needs.</p>
- <ul class="space-y-2 mb-4">
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Custom AI strategy development</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Process optimization analysis</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Implementation guidance</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Flexible booking options</li>
- </ul>
- <div class="flex justify-between items-center">
- <span class="text-xl font-bold text-blue-400">$500/hour</span>
- <a href="https://book.stripe.com/8x28wP0uobrE6Qz4N12wU0u" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded-lg text-sm transition">Book Now</a>
- </div>
- </div>
- 
- <div class="kpi-card p-6 rounded-lg">
- <div class="flex items-center mb-4">
- <div class="bg-purple-100 p-2 rounded-full mr-2">
- <i class="fas fa-chart-network text-purple-600 text-xl"></i>
- </div>
- <h3 class="text-xl font-bold text-gray-200">Custom AI Hubs & Interactive Dashboards</h3>
- </div>
- <p class="text-gray-400 mb-4 text-sm">We build tailored AI-powered hubs, dashboards, and interactive simulations that automate insights, visualize data, and enhance user engagement for any industry.</p>
- <ul class="space-y-2 mb-4">
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Custom AI solution design</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Interactive data visualization</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Ongoing support & maintenance</li>
- <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1"></i> Performance analytics dashboard</li>
- </ul>
- <div class="flex justify-between items-center">
- <span class="text-xl font-bold text-purple-400">Custom Pricing</span>
- <a href="https://docs.google.com/forms/d/e/1FAIpQLScw4NqC2XE18iAzFEr7J598AjxQ8Hl2GEIP7O7pygEpDBURqw/viewform?usp=header" target="_blank" class="bg-purple-600 hover:bg-purple-700 text-white py-1 px-4 rounded-lg text-sm transition">Request Quote</a>
- </div>
- </div>
- </div>
- </div>
- </section>
+          <div class="grid grid-cols-3 gap-3 mt-3 text-xs">
+            <div class="kpi"><div class="opacity-70">Risk</div><div class="text-2xl font-extrabold">High</div></div>
+            <div class="kpi"><div class="opacity-70">MTTD</div><div class="text-2xl font-extrabold">~28m</div></div>
+            <div class="kpi"><div class="opacity-70">MTTR</div><div class="text-2xl font-extrabold">~9h</div></div>
+          </div>
+          <p class="text-xs opacity-60 mt-2">If the demo doesn’t load, place <b>cyber_command_center-2_plus.html</b> next to this file.</p>
+        </div>
+      </div>
+    </div>
+  </header>
 
- <!-- Demo Section with Enhanced Supply Chain Dashboard -->
- <section id="demo" class="py-12">
- <div class="container mx-auto px-4">
- <h2 class="text-3xl font-bold text-center text-gray-200 mb-4">Interactive Supply Chain Dashboard</h2>
- <p class="text-lg text-center text-gray-400 mb-8 max-w-3xl mx-auto">
- Experience our advanced AI dashboard technology with realistic data visualization and predictive analytics.
- </p>
- 
- <!-- Enhanced Supply Chain Dashboard -->
- <div class="max-w-7xl mx-auto">
- <!-- Header -->
- <header class="flex items-center justify-between mb-8 flex-wrap relative">
- <div class="floating">
- <h1 class="text-3xl md:text-4xl font-bold tracking-tight flex items-center">
- <i class="fas fa-brain text-blue-500 mr-4"></i>
- QUANTUM SUPPLY CHAIN
- </h1>
- <p class="text-slate-300 mt-1">AI-Powered Predictive Risk Intelligence System</p>
- </div>
- 
- <div class="flex items-center mt-4 md:mt-0">
- <!-- Real-time Status Indicators -->
- <div class="mr-6 grid grid-cols-2 gap-2 text-center">
- <div class="kpi-card p-2 rounded-lg">
- <div class="text-xs text-slate-400">AI Confidence</div>
- <div class="text-lg font-bold text-blue-400" id="aiConfidence">94.7%</div>
- </div>
- <div class="kpi-card p-2 rounded-lg">
- <div class="text-xs text-slate-400">Threat Level</div>
- <div class="text-lg font-bold text-yellow-400" id="threatLevel">MEDIUM</div>
- </div>
- </div>
- 
- <!-- Enhanced Health Score Display -->
- <div class="relative">
- <div class="risk-radar">
- <div class="radar-sweep"></div>
- <div class="threat-indicator" style="top: 30%; left: 60%;"></div>
- <div class="threat-indicator" style="top: 70%; left: 40%;"></div>
- <div class="absolute inset-0 flex items-center justify-center">
- <div class="text-center">
- <div class="text-xs text-slate-400">RESILIENCE</div>
- <div class="text-3xl font-bold text-blue-500" id="healthScore">92.4</div>
- </div>
- </div>
- </div>
- </div>
- </div>
- </header>
+  <!-- HUBS -->
+  <section id="hubs" class="section">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2">The 4 hubs leaders want first</h2>
+      <p class="opacity-80">Answer: What’s burning? Who owns it? Are we compliant? How fast do we fix?</p>
 
- <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
- <!-- Enhanced KPI Section -->
- <section class="lg:col-span-8 space-y-6">
- <!-- KPI Grid with Enhanced Visuals -->
- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- <!-- Predictive Demand Forecast -->
- <div class="kpi-card holographic-display p-6 rounded-2xl relative overflow-hidden neon-border">
- <div class="absolute top-2 right-2 text-xs bg-blue-500/20 px-2 py-1 rounded-full text-blue-400">PREDICTIVE</div>
- <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">AI Demand Forecast</div>
- <div class="text-4xl font-bold text-blue-500 mb-2" id="forecastAcc">94.7%</div>
- <div class="text-xs text-slate-300 mb-4">Neural Engine Accuracy | Target: 95%</div>
- <div class="chart-container">
- <canvas id="chartForecast"></canvas>
- </div>
- <div class="absolute bottom-2 right-2 flex items-center text-xs text-blue-400">
- <i class="fas fa-arrow-up mr-1"></i> +8.7%
- <i class="fas fa-brain ml-2 text-blue-500"></i>
- </div>
- </div>
+      <div class="grid md:grid-cols-2 gap-5 mt-6">
+        <div class="glass rounded-lg p-4">
+          <h3 class="font-bold">Live SecOps</h3>
+          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
+            <li>Risk gauge, incident feed, geo map</li>
+            <li>Owner prompts, escalation, trends</li>
+            <li>MTTD / MTTR visibility</li>
+          </ul>
+        </div>
 
- <!-- Quantum Inventory Optimization -->
- <div class="kpi-card holographic-display p-6 rounded-2xl relative overflow-hidden neon-border">
- <div class="absolute top-2 right-2 text-xs bg-blue-500/20 px-2 py-1 rounded-full text-blue-400">QUANTUM</div>
- <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">Quantum Turns</div>
- <div class="text-4xl font-bold text-blue-400 mb-2" id="invTurns">5.8x</div>
- <div class="text-xs text-slate-300 mb-4">AI-Optimized Flow | Target: 6.0x</div>
- <div class="chart-container">
- <canvas id="chartInv"></canvas>
- </div>
- <div class="absolute bottom-2 right-2 flex items-center text-xs text-blue-400">
- <i class="fas fa-arrow-up mr-1"></i> +1.6
- <i class="fas fa-atom ml-2 text-blue-500"></i>
- </div>
- </div>
+        <div class="glass rounded-lg p-4">
+          <h3 class="font-bold">Compliance & Evidence</h3>
+          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
+            <li>SOC2 / ISO 27001 / NIST CSF coverage</li>
+            <li>One-click CSV/PDF exports</li>
+            <li>Audit trails, access logs</li>
+          </ul>
+        </div>
 
- <!-- Hyper-Precise Delivery -->
- <div class="kpi-card holographic-display p-6 rounded-2xl relative overflow-hidden neon-border">
- <div class="absolute top-2 right-2 text-xs bg-cyan-500/20 px-2 py-1 rounded-full text-cyan-400">HYPER</div>
- <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">Precision Delivery</div>
- <div class="text-4xl font-bold text-cyan-500 mb-2" id="otd">97.3%</div>
- <div class="text-xs text-slate-300 mb-4">Nano-Second Precision | Target: 98%</div>
- <div class="chart-container">
- <canvas id="chartOTD"></canvas>
- </div>
- <div class="absolute bottom-2 right-2 flex items-center text-xs text-blue-400">
- <i class="fas fa-arrow-up mr-1"></i> +5.3%
- <i class="fas fa-rocket ml-2 text-cyan-500"></i>
- </div>
- </div>
+        <div class="glass rounded-lg p-4">
+          <h3 class="font-bold">Vulnerability & Patch</h3>
+          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
+            <li>Overdue criticals, SLAs, patch score</li>
+            <li>Owner nudges into Jira/ServiceNow</li>
+            <li>Coverage by BU / platform</li>
+          </ul>
+        </div>
 
- <!-- Zero-Waste Fleet -->
- <div class="kpi-card holographic-display p-6 rounded-2xl relative overflow-hidden neon-border">
- <div class="absolute top-2 right-2 text-xs bg-red-500/20 px-2 py-1 rounded-full text-red-400">CRITICAL</div>
- <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">Idle Fleet Ratio</div>
- <div class="text-4xl font-bold text-red-500 mb-2" id="idleFleet">3.2%</div>
- <div class="text-xs text-slate-300 mb-4">Zero-Waste Target | Goal: 2%</div>
- <div class="chart-container">
- <canvas id="chartIdle"></canvas>
- </div>
- <div class="absolute bottom-2 right-2 flex items-center text-xs text-blue-400">
- <i class="fas fa-arrow-down mr-1"></i> -8.8%
- <i class="fas fa-leaf ml-2 text-blue-400"></i>
- </div>
- </div>
- </div>
- 
- <!-- Advanced AI Recommendations Engine -->
- <div class="holographic-display rounded-2xl p-6 neon-border">
- <h3 class="font-bold text-xl mb-4 flex items-center">
- <i class="fas fa-brain text-blue-500 mr-3 animate-pulse"></i>
- QUANTUM AI RECOMMENDATIONS
- <div class="ml-auto text-xs bg-blue-400/20 px-3 py-1 rounded-full text-blue-400">
- <i class="fas fa-circle animate-pulse mr-1"></i> LIVE
- </div>
- </h3>
- 
- <div id="aiRecommendations" class="space-y-4">
- <div class="ai-recommendation kpi-card p-4 rounded-xl">
- <div class="flex items-start">
- <div class="bg-blue-500/20 p-3 rounded-lg mr-4">
- <i class="fas fa-route text-blue-500 text-lg"></i>
- </div>
- <div class="flex-1">
- <div class="font-semibold text-lg">Neural Route Optimization</div>
- <div class="text-slate-300 mb-2">AI detected 23% efficiency gain through quantum pathfinding</div>
- <div class="flex justify-between items-center text-sm">
- <span class="text-blue-400">ROI: +$2.3M annually</span>
- <span class="text-blue-500">Confidence: 97.8%</span>
- </div>
- </div>
- </div>
- </div>
- 
- <div class="ai-recommendation kpi-card p-4 rounded-xl">
- <div class="flex items-start">
- <div class="bg-blue-400/20 p-3 rounded-lg mr-4">
- <i class="fas fa-shield-alt text-blue-400 text-lg"></i>
- </div>
- <div class="flex-1">
- <div class="font-semibold text-lg">Predictive Risk Mitigation</div>
- <div class="text-slate-300 mb-2">Deploy emergency inventory to predicted disruption zones</div>
- <div class="flex justify-between items-center text-sm">
- <span class="text-blue-400">Risk Reduction: 67%</span>
- <span class="text-blue-500">Implementation: 2 hours</span>
- </div>
- </div>
- </div>
- </div>
- </div>
- 
- <div class="mt-6 flex space-x-4">
- <button class="quantum-button flex-1 py-3 rounded-lg font-semibold">
- <i class="fas fa-play mr-2"></i> Execute All
- </button>
- <button class="kpi-card flex-1 py-3 rounded-lg font-semibold hover:bg-white/10">
- <i class="fas fa-cog mr-2"></i> Configure AI
- </button>
- </div>
- </div>
- </section>
+        <div class="glass rounded-lg p-4">
+          <h3 class="font-bold">Identity & Access</h3>
+          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
+            <li>MFA coverage, stale accounts</li>
+            <li>JML (joiner/mover/leaver) pipeline</li>
+            <li>Privileged access review</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
- <!-- Advanced Scenario Control Center -->
- <aside class="lg:col-span-4 space-y-6">
- <!-- Quantum Scenario Simulator -->
- <div class="holographic-display p-6 rounded-2xl relative neon-border">
- <div class="flex justify-between items-center mb-4">
- <div class="text-sm text-slate-300">QUANTUM SIMULATOR</div>
- <div class="text-xs bg-blue-500/20 px-3 py-1 rounded-full text-blue-500">
- <i class="fas fa-atom mr-1"></i> ACTIVE
- </div>
- </div>
- 
- <div class="text-2xl font-bold mb-6 flex items-center">
- <span id="scenarioType">Multi-Threat Analysis</span>
- <i class="fas fa-brain ml-2 text-blue-500 animate-pulse"></i>
- </div>
- 
- <div class="space-y-6 mb-6">
- <!-- Enhanced Sliders -->
- <div class="space-y-2">
- <div class="flex justify-between items-center">
- <label class="text-slate-300 text-sm">DEMAND SHOCK</label>
- <span class="scenario-impact" id="demandValue">0%</span>
- </div>
- <div class="advanced-slider">
- <input type="range" id="demandSlider" min="0" max="50" value="0" class="w-full">
- </div>
- <div class="text-xs text-slate-400">Neural prediction confidence: <span id="demandConfidence">100%</span></div>
- </div>
- 
- <div class="space-y-2">
- <div class="flex justify-between items-center">
- <label class="text-slate-300 text-sm">SUPPLY DISRUPTION</label>
- <span class="scenario-impact" id="delayValue">0 DAYS</span>
- </div>
- <div class="advanced-slider">
- <input type="range" id="delaySlider" min="0" max="30" value="0" class="w-full">
- </div>
- <div class="text-xs text-slate-400">Risk assessment: <span id="delayRisk">MINIMAL</span></div>
- </div>
- 
- <div class="space-y-2">
- <div class="flex justify-between items-center">
- <label class="text-slate-300 text-sm">ENERGY CRISIS</label>
- <span class="scenario-impact" id="fuelValue">0%</span>
- </div>
- <div class="advanced-slider">
- <input type="range" id="fuelSlider" min="0" max="100" value="0" class="w-full">
- </div>
- <div class="text-xs text-slate-400">Market volatility: <span id="fuelVolatility">STABLE</span></div>
- </div>
- 
- <div class="space-y-2">
- <div class="flex justify-between items-center">
- <label class="text-slate-300 text-sm">CYBER THREAT</label>
- <span class="scenario-impact" id="cyberValue">0%</span>
- </div>
- <div class="advanced-slider">
- <input type="range" id="cyberSlider" min="0" max="100" value="0" class="w-full">
- </div>
- <div class="text-xs text-slate-400">Security status: <span id="cyberStatus">SECURED</span></div>
- </div>
- </div>
- 
- <!-- Impact Assessment -->
- <div class="holographic-display p-4 rounded-xl mb-6">
- <div class="text-center text-sm text-slate-400 mb-2">COMBINED IMPACT ANALYSIS</div>
- <div class="scenario-impact text-4xl mb-2" id="impactDisplay">0%</div>
- <div class="text-xs text-slate-400">Risk Level: <span id="riskLevel">NOMINAL</span></div>
- </div>
- 
- <div class="grid grid-cols-2 gap-3">
- <button onclick="resetScenario()" class="kpi-card py-3 rounded-lg hover:bg-white/10 transition-all">
- <i class="fas fa-refresh mr-2"></i> Reset
- </button>
- <button onclick="runQuantumSimulation()" class="quantum-button py-3 rounded-lg font-semibold">
- <i class="fas fa-atom mr-2"></i> Simulate
- </button>
- </div>
- </div>
+  <!-- INTEGRATIONS -->
+  <section id="integrations" class="section glass">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Plays nice with your stack</h2>
+      <p class="opacity-90">Read-only keys, SSO (Okta/Azure AD/Google), RBAC, and audit logs. Managed or Private deploy.</p>
 
- <!-- Advanced Map & Intelligence Feed -->
- <div class="holographic-display rounded-2xl overflow-hidden neon-border">
- <div class="p-4 bg-black/40">
- <h3 class="font-bold flex items-center">
- <i class="fas fa-globe-americas mr-2 text-blue-500"></i>
- GLOBAL INTELLIGENCE NETWORK
- <div class="ml-auto text-xs bg-blue-400/20 px-2 py-1 rounded-full text-blue-400">
- <i class="fas fa-satellite mr-1"></i> LIVE
- </div>
- </h3>
- </div>
- <div id="map" class="h-64"></div>
- 
- <!-- Real-time Intelligence Feed -->
- <div class="p-4">
- <h4 class="font-semibold mb-3 text-sm">THREAT INTELLIGENCE FEED</h4>
- <div id="intelligenceFeed" class="real-time-feed space-y-3">
- <div class="kpi-card p-3 rounded-lg border-l-4 border-red-500">
- <div class="flex items-center justify-between">
- <div class="font-semibold flex items-center">
- <i class="fas fa-exclamation-triangle mr-2 text-red-500"></i>
- Critical Port Disruption
- </div>
- <div class="text-xs text-slate-400">2m ago</div>
- </div>
- <div class="text-xs mt-1">Shanghai terminal 67% capacity | AI auto-rerouting active</div>
- </div>
- 
- <div class="kpi-card p-3 rounded-lg border-l-4 border-yellow-500">
- <div class="flex items-center justify-between">
- <div class="font-semibold flex items-center">
- <i class="fas fa-shield-alt mr-2 text-yellow-500"></i>
- Cyber Security Alert
- </div>
- <div class="text-xs text-slate-400">5m ago</div>
- </div>
- <div class="text-xs mt-1">Attempted breach on Tier-1 supplier | Defense systems active</div>
- </div>
- 
- <div class="kpi-card p-3 rounded-lg border-l-4 border-blue-400">
- <div class="flex items-center justify-between">
- <div class="font-semibold flex items-center">
- <i class="fas fa-check-circle mr-2 text-blue-400"></i>
- AI Optimization Success
- </div>
- <div class="text-xs text-slate-400">8m ago</div>
- </div>
- <div class="text-xs mt-1">Neural routing saved $127K in fuel costs | European corridor</div>
- </div>
- </div>
- </div>
- </div>
- 
- <!-- Advanced Analytics Panel -->
- <div class="holographic-display p-4 rounded-2xl neon-border">
- <h3 class="font-bold mb-4 flex items-center">
- <i class="fas fa-chart-line mr-2 text-cyan-500"></i>
- QUANTUM ANALYTICS
- </h3>
- 
- <div class="grid grid-cols-2 gap-3 mb-4">
- <div class="kpi-card p-3 rounded-lg text-center">
- <div class="text-xs text-slate-400">Active Scenarios</div>
- <div class="text-2xl font-bold text-blue-500" id="activeScenarios">247</div>
- </div>
- <div class="kpi-card p-3 rounded-lg text-center">
- <div class="text-xs text-slate-400">Processing Speed</div>
- <div class="text-2xl font-bold text-blue-400" id="processingSpeed">1.2M/s</div>
- </div>
- </div>
- 
- <div class="space-y-3">
- <button class="w-full kpi-card p-3 rounded-lg hover:bg-white/10 transition-all text-left">
- <div class="flex items-center justify-between">
- <span class="font-medium">Demand Forecasting</span>
- <span class="text-blue-400 text-sm">94.7% accurate</span>
- </div>
- </button>
- <button class="w-full kpi-card p-3 rounded-lg hover:bg-white/10 transition-all text-left">
- <div class="flex items-center justify-between">
- <span class="font-medium">Risk Assessment</span>
- <span class="text-blue-500 text-sm">Real-time</span>
- </div>
- </button>
- <button class="w-full kpi-card p-3 rounded-lg hover:bg-white/10 transition-all text-left">
- <div class="flex items-center justify-between">
- <span class="font-medium">Route Optimization</span>
- <span class="text-cyan-500 text-sm">Active</span>
- </div>
- </button>
- </div>
- </div>
- </aside>
- </main>
- </div>
- 
- <div class="mt-6 text-center">
- <p class="mb-4 text-sm">This is a simplified preview of the executive dashboards we create. Our full solutions include:</p>
- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left max-w-4xl mx-auto">
- <div class="kpi-card p-3 rounded-lg">
- <h4 class="font-bold mb-1 text-sm"><i class="fas fa-chart-line mr-1"></i> Real-time Analytics</h4>
- <p class="text-xs">Live data integration with customizable metrics and KPIs</p>
- </div>
- <div class="kpi-card p-3 rounded-lg">
- <h4 class="font-bold mb-1 text-sm"><i class="fas fa-cogs mr-1"></i> Interactive Simulations</h4>
- <p class="text-xs">What-if scenarios to test decisions before implementation</p>
- </div>
- <div class="kpi-card p-3 rounded-lg">
- <h4 class="font-bold mb-1 text-sm"><i class="fas fa-bell mr-1"></i> Proactive Alerts</h4>
- <p class="text-xs">Automated notifications for critical metrics and anomalies</p>
- </div>
- </div>
- 
- <div class="mt-6">
- <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg text-sm font-medium transition inline-block">
- Request Your Custom Dashboard
- </a>
- </div>
- </div>
- </div>
- </section>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mt-4">
+        <div class="kpi"><div class="opacity-70">SIEM</div><div>Splunk • Sentinel</div></div>
+        <div class="kpi"><div class="opacity-70">EDR</div><div>CrowdStrike • CB</div></div>
+        <div class="kpi"><div class="opacity-70">Identity</div><div>Okta • Azure AD</div></div>
+        <div class="kpi"><div class="opacity-70">Workflow</div><div>Jira • ServiceNow</div></div>
+      </div>
+      <p class="text-xs mt-2 opacity-60">No data exfiltration: dashboards render from your data sources. Least-privilege by default.</p>
+    </div>
+  </section>
 
- <!-- Methodology Section -->
- <section id="methodology" class="section-overlay">
- <div class="container mx-auto px-4">
- <h2 class="text-3xl font-bold text-center text-gray-200 mb-8">Our Methodology</h2>
- <p class="text-lg text-center text-gray-400 mb-8 max-w-3xl mx-auto">Proven AI frameworks and interactive simulations that turn data into actionable strategies.</p>
- 
- <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
- <div class="text-center p-4">
- <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
- <span class="text-xl font-bold text-blue-600">1</span>
- </div>
- <h3 class="text-lg font-semibold text-gray-200 mb-2">Discovery & Analysis</h3>
- <p class="text-gray-400 text-sm">We begin by deeply understanding your business objectives, challenges, and data ecosystem to identify the most impactful AI opportunities.</p>
- </div>
- 
- <div class="text-center p-4">
- <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
- <span class="text-xl font-bold text-blue-600">2</span>
- </div>
- <h3 class="text-lg font-semibold text-gray-200 mb-2">Solution Design</h3>
- <p class="text-gray-400 text-sm">Our experts design tailored AI solutions that align with your specific business needs, ensuring maximum ROI and seamless integration.</p>
- </div>
- 
- <div class="text-center p-4">
- <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
- <span class="text-xl font-bold text-blue-600">3</span>
- </div>
- <h3 class="text-lg font-semibold text-gray-200 mb-2">Implementation</h3>
- <p class="text-gray-400 text-sm">We develop and deploy your AI solutions with precision, focusing on scalability, security, and user experience.</p>
- </div>
- 
- <div class="text-center p-4">
- <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
- <span class="text-xl font-bold text-blue-600">4</span>
- </div>
- <h3 class="text-lg font-semibold text-gray-200 mb-2">Optimization & Growth</h3>
- <p class="text-gray-400 text-sm">We continuously monitor and refine your AI systems to ensure they evolve with your business and deliver sustained value.</p>
- </div>
- </div>
- </div>
- </section>
+  <!-- PACKAGES -->
+  <section id="packages" class="section">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-6">Packages</h2>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="glass rounded-lg p-5">
+          <div class="text-sm uppercase tracking-wide opacity-80">Starter</div>
+          <ul class="mt-3 text-sm opacity-90 list-disc ml-5">
+            <li>4 hubs (Core bundle)</li>
+            <li>3 data sources + SSO</li>
+            <li>Compliance export (CSV/PDF)</li>
+            <li>Business-hours support</li>
+          </ul>
+        </div>
 
- <!-- Case Studies Section -->
- <section id="case-studies" class="section-overlay">
- <div class="container mx-auto px-4">
- <h2 class="text-3xl font-bold text-center text-gray-200 mb-8">Case Studies</h2>
- <p class="text-lg text-center text-gray-400 mb-8 max-w-3xl mx-auto">Real-world examples of AI solutions driving measurable business results across industries.</p>
- 
- <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
- <!-- Lawn Care Business Simulation -->
- <div class="kpi-card p-4 rounded-lg shadow">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/943e3335-b205-408e-89f8-2bdaf21770ec.png?raw=true" alt="Lawn Care Simulation" class="w-full h-32 object-cover rounded-lg mb-3 shadow-sm" />
- <h3 class="text-lg font-bold text-gray-200 mb-3">Lawn Care Operations Optimization</h3>
- <p class="text-gray-400 mb-3 text-sm">Implemented AI-driven scheduling and fleet management for a lawn care business, increasing service coverage efficiency and reducing idle time.</p>
- <div class="grid grid-cols-2 gap-3 mt-3">
- <div class="text-center">
- <div class="text-xl font-bold text-blue-400">48%</div>
- <div class="text-xs text-gray-400">SERVICE COVERAGE</div>
- </div>
- <div class="text-center">
- <div class="text-xl font-bold text-green-400">22%</div>
- <div class="text-xs text-gray-400">IDLE TIME REDUCTION</div>
- </div>
- </div>
- </div>
- 
- <!-- E-Commerce Dashboard -->
- <div class="kpi-card p-4 rounded-lg shadow">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/b83adae9-1498-4be2-b338-12ed9168e158.png?raw=true" alt="E-Commerce Dashboard" class="w-full h-32 object-cover rounded-lg mb-3 shadow-sm" />
- <h3 class="text-lg font-bold text-gray-200 mb-3">E-Commerce Revenue Growth</h3>
- <p class="text-gray-400 mb-3 text-sm">AI-powered analytics dashboard helped an e-commerce company optimize inventory and promotions, increasing revenue and improving delivery predictability.</p>
- <div class="grid grid-cols-2 gap-3 mt-3">
- <div class="text-center">
- <div class="text-xl font-bold text-red-400">35%</div>
- <div class="text-xs text-gray-400">REVENUE INCREASE</div>
- </div>
- <div class="text-center">
- <div class="text-xl font-bold text-purple-400">65%</div>
- <div class="text-xs text-gray-400">FULFILLMENT IMPROVEMENT</div>
- </div>
- </div>
- </div>
- 
- <!-- C-Level Executive Dashboard -->
- <div class="kpi-card p-4 rounded-lg shadow">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/b4220553-4fae-486b-8999-e72541e0f219.png?raw=true" alt="C-Level Executive Dashboard" class="w-full h-32 object-cover rounded-lg mb-3 shadow-sm" />
- <h3 class="text-lg font-bold text-gray-200 mb-3">C-Level Executive Dashboard</h3>
- <p class="text-gray-400 mb-3 text-sm">Developed a real-time executive dashboard for senior management, integrating KPIs across operations, logistics, and sales to drive data-informed decisions.</p>
- <div class="grid grid-cols-2 gap-3 mt-3">
- <div class="text-center">
- <div class="text-xl font-bold text-yellow-400">92%</div>
- <div class="text-xs text-gray-400">KPI VISIBILITY</div>
- </div>
- <div class="text-center">
- <div class="text-xl font-bold text-indigo-400">87%</div>
- <div class="text-xs text-gray-400">DECISION ACCURACY</div>
- </div>
- </div>
- </div>
- </div>
- </div>
- </section>
+        <div class="glass rounded-lg p-5 border border-green-400 border-opacity-30">
+          <div class="text-sm uppercase tracking-wide opacity-80">Pro</div>
+          <ul class="mt-3 text-sm opacity-90 list-disc ml-5">
+            <li>+ Cloud or EDR hub</li>
+            <li>6–8 sources</li>
+            <li>Jira/ServiceNow workflows</li>
+            <li>Priority support</li>
+          </ul>
+        </div>
 
- <!-- Contact / Build Your Solution Section -->
- <section id="contact" class="section-overlay">
- <div class="container mx-auto px-4">
- <div class="max-w-4xl mx-auto p-6 rounded-2xl shadow-2xl">
- <h2 class="text-3xl font-extrabold text-gray-200 mb-4 text-center">
- Transform Your Business with Next-Level AI
- </h2>
- <p class="text-gray-400 mb-4 text-lg text-center">
- We design **interactive simulations, executive dashboards, and real-time HUDs** that give your business **unmatched visibility and control**. 
- Visualize scenarios, monitor KPIs, and make strategic decisions faster than ever before.
- </p>
+        <div class="glass rounded-lg p-5">
+          <div class="text-sm uppercase tracking-wide opacity-80">Enterprise</div>
+          <ul class="mt-3 text-sm opacity-90 list-disc ml-5">
+            <li>War Room + DevSecOps hubs</li>
+            <li>Private images & change control</li>
+            <li>Audit trails & SLA</li>
+            <li>Managed or Private deploy</li>
+          </ul>
+        </div>
+      </div>
+      <p class="text-xs opacity-60 mt-3">Typical delivery: 2–4 weeks depending on connectors and hosting model.</p>
+    </div>
+  </section>
 
- <p class="text-gray-400 mb-4 font-semibold text-lg">
- Our solutions are tailored to provide:
- </p>
- <ul class="list-disc pl-5 text-gray-400 mb-4 space-y-2 text-sm">
- <li>**Custom simulation environments** that predict outcomes and optimize performance</li>
- <li>**Executive-grade dashboards & HUDs** for real-time KPIs and actionable insights</li>
- <li>**Seamless integration** with your existing systems and data sources</li>
- <li>**Advanced predictive AI** that uncovers hidden opportunities and reduces risk</li>
- <li>**Cross-platform web applications** accessible from desktop, tablet, or mobile</li>
- </ul>
+  <!-- FREE PACK -->
+  <section id="free" class="section glass">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Free pack: Exec Brief + SOC2 Checklist</h2>
+          <p class="opacity-90">Use today—even if you never buy. Forward the brief to leadership and start pulling evidence for your next audit.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="BAP_Exec_Brief.pdf" class="btn-primary"><i class="fa-solid fa-file-arrow-down mr-2"></i>Exec Brief (PDF)</a>
+            <a href="SOC2_Evidence_Checklist_BAP.csv" class="btn-ghost"><i class="fa-solid fa-table mr-2"></i>SOC2 Checklist (CSV)</a>
+          </div>
+          <p class="text-xs opacity-60 mt-2">Place the PDF/CSV in the same folder as this page so these links work.</p>
+        </div>
+        <div class="rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1551281044-8d8d0d8b9a4b?q=80&w=1600&auto=format&fit=crop" class="w-full h-72 object-cover" alt="Compliance documents">
+        </div>
+      </div>
+    </div>
+  </section>
 
- <div class="bg-gradient-to-r from-blue-900 to-green-900 p-6 rounded-xl shadow-inner">
- <h3 class="text-xl font-bold text-gray-200 mb-3 text-center">
- Your Business, Supercharged by AI
- </h3>
- <p class="text-gray-400 mb-4 text-center text-sm">
- Work with a team that combines **strategic AI consulting** with **hands-on development**. 
- We build systems that not only show insights but let you **act on them immediately** — simulations, dashboards, and HUDs crafted for decision-makers like you.
- </p>
- <div class="flex flex-col sm:flex-row justify-center gap-4 mt-4">
- <a href="mailto:jettilabz@gmail.com" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-xl text-center transition shadow-lg text-sm">
- <i class="fas fa-envelope mr-1"></i> Schedule a Consultation
- </a>
- <a href="tel:570-277-5107" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-xl text-center transition shadow-lg text-sm">
- <i class="fas fa-phone mr-1"></i> Call Us Now
- </a>
- </div>
- </div>
- </div>
- </div>
- </section>
+  <!-- DEMO CTA -->
+  <section id="demo" class="section">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-extrabold">Book a 10-minute walkthrough</h2>
+      <p class="opacity-80 mt-2">Read-only + SSO. Zero pressure—see if it fits your stack.</p>
+      <div class="mt-4 flex justify-center gap-3">
+        <a href="mailto:nile@bapxai.com" class="btn-primary"><i class="fa-solid fa-envelope mr-2"></i>Email Nile</a>
+        <a href="tel:570-277-5107" class="btn-ghost"><i class="fa-solid fa-phone mr-2"></i>Call</a>
+      </div>
+    </div>
+  </section>
 
- <!-- FAQ Section -->
- <section id="faq" class="section-overlay">
- <div class="container mx-auto px-4">
- <h2 class="text-3xl font-bold text-center text-gray-200 mb-8">Frequently Asked Questions</h2>
- <p class="text-lg text-center text-gray-400 mb-8 max-w-3xl mx-auto">Answers to key questions about BAP AI solutions and executive dashboards.</p>
- 
- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">How long does it take to implement a solution?</h3>
- <p class="text-gray-400 text-sm">Most AI dashboard projects, including custom simulations, are delivered within <strong>1-2 weeks</strong>. We provide a clear timeline upfront and keep you updated every step of the way.</p>
- </div>
- 
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">Do I need technical expertise?</h3>
- <p class="text-gray-400 text-sm">No technical experience is required. Our team handles setup, integration, and training, so your staff can start using the dashboards immediately.</p>
- </div>
- 
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">Which industries do you serve?</h3>
- <p class="text-gray-400 text-sm">We specialize in: <strong>logistics, e-commerce, and manufacturing</strong>. These are the sectors where our AI simulations and dashboards have proven measurable impact.</p>
- </div>
- 
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">How do you measure success?</h3>
- <p class="text-gray-400 text-sm">We set clear KPIs before starting your project and provide real-time analytics dashboards to track efficiency, ROI, and operational improvements.</p>
- </div>
+  <!-- FOOTER -->
+  <footer class="py-8 text-center text-sm opacity-70">
+    © 2025 Breakthrough AI Protocols · BAP UI™
+  </footer>
 
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">Can I customize the dashboards for my business?</h3>
- <p class="text-gray-400 text-sm">Absolutely. Each dashboard and simulation is tailored to your workflows, KPIs, and business goals, ensuring actionable insights for your team.</p>
- </div>
-
- <div class="kpi-card p-4 rounded-lg shadow">
- <h3 class="text-lg font-bold text-gray-200 mb-2">What level of support do you provide?</h3>
- <p class="text-gray-400 text-sm">We offer full post-deployment support, including updates, troubleshooting, and guidance to maximize your investment in AI tools.</p>
- </div>
- </div>
- </div>
- </section>
-
- <!-- Footer -->
- <footer class="bg-gray-900 text-white py-8">
- <div class="container mx-auto px-4">
- <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
- <div>
- <div class="flex items-center mb-3">
- <img src="https://github.com/hustle-rent-due/rentduehustle-sit/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" alt="Breakthrough AI Protocols Logo" class="h-8 mr-2">
- <h3 class="text-lg font-bold">Breakthrough AI Protocols</h3>
- </div>
- <p class="text-gray-500 text-sm">AI solutions designed to grow revenue, automate insights, and maximize ROI.</p>
- <div class="mt-4 flex">
- <a href="https://www.linkedin.com/in/nile-green-8a66a2379" target="_blank" class="social-icon">
- <i class="fab fa-linkedin-in"></i>
- </a>
- <a href="https://youtube.com/@BAPxAI" target="_blank" class="social-icon">
- <i class="fab fa-youtube"></i>
- </a>
- <a href="https://x.com/BAPxAI" target="_blank" class="social-icon">
- <i class="fab fa-x-twitter"></i>
- </a>
- </div>
- </div>
- 
- <div>
- <h4 class="text-base font-semibold mb-3">Services</h4>
- <ul class="space-y-2">
- <li><a href="#services" class="text-gray-500 hover:text-white transition text-sm">Hourly AI Consultation</a></li>
- <li><a href="#services" class="text-gray-500 hover:text-white transition text-sm">Custom AI Hubs</a></li>
- <li><a href="#services" class="text-gray-500 hover:text-white transition text-sm">Interactive Simulations</a></li>
- </ul>
- </div>
- 
- <div>
- <h4 class="text-base font-semibold mb-3">Company</h4>
- <ul class="space-y-2">
- <li><a href="#methodology" class="text-gray-500 hover:text-white transition text-sm">Our Methodology</a></li>
- <li><a href="#case-studies" class="text-gray-500 hover:text-white transition text-sm">Case Studies</a></li>
- <li><a href="#faq" class="text-gray-500 hover:text-white transition text-sm">FAQ</a></li>
- <li><a href="#contact" class="text-gray-500 hover:text-white transition text-sm">Contact Us</a></li>
- </ul>
- </div>
- 
- <div>
- <h4 class="text-base font-semibold mb-3">Legal</h4>
- <ul class="space-y-2">
- <li><a href="#" class="text-gray-500 hover:text-white transition text-sm">Privacy Policy</a></li>
- <li><a href="#" class="text-gray-500 hover:text-white transition text-sm">Terms of Service</a></li>
- <li><a href="#" class="text-gray-500 hover:text-white transition text-sm">Cookie Policy</a></li>
- </ul>
- </div>
- </div>
- 
- <div class="border-t border-gray-700 mt-6 pt-4 text-center text-gray-500 text-xs">
- <p>© 2023 Breakthrough AI Protocols. All rights reserved.</p>
- </div>
- </div>
- </footer>
-
- <script>
- // Mobile menu functionality
- document.getElementById('mobile-menu-btn').addEventListener('click', function() {
- document.getElementById('mobile-menu').classList.remove('hidden');
- });
- 
- document.getElementById('close-menu').addEventListener('click', function() {
- document.getElementById('mobile-menu').classList.add('hidden');
- });
- 
- // Enhanced Supply Chain Dashboard Functionality
- document.addEventListener('DOMContentLoaded', function() {
- // Initialize particles.js
- particlesJS('particles-js', {
- particles: {
- number: { value: 100, density: { enable: true, value_area: 800 } },
- color: { value: '#ffffff' },
- shape: { type: 'circle' },
- opacity: { value: 0.5, random: true, anim: { enable: false } },
- size: { value: 1, random: true, anim: { enable: false } },
- line_linked: { enable: false },
- move: { enable: true, speed: 2, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
- },
- interactivity: {
- detect_on: 'canvas',
- events: { onhover: { enable: false }, onclick: { enable: false }, resize: true },
- modes: { repulse: { distance: 100, duration: 0.4 } }
- },
- retina_detect: true
- });
-
- // Initialize enhanced charts with realistic data
- initQuantumCharts();
- initQuantumMap();
- initIntelligenceFeed();
- updateQuantumDisplay();
- 
- // Set up enhanced scenario controls
- const controls = [
- { slider: 'demandSlider', value: 'demandValue', suffix: '%', key: 'demand', confidence: 'demandConfidence' },
- { slider: 'delaySlider', value: 'delayValue', suffix: ' DAYS', key: 'delay', risk: 'delayRisk' },
- { slider: 'fuelSlider', value: 'fuelValue', suffix: '%', key: 'fuel', volatility: 'fuelVolatility' },
- { slider: 'cyberSlider', value: 'cyberValue', suffix: '%', key: 'cyber', status: 'cyberStatus' }
- ];
-
- controls.forEach(control => {
- document.getElementById(control.slider).addEventListener('input', (e) => {
- const value = parseInt(e.target.value);
- quantumScenario[control.key] = value;
- document.getElementById(control.value).textContent = `${value}${control.suffix}`;
- 
- // Update secondary indicators
- if (control.confidence) {
- const confidence = Math.max(70, 100 - value * 0.8);
- document.getElementById(control.confidence).textContent = `${confidence.toFixed(1)}%`;
- }
- if (control.risk) {
- const riskLevels = ['MINIMAL', 'LOW', 'MODERATE', 'HIGH', 'CRITICAL'];
- const riskIndex = Math.min(4, Math.floor(value / 6));
- document.getElementById(control.risk).textContent = riskLevels[riskIndex];
- }
- if (control.volatility) {
- const volatilityLevels = ['STABLE', 'SLIGHT', 'MODERATE', 'HIGH', 'EXTREME'];
- const volIndex = Math.min(4, Math.floor(value / 20));
- document.getElementById(control.volatility).textContent = volatilityLevels[volIndex];
- }
- if (control.status) {
- const statusLevels = ['SECURED', 'MONITORED', 'ELEVATED', 'HIGH RISK', 'CRITICAL'];
- const statusIndex = Math.min(4, Math.floor(value / 20));
- document.getElementById(control.status).textContent = statusLevels[statusIndex];
- }
- 
- updateQuantumImpactDisplay();
- });
- });
-
- function updateQuantumImpactDisplay() {
- const totalImpact = calculateQuantumImpact();
- document.getElementById('impactDisplay').textContent = `${totalImpact.toFixed(1)}%`;
- 
- // Update risk level
- let riskLevel;
- if (totalImpact < 20) {
- riskLevel = 'NOMINAL';
- } else if (totalImpact < 50) {
- riskLevel = 'ELEVATED';
- } else if (totalImpact < 80) {
- riskLevel = 'HIGH';
- } else {
- riskLevel = 'CRITICAL';
- }
- document.getElementById('riskLevel').textContent = riskLevel;
- }
-
- // Auto-run demo scenario after delay
- setTimeout(() => {
- if (simulationHistory.length === 0) {
- quantumScenario = { demand: 35, delay: 12, fuel: 28, cyber: 15 };
- 
- document.getElementById('demandSlider').value = 35;
- document.getElementById('delaySlider').value = 12;
- document.getElementById('fuelSlider').value = 28;
- document.getElementById('cyberSlider').value = 15;
- 
- updateQuantumImpactDisplay();
- runQuantumSimulation();
- }
- }, 2000);
- });
-
- // Enhanced Data Models with Realistic Ranges
- const quantumKPIs = [
- { 
- id: "forecastAcc", 
- label: "AI Demand Forecast", 
- value: 94.7, 
- target: 95, 
- // Realistic range: 85-98%
- trend: [88.2, 89.8, 91.3, 92.7, 94.1, 94.7, 95.2, 95.8, 96.1, 96.5, 96.8, 97.2],
- prediction: [96.8, 97.0, 97.2, 97.4, 97.6],
- confidence: 97.8,
- realisticRange: { min: 85, max: 98 }
- },
- { 
- id: "invTurns", 
- label: "Quantum Inventory Turns", 
- value: 5.8, 
- target: 6.0, 
- // Realistic range: 5-12
- trend: [5.1, 5.3, 5.6, 5.8, 6.0, 6.2, 6.4, 6.1, 5.9, 5.8, 5.9, 6.1],
- prediction: [6.1, 6.2, 6.3, 6.4, 6.5],
- confidence: 89.3,
- realisticRange: { min: 5, max: 12 }
- },
- { 
- id: "otd", 
- label: "Precision Delivery", 
- value: 97.3, 
- target: 98, 
- // Realistic range: 88-97%
- trend: [91.1, 92.7, 93.2, 94.1, 95.2, 96.1, 96.8, 96.3, 95.7, 95.2, 95.8, 96.4],
- prediction: [96.4, 96.6, 96.8, 97.0, 97.2],
- confidence: 95.7,
- realisticRange: { min: 88, max: 97 }
- },
- { 
- id: "idleFleet", 
- label: "Fleet Optimization", 
- value: 3.2, 
- target: 2.0, 
- // Realistic range: 3-12%
- trend: [11.8, 9.4, 7.7, 6.9, 5.4, 4.9, 4.1, 3.8, 3.5, 3.4, 3.3, 3.2],
- prediction: [3.2, 3.0, 2.8, 2.6, 2.4],
- confidence: 92.1,
- realisticRange: { min: 3, max: 12 }
- }
- ];
-
- let currentKPIs = [...quantumKPIs];
- let quantumScenario = { 
- demand: 0, 
- delay: 0, 
- fuel: 0,
- cyber: 0
- };
- let simulationHistory = [];
- let globalMap;
- let neuralCharts = {};
-
- // Initialize Enhanced Charts with Realistic Data
- function initQuantumCharts() {
- const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
- 
- const chartConfigs = [
- { 
- id: 'chartForecast', 
- data: quantumKPIs[0], 
- color: '#2563EB'
- },
- { 
- id: 'chartInv', 
- data: quantumKPIs[1], 
- color: '#0EA5E9'
- },
- { 
- id: 'chartOTD', 
- data: quantumKPIs[2], 
- color: '#06B6D4'
- },
- { 
- id: 'chartIdle', 
- data: quantumKPIs[3], 
- color: '#EF4444'
- }
- ];
-
- chartConfigs.forEach(config => {
- const ctx = document.getElementById(config.id).getContext('2d');
- 
- // Generate realistic prediction data (smooth continuation)
- const lastValue = config.data.trend[config.data.trend.length - 1];
- const predictionData = [
- ...config.data.trend.slice(-4), // Last 4 real data points
- lastValue + (Math.random() * 0.8 - 0.4), // Small realistic fluctuations
- lastValue + (Math.random() * 1.0 - 0.5),
- lastValue + (Math.random() * 1.2 - 0.6)
- ].map(val => Math.max(config.data.realisticRange.min, Math.min(config.data.realisticRange.max, val)));
-
- neuralCharts[config.id] = new Chart(ctx, {
- type: 'line',
- data: {
- labels: monthLabels,
- datasets: [{
- label: 'Historical',
- data: config.data.trend,
- borderColor: config.color,
- backgroundColor: `${config.color}20`,
- borderWidth: 3,
- tension: 0.4, // Smoother curves
- pointRadius: 4,
- pointBackgroundColor: config.color,
- pointBorderColor: '#ffffff',
- pointBorderWidth: 2,
- pointHoverRadius: 6,
- fill: true
- }, {
- label: 'AI Prediction',
- data: [...Array(9).fill(null), ...predictionData.slice(-3)], // Start predictions from Oct
- borderColor: '#9CA3AF',
- borderWidth: 3,
- borderDash: [5, 5],
- tension: 0.4,
- pointRadius: 4,
- pointBackgroundColor: '#9CA3AF',
- pointBorderColor: '#ffffff',
- pointBorderWidth: 2,
- fill: false
- }]
- },
- options: {
- responsive: true,
- maintainAspectRatio: false,
- plugins: { 
- legend: { display: false },
- tooltip: {
- mode: 'index',
- intersect: false,
- backgroundColor: 'rgba(15, 23, 42, 0.9)',
- titleColor: '#2563EB',
- bodyColor: '#F1F5F9',
- borderColor: '#2563EB',
- borderWidth: 1
- }
- },
- scales: {
- y: { 
- display: false,
- min: config.data.realisticRange.min - 2, // Tight bounds
- max: config.data.realisticRange.max + 2,
- grid: { display: false }
- },
- x: { 
- display: true,
- grid: { 
- color: 'rgba(255, 255, 255, 0.1)',
- drawBorder: false
- },
- ticks: {
- color: '#9CA3AF',
- font: {
- size: 10,
- family: 'Segoe UI'
- }
- }
- }
- },
- interaction: {
- mode: 'nearest',
- axis: 'x',
- intersect: false
- },
- animation: { 
- duration: 2000,
- easing: 'easeOutQuart'
- }
- }
- });
- });
- }
-
- // Initialize Enhanced Map
- function initQuantumMap() {
- globalMap = L.map('map', {
- zoomControl: false,
- attributionControl: false
- }).setView([40.7128, -10.0], 2);
-
- // Dark theme tiles
- L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(globalMap);
-
- // Enhanced supply network nodes
- const quantumNodes = [
- { coords: [37.7749, -122.4194], name: 'SF Quantum Hub', status: 'optimal', type: 'hub', threat: 0.12 },
- { coords: [40.7128, -74.0060], name: 'NYC Neural Center', status: 'normal', type: 'center', threat: 0.23 },
- { coords: [34.0522, -118.2437], name: 'LA Processing Unit', status: 'warning', type: 'unit', threat: 0.67 },
- { coords: [51.5074, -0.1278], name: 'London AI Node', status: 'optimal', type: 'node', threat: 0.19 },
- { coords: [35.6762, 139.6503], name: 'Tokyo Cyber Port', status: 'critical', type: 'port', threat: 0.89 },
- { coords: [55.7558, 37.6173], name: 'Moscow Relay', status: 'normal', type: 'relay', threat: 0.34 },
- { coords: [1.3521, 103.8198], name: 'Singapore Gateway', status: 'optimal', type: 'gateway', threat: 0.15 }
- ];
-
- quantumNodes.forEach(node => {
- let statusColor;
- switch(node.status) {
- case 'optimal': statusColor = '#10B981'; break;
- case 'normal': statusColor = '#2563EB'; break;
- case 'warning': statusColor = '#F59E0B'; break;
- case 'critical': statusColor = '#EF4444'; break;
- }
- 
- const icon = L.divIcon({
- className: 'quantum-marker',
- html: `
- <div style="
- background: radial-gradient(circle, ${statusColor}, transparent 70%);
- width: 30px; 
- height: 30px; 
- border-radius: 50%; 
- border: 3px solid ${statusColor};
- box-shadow: 0 0 20px ${statusColor};
- display: flex;
- align-items: center;
- justify-content: center;
- color: white;
- font-weight: bold;
- font-size: 10px;
- ">
- ${node.type.charAt(0).toUpperCase()}
- </div>
- `,
- iconSize: [30, 30],
- iconAnchor: [15, 15]
- });
- 
- L.marker(node.coords, { icon }).addTo(globalMap)
- .bindPopup(`
- <div class="text-center bg-slate-900 p-3 rounded-lg border border-blue-400">
- <b class="text-blue-400">${node.name}</b><br>
- <div class="text-sm mt-1">Status: <span class="text-${node.status === 'optimal' ? 'green' : node.status === 'critical' ? 'red' : 'yellow'}-400">${node.status.toUpperCase()}</span></div>
- <div class="text-xs text-gray-300">Threat Level: ${(node.threat * 100).toFixed(1)}%</div>
- </div>
- `);
- });
- }
-
- // Real-time Intelligence Feed System
- function initIntelligenceFeed() {
- const feedTypes = [
- { type: 'success', icon: 'check-circle', prefix: 'AI Optimization', color: 'blue-400' },
- { type: 'warning', icon: 'exclamation-triangle', prefix: 'Risk Alert', color: 'yellow-500' },
- { type: 'danger', icon: 'shield-alt', prefix: 'Critical Threat', color: 'red-500' },
- { type: 'info', icon: 'brain', prefix: 'Neural Update', color: 'blue-500' }
- ];
-
- const feedMessages = [
- 'Route efficiency improved by 23% through quantum optimization',
- 'Cyber threat detected and neutralized in European network',
- 'Demand surge predicted 47 hours in advance with 97% accuracy',
- 'Emergency inventory deployed to high-risk zones',
- 'Supply chain vulnerability patched automatically',
- 'Neural network processing speed increased to 1.4M/s',
- 'Alternative supplier activated for critical components',
- 'Fuel cost optimization saved $89K in last 24 hours'
- ];
-
- function addIntelligenceFeed() {
- const feed = feedTypes[Math.floor(Math.random() * feedTypes.length)];
- const message = feedMessages[Math.floor(Math.random() * feedMessages.length)];
- const timestamp = new Date().toLocaleTimeString();
-
- const feedElement = document.createElement('div');
- feedElement.className = `kpi-card p-3 rounded-lg border-l-4 border-${feed.color} opacity-0 transform translate-x-full`;
- feedElement.innerHTML = `
- <div class="flex items-center justify-between">
- <div class="font-semibold flex items-center">
- <i class="fas fa-${feed.icon} mr-2 text-${feed.color}"></i>
- ${feed.prefix}
- </div>
- <div class="text-xs text-slate-400">${timestamp}</div>
- </div>
- <div class="text-xs mt-1">${message}</div>
- `;
-
- const container = document.getElementById('intelligenceFeed');
- container.insertBefore(feedElement, container.firstChild);
-
- // Animate in
- setTimeout(() => {
- feedElement.classList.remove('opacity-0', 'translate-x-full');
- feedElement.classList.add('opacity-100', 'translate-x-0');
- }, 100);
-
- // Remove oldest if more than 6
- if (container.children.length > 6) {
- container.removeChild(container.lastChild);
- }
- }
-
- // Add feed items every 5-10 seconds
- setInterval(addIntelligenceFeed, Math.random() * 5000 + 5000);
- }
-
- // Quantum Scenario Simulation
- function runQuantumSimulation() {
- const totalImpact = calculateQuantumImpact();
- 
- // Apply advanced scenario effects
- currentKPIs = quantumKPIs.map(kpi => {
- let newValue = kpi.value;
- 
- // Complex multi-factor impact calculations
- if (quantumScenario.demand > 0) {
- if (kpi.id === 'forecastAcc') newValue -= quantumScenario.demand * 0.4;
- if (kpi.id === 'invTurns') newValue -= quantumScenario.demand * 0.08;
- if (kpi.id === 'otd') newValue -= quantumScenario.demand * 0.3;
- }
- 
- if (quantumScenario.delay > 0) {
- if (kpi.id === 'otd') newValue -= quantumScenario.delay * 1.5;
- if (kpi.id === 'invTurns') newValue -= quantumScenario.delay * 0.1;
- if (kpi.id === 'forecastAcc') newValue -= quantumScenario.delay * 0.8;
- }
- 
- if (quantumScenario.fuel > 0) {
- if (kpi.id === 'idleFleet') newValue += quantumScenario.fuel * 0.15;
- if (kpi.id === 'otd') newValue -= quantumScenario.fuel * 0.12;
- }
- 
- if (quantumScenario.cyber > 0) {
- if (kpi.id === 'forecastAcc') newValue -= quantumScenario.cyber * 0.6;
- if (kpi.id === 'otd') newValue -= quantumScenario.cyber * 0.4;
- }
- 
- return { 
- ...kpi, 
- value: parseFloat(Math.max(kpi.id === 'idleFleet' ? 0 : 50, newValue).toFixed(1))
- };
- });
-
- const newScore = calculateQuantumHealthScore();
- 
- // Add to simulation history
- simulationHistory.unshift({
- timestamp: new Date(),
- scenario: { ...quantumScenario },
- impact: totalImpact,
- score: newScore,
- kpis: [...currentKPIs],
- aiConfidence: Math.max(60, 100 - totalImpact * 0.8)
- });
-
- if (simulationHistory.length > 20) {
- simulationHistory = simulationHistory.slice(0, 20);
- }
-
- updateQuantumDisplay();
- updateQuantumRecommendations();
- 
- // Visual effects for simulation
- document.querySelectorAll('.kpi-card').forEach((card, index) => {
- card.style.transition = 'all 0.6s ease';
- card.style.transform = 'translateY(-10px) rotateX(5deg)';
- setTimeout(() => {
- card.style.transform = 'translateY(0) rotateX(0)';
- }, 600);
- });
- }
-
- function calculateQuantumImpact() {
- return quantumScenario.demand * 1.2 + 
- quantumScenario.delay * 1.8 + 
- quantumScenario.fuel * 0.7 + 
- quantumScenario.cyber * 2.1;
- }
-
- function calculateQuantumHealthScore() {
- const weighted = currentKPIs[0].value * 0.35 + 
- currentKPIs[2].value * 0.35 + 
- ((100 - currentKPIs[3].value) * 0.15) + 
- (currentKPIs[1].value * 10 * 0.15);
- 
- const impact = calculateQuantumImpact();
- return Math.max(20, Math.min(100, weighted - impact * 0.5));
- }
-
- function updateQuantumDisplay() {
- // Update KPI displays
- currentKPIs.forEach(kpi => {
- const element = document.getElementById(kpi.id);
- if (element) {
- let displayValue;
- if (kpi.id === 'invTurns') {
- displayValue = `${kpi.value}x`;
- } else {
- displayValue = `${kpi.value}%`;
- }
- 
- element.textContent = displayValue;
- }
- });
-
- // Update health score
- const score = calculateQuantumHealthScore();
- document.getElementById('healthScore').textContent = score.toFixed(1);
-
- // Update AI confidence
- const confidence = Math.max(70, 100 - calculateQuantumImpact() * 0.6);
- document.getElementById('aiConfidence').textContent = `${confidence.toFixed(1)}%`;
-
- // Update threat level
- const impact = calculateQuantumImpact();
- let threatLevel, threatColor;
- if (impact < 20) {
- threatLevel = 'LOW';
- threatColor = '#10B981';
- } else if (impact < 50) {
- threatLevel = 'MEDIUM';
- threatColor = '#F59E0B';
- } else {
- threatLevel = 'HIGH';
- threatColor = '#EF4444';
- }
- 
- const threatElement = document.getElementById('threatLevel');
- threatElement.textContent = threatLevel;
- threatElement.style.color = threatColor;
- }
-
- function updateQuantumRecommendations() {
- const container = document.getElementById('aiRecommendations');
- 
- // Clear existing recommendations except the first two (static ones)
- while (container.children.length > 2) {
- container.removeChild(container.lastChild);
- }
- 
- const recommendations = generateQuantumRecommendations();
- 
- recommendations.forEach((rec, index) => {
- const recElement = document.createElement('div');
- recElement.className = 'ai-recommendation kpi-card p-4 rounded-xl opacity-0 transform scale-95';
- recElement.innerHTML = `
- <div class="flex items-start">
- <div class="bg-${rec.color}/20 p-3 rounded-lg mr-4">
- <i class="fas fa-${rec.icon} text-${rec.color} text-lg"></i>
- </div>
- <div class="flex-1">
- <div class="font-semibold text-lg">${rec.title}</div>
- <div class="text-slate-300 mb-2">${rec.description}</div>
- <div class="flex justify-between items-center text-sm">
- <span class="text-${rec.color}">${rec.impact}</span>
- <span class="text-${rec.color}">Confidence: ${rec.confidence}%</span>
- </div>
- </div>
- </div>
- `;
- 
- container.appendChild(recElement);
- 
- // Animate in
- setTimeout(() => {
- recElement.classList.remove('opacity-0', 'scale-95');
- recElement.classList.add('opacity-100', 'scale-100');
- }, index * 100);
- });
- }
-
- function generateQuantumRecommendations() {
- const recs = [];
- const impact = calculateQuantumImpact();
- 
- if (quantumScenario.demand > 25) {
- recs.push({
- icon: 'rocket',
- color: 'red-500',
- title: 'Emergency Supply Activation',
- description: 'Deploy quantum-optimized emergency suppliers to meet critical demand surge',
- impact: 'ROI: +$4.7M | Risk Mitigation: 89%',
- confidence: 96.3
- });
- }
- 
- if (quantumScenario.cyber > 30) {
- recs.push({
- icon: 'shield-alt',
- color: 'yellow-500',
- title: 'Quantum Security Protocol',
- description: 'Activate AI-driven cybersecurity defense matrix across all nodes',
- impact: 'Security Enhancement: 340% | Threat Neutralization: 12min',
- confidence: 98.7
- });
- }
- 
- if (quantumScenario.delay > 15) {
- recs.push({
- icon: 'route',
- color: 'blue-500',
- title: 'Neural Route Recalculation',
- description: 'AI identifies 47 alternative pathways through quantum optimization',
- impact: 'Time Savings: 67% | Cost Reduction: $1.2M',
- confidence: 94.1
- });
- }
- 
- return recs;
- }
-
- function resetScenario() {
- quantumScenario = { demand: 0, delay: 0, fuel: 0, cyber: 0 };
- currentKPIs = [...quantumKPIs];
- 
- // Reset all sliders
- document.getElementById('demandSlider').value = 0;
- document.getElementById('delaySlider').value = 0;
- document.getElementById('fuelSlider').value = 0;
- document.getElementById('cyberSlider').value = 0;
- 
- // Reset displays
- document.getElementById('demandValue').textContent = '0%';
- document.getElementById('delayValue').textContent = '0 DAYS';
- document.getElementById('fuelValue').textContent = '0%';
- document.getElementById('cyberValue').textContent = '0%';
- document.getElementById('impactDisplay').textContent = '0%';
- document.getElementById('riskLevel').textContent = 'NOMINAL';
- 
- updateQuantumDisplay();
- updateQuantumRecommendations();
- }
- </script>
 </body>
 </html>
