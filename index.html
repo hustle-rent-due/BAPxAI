@@ -1,21 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BAP UI™ — SecOps & Compliance Command Center</title>
-  <meta name="description" content="Live Security Ops → SOC2/ISO/NIST export in minutes. Works with Splunk, CrowdStrike, Okta. Read-only keys, SSO, RBAC, audit logs." />
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="BAP UI — SecOps & Compliance Command Center" />
-  <meta property="og:description" content="Live risk + Next Best Actions → SOC2/ISO/NIST export in minutes. Works with Splunk, CrowdStrike, Okta." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- CDNs -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BAP UI — SecOps & Compliance Command Center</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     :root { 
@@ -218,13 +209,7 @@
             <div class="font-semibold">SecOps Command Center (demo)</div>
             <div class="text-xs opacity-70">live simulated data</div>
           </div>
-          <div class="mt-4">
-            <form action="https://formsubmit.co/nile@bapxai.com" method="POST">
-              <input type="email" name="email" placeholder="Enter email for demo access" class="p-2 rounded bg-white bg-opacity-10 text-white w-full max-w-md" required>
-              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-unlock mr-2"></i>Unlock Demo</button>
-            </form>
-          </div>
-          <div class="grid md:grid-cols-3 gap-3 mt-4">
+          <div class="grid md:grid-cols-3 gap-3">
             <div class="md:col-span-1">
               <canvas id="riskChart" class="w-full"></canvas>
               <div class="grid grid-cols-3 gap-3 mt-3 text-center text-xs">
@@ -376,7 +361,7 @@
   <section id="packages" class="section">
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-2xl md:text-3xl font-extrabold mb-6">Packages</h2>
-      <div class="grid md:grid-cols-2 gap-5">
+      <div class="grid md:grid-cols-2 gap-5 justify-center">
         <div class="glass rounded-lg p-5">
           <div class="text-sm uppercase tracking-wide opacity-80">Starter</div>
           <ul class="mt-3 text-sm opacity-90 list-disc ml-5">
@@ -396,7 +381,7 @@
           </ul>
         </div>
       </div>
-      <p class="text-xs opacity-60 mt-3">Typical delivery: 2–4 weeks depending on connectors and hosting model.</p>
+      <p class="text-xs opacity-60 mt-3 text-center">Typical delivery: 2–4 weeks depending on connectors and hosting model.</p>
     </div>
   </section>
 
@@ -451,7 +436,7 @@
       <h3 class="text-lg font-bold mt-4">How it fits your stack</h3>
       <ul class="list-disc ml-6 mt-2">
         <li>Read-only keys, SSO (Okta/Azure AD/Google), RBAC, audit logs; least-privilege by default</li>
-        <li>Deploy managed by us or in your cloud as a single container</li>
+        <li>Deploy Managed (we host) or Private (your cloud) as a single container</li>
         <li>No data exfiltration—dashboards render directly from your data sources</li>
       </ul>
       <h3 class="text-lg font-bold mt-4">Outcomes executives care about</h3>
