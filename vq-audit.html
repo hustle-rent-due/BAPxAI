@@ -171,6 +171,13 @@
       font-size: 0.7rem;
       font-weight: bold;
     }
+    .comparison-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
     @media (max-width: 768px) {
       .section { padding: 2rem 0; }
       .btn-primary, .btn-secondary { font-size: 1rem; padding: 0.8rem 1.5rem; }
@@ -261,7 +268,8 @@
               </li>
             </ul>
 
-            <div class="mt-6 p-4 bg-white bg-opacity-05 rounded-lg">
+            <!-- FIXED: This was the white block issue -->
+            <div class="comparison-box">
               <p class="text-sm opacity-90">
                 <b>Free Agent = Quick diagnosis</b><br/>
                 <b>Full $997 Audit = Deep dive with custom roadmap, ROI projections, and implementation plan</b>
