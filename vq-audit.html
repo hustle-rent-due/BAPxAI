@@ -8,6 +8,15 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <style>
     :root { 
       --primary: #2563EB; 
@@ -252,7 +261,7 @@
               </li>
             </ul>
 
-            <div class="mt-6 p-4 bg-white bg-opacity-5 rounded-lg">
+            <div class="mt-6 p-4 bg-white bg-opacity-05 rounded-lg">
               <p class="text-sm opacity-90">
                 <b>Free Agent = Quick diagnosis</b><br/>
                 <b>Full $997 Audit = Deep dive with custom roadmap, ROI projections, and implementation plan</b>
@@ -261,7 +270,7 @@
           </div>
 
           <div class="text-center">
-            <a href="https://chatgpt.com/g/g-6924b5bc6110819187d6933452cb057e-vq-modeltm-growth-leak-auditor" target="_blank" class="btn-secondary block mb-4">
+            <a href="https://chatgpt.com/g/g-6924b5bc6110819187d6933452cb057e-vq-modeltm-growth-leak-auditor" target="_blank" class="btn-secondary block mb-4" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'free_ai_agent_launch'});">
               <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>Launch Free VQ-MODEL™ Agent
             </a>
             <p class="text-xs opacity-70 mb-4">Opens in ChatGPT · No login required for basic use</p>
@@ -281,7 +290,7 @@
           <p class="opacity-90 mb-4">
             <b>Like what you see?</b> Book the full audit for deep analysis, custom roadmap, and ROI projections.
           </p>
-          <a href="#book" class="btn-primary">
+          <a href="#book" class="btn-primary" onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_from_free_section'});">
             <i class="fa-solid fa-rocket mr-2"></i>Book Full VQ-MODEL™ Audit
           </a>
         </div>
@@ -337,7 +346,10 @@
           </div>
 
           <div class="text-center">
-            <a href="vq-model-playbook.pdf" download class="btn-secondary block mb-4">
+            <a href="https://github.com/hustle-rent-due/BAPxAI/raw/main/VQ_MODEL_Playbook.pdf" 
+               download 
+               class="btn-secondary block mb-4"
+               onclick="gtag('event', 'download', {'event_category': 'playbook', 'event_label': 'free_playbook_download'});">
               <i class="fa-solid fa-download mr-2"></i>Download FREE Playbook (PDF)
             </a>
             <p class="text-xs opacity-70 mb-4">No email required · Instant download · 15 chapters</p>
@@ -637,7 +649,7 @@
           </ul>
           
           <div class="text-center mt-auto">
-            <a href="#try-free" class="btn-secondary w-full">
+            <a href="#try-free" class="btn-secondary w-full" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'free_agent_pricing_card'});">
               Try Free Agent
             </a>
           </div>
@@ -670,8 +682,11 @@
           
           <div class="text-center">
             <div class="text-2xl font-bold mb-2">FREE</div>
-            <p class="text-xs opacity-70 mb-4"/p>
-            <a href="#playbook" class="btn-secondary w-full">
+            <p class="text-xs opacity-70 mb-4"></p>
+            <a href="https://github.com/hustle-rent-due/BAPxAI/raw/main/VQ_MODEL_Playbook.pdf" 
+               download 
+               class="btn-secondary w-full"
+               onclick="gtag('event', 'download', {'event_category': 'playbook', 'event_label': 'free_playbook_pricing_card'});">
               Get Playbook
             </a>
           </div>
@@ -706,7 +721,7 @@
             <div class="text-2xl font-bold mb-2">$997</div>
             <p class="text-xs opacity-70 mb-4">one-time payment</p>
             <p class="text-xs text-green-400 mb-4">Typically saves businesses $50K-$500K+</p>
-            <a href="#book" class="btn-primary w-full">
+            <a href="#book" class="btn-primary w-full" onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_pricing_card'});">
               Get Auditor
             </a>
           </div>
@@ -791,14 +806,18 @@
       </p>
       
       <div class="mb-8">
-        <a href="mailto:nile@bapxai.com?subject=VQ-MODEL%20Audit%20Booking&body=I'd%20like%20to%20book%20a%20VQ-MODEL%20Growth%20%26%20Leak%20Auditor.%0A%0AName:%0ACompany:%0AArea%20to%20audit:%0APreferred%20dates/times:" class="btn-primary">
+        <a href="mailto:nile@bapxai.com?subject=VQ-MODEL%20Audit%20Booking&body=I'd%20like%20to%20book%20a%20VQ-MODEL%20Growth%20%26%20Leak%20Auditor.%0A%0AName:%0ACompany:%0AArea%20to%20audit:%0APreferred%20dates/times:" 
+           class="btn-primary"
+           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'email_booking'});">
           <i class="fa-solid fa-envelope mr-2"></i>Book via Email — nile@bapxai.com
         </a>
       </div>
 
       <div class="text-sm opacity-70">
         <p class="mb-2">Or call directly:</p>
-        <a href="tel:570-277-5107" class="btn-ghost">
+        <a href="tel:570-277-5107" 
+           class="btn-ghost"
+           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'phone_booking'});">
           <i class="fa-solid fa-phone mr-2"></i>570-277-5107
         </a>
       </div>
@@ -812,9 +831,12 @@
           <b>Not ready for the full audit?</b>
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-          <a href="#try-free" class="text-blue-300 hover:text-blue-200 underline text-sm">Try the free AI agent</a>
+          <a href="#try-free" class="text-blue-300 hover:text-blue-200 underline text-sm" onclick="gtag('event', 'click', {'event_category': 'engagement', 'event_label': 'try_free_from_book_section'});">Try the free AI agent</a>
           <span class="opacity-50">or</span>
-          <a href="#playbook" class="text-green-300 hover:text-green-200 underline text-sm">Download the free playbook</a>
+          <a href="https://github.com/hustle-rent-due/BAPxAI/raw/main/VQ_MODEL_Playbook.pdf" 
+             download 
+             class="text-green-300 hover:text-green-200 underline text-sm"
+             onclick="gtag('event', 'download', {'event_category': 'playbook', 'event_label': 'free_playbook_from_book_section'});">Download the free playbook</a>
         </div>
       </div>
     </div>
