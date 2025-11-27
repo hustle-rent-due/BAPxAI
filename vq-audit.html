@@ -139,6 +139,29 @@
       background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(6, 182, 212, 0.1));
       border: 2px solid rgba(34, 197, 94, 0.3);
     }
+    .pricing-card {
+      transition: all 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-8px);
+    }
+    .pricing-highlight {
+      border: 2px solid rgba(34, 197, 94, 0.5);
+      position: relative;
+    }
+    .pricing-highlight::before {
+      content: 'PROFESSIONAL GRADE';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
     @media (max-width: 768px) {
       .section { padding: 2rem 0; }
       .btn-primary, .btn-secondary { font-size: 1rem; padding: 0.8rem 1.5rem; }
@@ -193,7 +216,9 @@
     <div class="max-w-6xl mx-auto px-4">
       <div class="glass try-free-section rounded-xl p-8 md:p-12">
         <div class="text-center mb-8">
-          <div class="text-5xl mb-4">🤖</div>
+          <div class="void-icon mb-4">
+            <i class="fa-solid fa-robot"></i>
+          </div>
           <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
             Try the VQ-MODEL™ <span class="text-blue-300">FREE</span> Right Now
           </h2>
@@ -266,7 +291,9 @@
     <div class="max-w-6xl mx-auto px-4">
       <div class="glass playbook-section rounded-xl p-8 md:p-12">
         <div class="text-center mb-8">
-          <div class="text-5xl mb-4">📚</div>
+          <div class="void-icon mb-4">
+            <i class="fa-solid fa-book"></i>
+          </div>
           <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
             Download the <span class="text-green-300">FREE</span> VQ-MODEL™ Playbook
           </h2>
@@ -315,10 +342,10 @@
             <div class="glass rounded-lg p-4 text-left">
               <p class="text-sm font-bold mb-2">Perfect for:</p>
               <ul class="text-xs opacity-90 space-y-1">
-                <li>✅ Business owners fixing operational chaos</li>
-                <li>✅ Consultants adding VQ to their toolkit</li>
-                <li>✅ Operations leaders scaling their teams</li>
-                <li>✅ Anyone tired of guessing what's broken</li>
+                <li>Business owners fixing operational chaos</li>
+                <li>Consultants adding VQ to their toolkit</li>
+                <li>Operations leaders scaling their teams</li>
+                <li>Anyone tired of guessing what's broken</li>
               </ul>
             </div>
           </div>
@@ -359,22 +386,30 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="glass rounded-lg p-5 leak-card">
-            <div class="text-3xl mb-2">💸</div>
+            <div class="void-icon mb-2">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
             <div class="font-bold text-lg">Wasted Effort</div>
             <p class="text-sm opacity-80 mt-1">Rework, bottlenecks, miscommunication</p>
           </div>
           <div class="glass rounded-lg p-5 leak-card">
-            <div class="text-3xl mb-2">⏱️</div>
+            <div class="void-icon mb-2">
+              <i class="fa-solid fa-clock"></i>
+            </div>
             <div class="font-bold text-lg">Time Drains</div>
             <p class="text-sm opacity-80 mt-1">Tasks taking 3x longer than they should</p>
           </div>
           <div class="glass rounded-lg p-5 leak-card">
-            <div class="text-3xl mb-2">🔥</div>
+            <div class="void-icon mb-2">
+              <i class="fa-solid fa-fire"></i>
+            </div>
             <div class="font-bold text-lg">Constant Firefighting</div>
             <p class="text-sm opacity-80 mt-1">Reacting instead of operating</p>
           </div>
           <div class="glass rounded-lg p-5 leak-card">
-            <div class="text-3xl mb-2">📉</div>
+            <div class="void-icon mb-2">
+              <i class="fa-solid fa-chart-line-down"></i>
+            </div>
             <div class="font-bold text-lg">Customer Churn</div>
             <p class="text-sm opacity-80 mt-1">Inconsistent delivery kills trust</p>
           </div>
@@ -522,21 +557,27 @@
       <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center">Who This Is For</h2>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="glass rounded-lg p-6">
-          <div class="text-3xl mb-3">👔</div>
+          <div class="void-icon mb-3">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
           <h3 class="font-bold text-lg mb-2">Operations Leaders</h3>
           <p class="text-sm opacity-90">
             You're scaling past 10-200 people and operational debt is slowing everything down. You need clarity before you automate chaos.
           </p>
         </div>
         <div class="glass rounded-lg p-6">
-          <div class="text-3xl mb-3">🤖</div>
+          <div class="void-icon mb-3">
+            <i class="fa-solid fa-robot"></i>
+          </div>
           <h3 class="font-bold text-lg mb-2">AI/Automation Consultants</h3>
           <p class="text-sm opacity-90">
             You know the foundation needs to be clean before layering agentic AI. VQ-MODEL™ reveals what to fix first.
           </p>
         </div>
         <div class="glass rounded-lg p-6">
-          <div class="text-3xl mb-3">🚀</div>
+          <div class="void-icon mb-3">
+            <i class="fa-solid fa-rocket"></i>
+          </div>
           <h3 class="font-bold text-lg mb-2">Founders Scaling</h3>
           <p class="text-sm opacity-90">
             You're moving past founder-mode but systems are breaking. See exactly where structure is missing before it costs you customers.
@@ -546,61 +587,117 @@
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
-  <section class="section">
-    <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center">What People Are Saying</h2>
-      <div class="glass rounded-lg p-8">
-        <div class="flex items-start space-x-4">
-          <div class="text-4xl">💬</div>
-          <div>
-            <p class="text-lg italic opacity-90 mb-4">
-              "Nile Green love this reply, and I am very intrigued to learn more about your diagnostic tool it sounds very intriguing."
-            </p>
-            <div class="font-bold">Matt Murphy</div>
-            <div class="text-sm opacity-70">CEO @ The Faction Group | AI Consulting</div>
+  <!-- THE COMPLETE VQ-MODEL™ SYSTEM -->
+  <section id="pricing" class="section glass">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-center">The Complete VQ-MODEL™ System</h2>
+      <p class="text-lg opacity-90 mb-12 text-center max-w-3xl mx-auto">
+        Start with our free ChatGPT Agent, then upgrade to enterprise-grade solutions
+      </p>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        
+        <!-- Free ChatGPT Agent -->
+        <div class="glass pricing-card rounded-xl p-6 flex flex-col">
+          <h3 class="font-bold text-xl mb-2">Free ChatGPT Agent</h3>
+          <p class="text-sm opacity-80 mb-4">Instant Analysis</p>
+          <p class="text-sm mb-6">Get immediate insights into your business leaks with our free AI agent. Perfect for quick assessment and initial recommendations.</p>
+          
+          <ul class="space-y-2 mb-8 flex-grow">
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Instant business health scoring</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Revenue leak identification</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Quick fix recommendations</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>100% free, no credit card</span>
+            </li>
+          </ul>
+          
+          <div class="text-center mt-auto">
+            <a href="#try-free" class="btn-secondary w-full">
+              Try Free Agent
+            </a>
           </div>
         </div>
-      </div>
-      <p class="text-center text-sm opacity-60 mt-6">
-        More testimonials coming as audits are completed. Be among the first.
-      </p>
-    </div>
-  </section>
-
-  <!-- PRICING -->
-  <section id="pricing" class="section glass">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Investment</h2>
-      <div class="glass rounded-lg p-8 md:p-12 max-w-2xl mx-auto border-2 border-green-400 border-opacity-30">
-        <div class="text-5xl md:text-6xl font-extrabold mb-4">$997</div>
-        <p class="text-lg opacity-90 mb-6">One-time payment · 60-minute audit · Complete deliverables package</p>
         
-        <div class="text-left mb-8 space-y-2">
-          <div><i class="fa-solid fa-check checkmark"></i>60-minute diagnostic session</div>
-          <div><i class="fa-solid fa-check checkmark"></i>Visual VQ Void Map™</div>
-          <div><i class="fa-solid fa-check checkmark"></i>Leak Analysis Report</div>
-          <div><i class="fa-solid fa-check checkmark"></i>Priority Roadmap</div>
-          <div><i class="fa-solid fa-check checkmark"></i>ROI Projections</div>
+        <!-- VQ-MODEL™ Playbook -->
+        <div class="glass pricing-card rounded-xl p-6 flex flex-col">
+          <h3 class="font-bold text-xl mb-2">VQ-MODEL™ Playbook</h3>
+          <p class="text-sm opacity-80 mb-4">Complete Framework</p>
+          <p class="text-sm mb-6">The ultimate guide to implementing the VQ-MODEL™ system. Learn the methodology and get step-by-step implementation tools.</p>
+          
+          <ul class="space-y-2 mb-8 flex-grow">
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>15 chapters of battle-tested framework</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Void detection & leak quantification</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Implementation templates & worksheets</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Lifetime updates</span>
+            </li>
+          </ul>
+          
+          <div class="text-center">
+            <div class="text-2xl font-bold mb-2">$30</div>
+            <p class="text-xs opacity-70 mb-4">one-time payment</p>
+            <a href="#playbook" class="btn-secondary w-full">
+              Get Playbook
+            </a>
+          </div>
         </div>
-
-        <a href="#book" class="btn-primary">
-          <i class="fa-solid fa-calendar-check mr-2"></i>Book Your VQ-MODEL™ Audit Now
-        </a>
         
-        <p class="text-xs opacity-60 mt-4">
-          Limited slots available this month · Typical ROI payback in first 30 days
-        </p>
-      </div>
-
-      <div class="mt-12">
-        <h3 class="font-bold text-xl mb-4">Enterprise Pricing Available</h3>
-        <p class="opacity-90 mb-4">
-          Multiple teams? Full operational assessment? VQ implementation? Contact us for custom pricing.
-        </p>
-        <a href="mailto:nile@bapxai.com" class="btn-ghost">
-          <i class="fa-solid fa-envelope mr-2"></i>Contact for Enterprise Pricing
-        </a>
+        <!-- Growth & Leak Auditor -->
+        <div class="glass pricing-card pricing-highlight rounded-xl p-6 flex flex-col">
+          <h3 class="font-bold text-xl mb-2">Growth & Leak Auditor</h3>
+          <p class="text-sm opacity-80 mb-4">Enterprise Analysis Platform</p>
+          <p class="text-sm mb-6">The comprehensive software platform that automates leak detection and provides ongoing monitoring of your business health.</p>
+          
+          <ul class="space-y-2 mb-8 flex-grow">
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Advanced business health analytics</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Real-time revenue leak detection</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Growth opportunity identification</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check checkmark mt-1"></i>
+              <span>Priority support & lifetime updates</span>
+            </li>
+          </ul>
+          
+          <div class="text-center">
+            <div class="text-2xl font-bold mb-2">$997</div>
+            <p class="text-xs opacity-70 mb-4">one-time payment</p>
+            <p class="text-xs text-green-400 mb-4">Typically saves businesses $50K-$500K+</p>
+            <a href="#book" class="btn-primary w-full">
+              Get Auditor
+            </a>
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
