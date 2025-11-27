@@ -69,16 +69,27 @@
     .section { 
       padding: 4rem 0; 
     }
-    .brand-dot { 
-      height: 32px; 
-      width: 32px; 
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      height: 40px;
+      width: auto;
       border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    .brand-logo:hover {
+      transform: scale(1.05);
+    }
+    .brand-text {
+      font-weight: 800;
+      font-size: 1.2rem;
       background: linear-gradient(135deg, #60a5fa, #22c55e 50%, #d946ef 100%);
-      display: grid; 
-      place-items: center; 
-      color: #0b1220; 
-      font-weight: 800; 
-      box-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     a, button { 
       transition: all 0.2s ease; 
@@ -161,6 +172,8 @@
       .section { padding: 2rem 0; }
       .expertise-card { margin-bottom: 1rem; }
       .screenshot-container { height: 120px; }
+      .brand-logo { height: 32px; }
+      .brand-text { font-size: 1rem; }
     }
   </style>
 </head>
@@ -169,9 +182,12 @@
   <!-- NAV -->
   <nav class="fixed top-0 inset-x-0 z-50 glass">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <div class="brand-dot">B</div>
-        <div class="font-bold tracking-tight">BAP UI™</div>
+      <div class="brand-container">
+        <!-- SIMPLE LOGO WITHOUT FILTERS -->
+        <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" 
+             alt="BAP Logo" 
+             class="brand-logo">
+        <div class="brand-text">BAP UI™</div>
       </div>
       <div class="hidden md:flex items-center space-x-6 text-sm">
         <a href="#hubs" class="hover:text-blue-300">Hubs</a>
