@@ -102,16 +102,27 @@
     .section { 
       padding: 4rem 0; 
     }
-    .brand-dot { 
-      height: 32px; 
-      width: 32px; 
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      height: 40px;
+      width: auto;
       border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    .brand-logo:hover {
+      transform: scale(1.05);
+    }
+    .brand-text {
+      font-weight: 800;
+      font-size: 1.2rem;
       background: linear-gradient(135deg, #60a5fa, #22c55e 50%, #d946ef 100%);
-      display: grid; 
-      place-items: center; 
-      color: #0b1220; 
-      font-weight: 800; 
-      box-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .void-icon {
       width: 80px;
@@ -181,6 +192,8 @@
     @media (max-width: 768px) {
       .section { padding: 2rem 0; }
       .btn-primary, .btn-secondary { font-size: 1rem; padding: 0.8rem 1.5rem; }
+      .brand-logo { height: 32px; }
+      .brand-text { font-size: 1rem; }
     }
   </style>
 </head>
@@ -189,9 +202,12 @@
   <!-- NAV -->
   <nav class="fixed top-0 inset-x-0 z-50 glass">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <div class="brand-dot">B</div>
-        <div class="font-bold tracking-tight">BAP™</div>
+      <div class="brand-container">
+        <!-- UPDATED: New logo added -->
+        <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Nov%2024,%202025%20at%2009_35_53%20AM.png?raw=true" 
+             alt="BAP Logo" 
+             class="brand-logo">
+        <div class="brand-text">BAP™</div>
       </div>
       <div class="hidden md:flex items-center space-x-6 text-sm">
         <a href="index.html" class="hover:text-blue-300">Home</a>
@@ -199,7 +215,14 @@
         <a href="#playbook" class="hover:text-blue-300">Free Playbook</a>
         <a href="#how-it-works" class="hover:text-blue-300">How It Works</a>
         <a href="#pricing" class="hover:text-blue-300">Pricing</a>
-        <a href="#book" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Book Your Audit</a>
+        <!-- UPDATED: Google Form booking link -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgHD0clf9x2r2Vbv0yr4-MpMFLrKKrayrDKslaJ4xwNjZcOA/viewform?usp=sf_link" 
+           target="_blank" 
+           class="btn-primary" 
+           style="padding: 0.5rem 1rem; font-size: 0.9rem;"
+           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'nav_book_audit'});">
+          Book Your Audit
+        </a>
       </div>
     </div>
   </nav>
@@ -219,7 +242,11 @@
         This is not software you log into. It's a guided diagnostic and analysis delivered as a custom operational dashboard and execution roadmap.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="#book" class="btn-primary">
+        <!-- UPDATED: Google Form booking link -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgHD0clf9x2r2Vbv0yr4-MpMFLrKKrayrDKslaJ4xwNjZcOA/viewform?usp=sf_link" 
+           target="_blank" 
+           class="btn-primary"
+           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'hero_book_audit'});">
           <i class="fa-solid fa-calendar-check mr-2"></i>Book Your Full Audit — $997
         </a>
         <a href="#try-free" class="btn-secondary">
@@ -268,7 +295,6 @@
               </li>
             </ul>
 
-            <!-- FIXED: This was the white block issue -->
             <div class="comparison-box">
               <p class="text-sm opacity-90">
                 <b>Free Agent = Quick diagnosis</b><br/>
@@ -298,7 +324,11 @@
           <p class="opacity-90 mb-4">
             <b>Like what you see?</b> Book the full audit for deep analysis, custom roadmap, and ROI projections.
           </p>
-          <a href="#book" class="btn-primary" onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_from_free_section'});">
+          <!-- UPDATED: Google Form booking link -->
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgHD0clf9x2r2Vbv0yr4-MpMFLrKKrayrDKslaJ4xwNjZcOA/viewform?usp=sf_link" 
+             target="_blank" 
+             class="btn-primary" 
+             onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_from_free_section'});">
             <i class="fa-solid fa-rocket mr-2"></i>Book Full VQ-MODEL™ Audit
           </a>
         </div>
@@ -729,7 +759,11 @@
             <div class="text-2xl font-bold mb-2">$997</div>
             <p class="text-xs opacity-70 mb-4">one-time payment</p>
             <p class="text-xs text-green-400 mb-4">Typically saves businesses $50K-$500K+</p>
-            <a href="#book" class="btn-primary w-full" onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_pricing_card'});">
+            <!-- UPDATED: Google Form booking link -->
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgHD0clf9x2r2Vbv0yr4-MpMFLrKKrayrDKslaJ4xwNjZcOA/viewform?usp=sf_link" 
+               target="_blank" 
+               class="btn-primary w-full" 
+               onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'book_audit_pricing_card'});">
               Get Auditor
             </a>
           </div>
@@ -814,19 +848,21 @@
       </p>
       
       <div class="mb-8">
-        <a href="mailto:nile@bapxai.com?subject=VQ-MODEL%20Audit%20Booking&body=I'd%20like%20to%20book%20a%20VQ-MODEL%20Growth%20%26%20Leak%20Auditor.%0A%0AName:%0ACompany:%0AArea%20to%20audit:%0APreferred%20dates/times:" 
+        <!-- UPDATED: Google Form booking link -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgHD0clf9x2r2Vbv0yr4-MpMFLrKKrayrDKslaJ4xwNjZcOA/viewform?usp=sf_link" 
+           target="_blank" 
            class="btn-primary"
            onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'email_booking'});">
-          <i class="fa-solid fa-envelope mr-2"></i>Book via Email — nile@bapxai.com
+          <i class="fa-solid fa-calendar-check mr-2"></i>Book Your VQ Audit — $997
         </a>
       </div>
 
       <div class="text-sm opacity-70">
-        <p class="mb-2">Or call directly:</p>
-        <a href="tel:570-277-5107" 
+        <p class="mb-2">Prefer to email directly?</p>
+        <a href="mailto:nile@bapxai.com?subject=VQ-MODEL%20Audit%20Booking&body=I'd%20like%20to%20book%20a%20VQ-MODEL%20Growth%20%26%20Leak%20Auditor." 
            class="btn-ghost"
-           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'phone_booking'});">
-          <i class="fa-solid fa-phone mr-2"></i>570-277-5107
+           onclick="gtag('event', 'click', {'event_category': 'conversion', 'event_label': 'email_booking'});">
+          <i class="fa-solid fa-envelope mr-2"></i>nile@bapxai.com
         </a>
       </div>
 
