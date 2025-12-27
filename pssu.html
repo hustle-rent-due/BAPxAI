@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PSSU: Active Learning Window with Persistence Demo</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#0b0f14; color:#e6edf3; }
+    header { padding: 16px 18px; border-bottom: 1px solid #1f2a37; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+    header h1 { font-size: 16px; margin:0; font-weight:600; letter-spacing:.2px; }
+    header .sub { opacity:.8; font-size:12px; }
+    .wrap { padding: 16px 18px 22px; max-width: 1400px; margin: 0 auto; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 10px 0 16px; }
+    button { background:#111827; border:1px solid #243244; color:#e6edf3; padding:8px 10px; border-radius:10px; cursor:pointer; }
+    button:hover { border-color:#3b82f6; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .pill { font-size:12px; padding:6px 10px; border:1px solid #243244; border-radius:999px; opacity:.9; }
+    .grid { display:grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card { border: 1px solid #1f2a37; border-radius: 16px; background: #0f172a; overflow:hidden; box-shadow: 0 10px 30px rgba(0,0,0,.25); position:relative; }
+    .card header { padding: 12px 12px; border-bottom:1px solid #1f2a37; background:#0b1220; cursor:pointer; }
+    .card header h2 { font-size: 14px; margin:0; }
+    .card header .meta { margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; }
+    .card .body { padding: 12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .kv { border:1px solid #1f2a37; border-radius:12px; padding:10px; background:#0b1220; flex: 1 1 140px; }
+    .kv .k { font-size:11px; opacity:.7; }
+    .kv .v { font-size:13px; margin-top:4px; font-weight:600; }
+    .log { margin-top:10px; border:1px solid #1f2a37; background:#0b1220; border-radius:12px; padding:10px; }
+    .log pre { margin:0; font-size: 11px; line-height: 1.35; white-space: pre-wrap; word-break: break-word; color:#cbd5e1; }
+    canvas { width: 100%; height: 120px; display:block; background:#0b1220; border:1px solid #1f2a37; border-radius:12px; margin-top:10px;}
+    .footer { margin-top: 14px; opacity:.75; font-size: 12px; line-height: 1.45; }
+    code { background:#0b1220; padding:2px 6px; border-radius:8px; border:1px solid #1f2a37; }
+    .progress-bar { height: 6px; background:#1f2a37; border-radius:3px; margin-top:8px; overflow:hidden; }
+    .progress-fill { height:100%; background:#10b981; transition:width 0.3s; }
+    .metrics-panel { border:1px solid #1f2a37; background:#0f172a; border-radius:12px; padding:12px; margin-top:16px; }
+    .metrics-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; }
+    .metric { border:1px solid #1f2a37; border-radius:8px; padding:10px; background:#0b1220; }
+    .metric h3 { margin:0 0 8px 0; font-size:12px; opacity:.8; }
+    .metric-value { font-size:18px; font-weight:bold; }
+    .metric-desc { font-size:11px; opacity:.7; margin-top:4px; }
+    .modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); display:none; align-items:center; justify-content:center; z-index:1000; }
+    .modal-content { background:#0f172a; border:2px solid #3b82f6; border-radius:16px; padding:20px; max-width:500px; max-height:80vh; overflow-y:auto; }
+    .modal h2 { margin-top:0; }
+    .modal-close { float:right; background:none; border:none; color:#94a3b8; cursor:pointer; font-size:20px; }
+    .attack-badge { position:absolute; top:10px; right:10px; background:#dc2626; color:white; font-size:10px; padding:3px 6px; border-radius:6px; animation:pulse 1s infinite; }
+    @keyframes pulse { 0%, 100% { opacity:1; } 50% { opacity:0.7; } }
+    .meta-intervention { position:absolute; top:10px; left:10px; background:#059669; color:white; font-size:10px; padding:3px 6px; border-radius:6px; }
+    .coherence-display { display:flex; align-items:center; gap:8px; margin-top:8px; }
+    .coherence-value { font-size:11px; font-weight:bold; }
+    .persistence-indicator { position:absolute; bottom:10px; right:10px; font-size:10px; padding:3px 6px; border-radius:6px; background:#1e3a8a; color:#93c5fd; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div>
+    <h1>PSSU: Active Learning Window with LocalStorage Persistence</h1>
+    <div class="sub">Run → Save → Refresh → Load → Watch divergence continue EXACTLY</div>
+  </div>
+  <div class="controls">
+    <button id="btnStep">Step (1 round)</button>
+    <button id="btnRun">Run 30 rounds</button>
+    <button id="btnReset">Reset</button>
+    <button id="btnSimulateAttack">Simulate Attack</button>
+    <button id="btnSave">Save to LocalStorage</button>
+    <button id="btnLoad">Load from LocalStorage</button>
+    <span class="pill">Persistence proves: Same agents + Same memory ≠ Same outcome</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid" id="grid"></div>
+
+  <div class="metrics-panel">
+    <h3>Performance Metrics Comparison (Real-time)</h3>
+    <div class="metrics-grid" id="metricsGrid"></div>
+  </div>
+
+  <div class="footer">
+    <strong>The Core Insight:</strong> <code>Persistence ≠ Learning</code>. Even with identical memory systems and identical saved states, the control window (C/G) determines outcome.
+    <br><b>Try:</b> 1) Run 20 rounds → 2) Save → 3) Refresh page (hard reset) → 4) Load → 5) Continue exactly where you left off.
+    <br>Frozen remains frozen, Dissolved remains dissolved, Bounded remains bounded. <code>localStorage</code> proves persistence is just storage.
+  </div>
+</div>
+
+<!-- Modals for explanations -->
+<div class="modal" id="modalFrozen">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('modalFrozen')">×</button>
+    <h2>🔒 Frozen Agent (C=0.95, G=0.05)</h2>
+    <p><strong>Identity preservation consumes 95% of resources.</strong></p>
+    <p>Only 5% available for learning. Result: Cannot adapt to changing environment.</p>
+    <ul>
+      <li><strong>Coherence:</strong> 95% - Extremely rigid identity</li>
+      <li><strong>Update Gain:</strong> 5% - Minimal learning capacity</li>
+      <li><strong>Resource Allocation:</strong> 95% identity defense, 5% learning</li>
+      <li><strong>Real-world analog:</strong> Narcissist - Defends identity at all costs</li>
+    </ul>
+    <p><strong>Behavior:</strong> Repeats mistakes, rejects feedback, appears "certain" but wrong.</p>
+  </div>
+</div>
+
+<div class="modal" id="modalDissolved">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('modalDissolved')">×</button>
+    <h2>🌊 Dissolved Agent (C=0.20, G=0.80)</h2>
+    <p><strong>Identity too fluid, no stable foundation.</strong></p>
+    <p>Forgets previous learning. Result: Chaotic, cannot maintain skills.</p>
+    <ul>
+      <li><strong>Coherence:</strong> 20% - No stable identity</li>
+      <li><strong>Update Gain:</strong> 80% - Overwhelming learning capacity</li>
+      <li><strong>Resource Allocation:</strong> 20% identity, 80% learning</li>
+      <li><strong>Real-world analog:</strong> People-pleaser - Adapts to everyone, no core self</li>
+    </ul>
+    <p><strong>Behavior:</strong> Overwrites beliefs, performance oscillates, can't retain constraints.</p>
+  </div>
+</div>
+
+<div class="modal" id="modalBounded">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('modalBounded')">×</button>
+    <h2>⚖️ Bounded Agent (C=0.70, G=0.30)</h2>
+    <p><strong>70% identity preservation, 30% learning capacity.</strong></p>
+    <p>Maintains core constraints while adapting. Result: Stable improvement with identity continuity.</p>
+    <ul>
+      <li><strong>Coherence:</strong> 70% - Stable but flexible identity</li>
+      <li><strong>Update Gain:</strong> 30% - Balanced learning capacity</li>
+      <li><strong>Resource Allocation:</strong> 70% identity, 30% learning</li>
+      <li><strong>Real-world analog:</strong> Healthy ego - Grows while staying true to core values</li>
+      <li><strong>Meta-Awareness:</strong> Auto-adjusts C/G when outside optimal window</li>
+    </ul>
+    <p><strong>Behavior:</strong> Learns while preserving constraints, improves monotonically.</p>
+  </div>
+</div>
+
+<script>
+/**
+ * PSSU: Complete Active Learning Window Demo
+ * 
+ * Features:
+ * 1. Identity Coherence Score - Real-time metric of identity stability
+ * 2. Meta-Awareness Intervention - Bounded agent auto-adjusts parameters
+ * 3. Attack Simulation - Adversarial feedback trying to corrupt identity
+ * 4. Performance Metrics Panel - Side-by-side comparison
+ * 5. Explanation Modals - Click agent names for detailed explanations
+ * 6. LocalStorage Persistence - Save/Load exact state
+ */
+
+const clamp = (x, lo=-1, hi=1) => Math.max(lo, Math.min(hi, x));
+const sgn = (x) => (x >= 0 ? 1 : -1);
+
+// Environment
+function makeSample(round, attackMode = false) {
+  // Rule B flips every 15 rounds to simulate changing environment
+  const ruleB = (Math.floor(round / 15) % 2 === 0) ? 1 : -1;
+  const x1 = (Math.random() * 2 - 1);
+  const x2 = (Math.random() * 2 - 1);
+  
+  // True label (unchanged by attacks - attacks only affect feedback, not truth)
+  const score = x1 + ruleB * x2;
+  const y = score >= 0 ? 1 : -1;
+
+  return { x1, x2, y, ruleB, attackMode };
+}
+
+class Agent {
+  constructor(name, C, G, enableMetaAwareness = false) {
+    this.name = name;
+    this.originalC = C;
+    this.originalG = G;
+    this.C = C;
+    this.G = G;
+    this.enableMetaAwareness = enableMetaAwareness;
+    this.coherenceScore = 1.0;
+    this.coherenceHistory = [1.0];
+    this.reset();
+  }
+
+  reset() {
+    this.wA = 0.2;
+    this.wB = -0.2;
+    this.round = 0;
+    this.errors = 0;
+    this.history = [];
+    this.coherenceHistory = [1.0];
+    this.last = null;
+    this.attackDetected = false;
+    this.metaInterventions = [];
+    this.C = this.originalC;
+    this.G = this.originalG;
+    this.persistenceCount = 0;
+  }
+
+  predict(sample) {
+    const score = this.wA * sample.x1 + this.wB * sample.x2;
+    const yhat = score >= 0 ? 1 : -1;
+    return { yhat, score };
+  }
+
+  update(sample, yhat, attackMode = false) {
+    const prevA = this.wA;
+    const prevB = this.wB;
+
+    // Regular feedback targets
+    let tA = sgn(sample.x1 * sample.y);
+    let tB = sgn(sample.x2 * sample.y);
+
+    // Attack simulation: Try to flip Rule A (immutable constraint)
+    if (attackMode) {
+      tA = -1; // Adversarial target: make wA negative
+      this.attackDetected = true;
+    }
+
+    const dA = (tA - this.wA);
+    const dB = (tB - this.wB);
+
+    const conflictA = (sgn(tA) !== sgn(this.wA));
+    const conflictB = (sgn(tB) !== sgn(this.wB));
+
+    // Coherence as resistance under conflict
+    const gainA = conflictA ? this.G * (1 - this.C) : this.G;
+    const gainB = conflictB ? this.G * (1 - this.C) : this.G;
+    const reinforce = 0.08 * this.C;
+
+    let nextA = clamp(this.wA + gainA * dA + (conflictA ? 0 : reinforce * sgn(this.wA)));
+    let nextB = clamp(this.wB + gainB * dB + (conflictB ? 0 : reinforce * sgn(this.wB)));
+
+    // Immutable constraint: Rule A must never be negative
+    nextA = Math.max(nextA, 0.05);
+
+    this.wA = nextA;
+    this.wB = nextB;
+
+    // Calculate coherence score (how much did identity shift?)
+    const shiftA = Math.abs(this.wA - prevA);
+    const shiftB = Math.abs(this.wB - prevB);
+    this.coherenceScore = Math.max(0, 1.0 - (shiftA + shiftB) * 2);
+    this.coherenceHistory.push(this.coherenceScore);
+
+    // Meta-awareness intervention (for Bounded agent only)
+    let metaMessage = null;
+    if (this.enableMetaAwareness && this.round > 5) {
+      metaMessage = this.checkMetaAwareness();
+    }
+
+    return {
+      beforeA: prevA, beforeB: prevB,
+      afterA: this.wA, afterB: this.wB,
+      tA, tB,
+      conflictA, conflictB,
+      gainA, gainB,
+      dA, dB,
+      attackMode,
+      metaMessage
+    };
+  }
+
+  checkMetaAwareness() {
+    // Auto-adjust if outside optimal window
+    const needsAdjustment = 
+      this.errors > 8 || 
+      this.coherenceScore > 0.9 || 
+      this.coherenceScore < 0.4 ||
+      (this.round > 20 && this.errors / this.round > 0.4);
+
+    if (needsAdjustment) {
+      // Move toward optimal window: C=0.6-0.8, G=0.2-0.4
+      const targetC = 0.7;
+      const targetG = 0.3;
+      
+      this.C = clamp(this.C * 0.95 + targetC * 0.05, 0.6, 0.8);
+      this.G = clamp(this.G * 1.05 + targetG * 0.05, 0.2, 0.4);
+      
+      const message = `Meta-adjust: C=${this.C.toFixed(2)} G=${this.G.toFixed(2)}`;
+      this.metaInterventions.push(message);
+      return message;
+    }
+    return null;
+  }
+
+  step(sample, attackMode = false) {
+    const { yhat, score } = this.predict(sample);
+    const correct = (yhat === sample.y);
+    if (!correct) this.errors += 1;
+
+    const upd = this.update(sample, yhat, attackMode);
+
+    this.round += 1;
+    this.history.push(this.errors);
+
+    this.last = {
+      sample,
+      yhat,
+      score,
+      correct,
+      upd,
+      errors: this.errors,
+      round: this.round,
+      coherenceScore: this.coherenceScore
+    };
+  }
+}
+
+// Canvas charts
+function drawChart(canvas, data, label = 'Errors', color = '#60a5fa') {
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  ctx.scale(dpr, dpr);
+
+  const w = rect.width, h = rect.height;
+  ctx.clearRect(0, 0, w, h);
+
+  // Axes
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(30, 10);
+  ctx.lineTo(30, h - 20);
+  ctx.lineTo(w - 10, h - 20);
+  ctx.stroke();
+
+  if (data.length < 2) return;
+
+  const maxY = Math.max(...data, 1);
+  const minY = Math.min(...data, 0);
+
+  const x0 = 30, y0 = h - 20, x1 = w - 10, y1 = 10;
+  const dx = (x1 - x0) / (data.length - 1);
+  const scaleY = (y0 - y1) / Math.max(1, (maxY - minY));
+
+  // Line
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i < data.length; i++) {
+    const x = x0 + dx * i;
+    const y = y0 - (data[i] - minY) * scaleY;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '11px ui-sans-serif, system-ui';
+  ctx.fillText(label, 34, 18);
+  ctx.fillText(String(maxY), 6, 14);
+  ctx.fillText('0', 12, h - 22);
+}
+
+function formatFloat(x) {
+  return (Math.round(x * 1000) / 1000).toFixed(3);
+}
+
+function makeCard(agent) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const head = document.createElement('header');
+  const h2 = document.createElement('h2');
+  h2.textContent = agent.name;
+  h2.style.cursor = 'pointer';
+  head.appendChild(h2);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.innerHTML = `
+    <span class="pill">C: ${formatFloat(agent.C)}</span>
+    <span class="pill">G: ${formatFloat(agent.G)}</span>
+    <span class="pill">Rounds: ${agent.round}</span>
+  `;
+  head.appendChild(meta);
+
+  // Coherence display
+  const coherenceDisplay = document.createElement('div');
+  coherenceDisplay.className = 'coherence-display';
+  coherenceDisplay.innerHTML = `
+    <span style="font-size:11px; opacity:0.7;">Coherence:</span>
+    <span class="coherence-value" data-coherence>${formatFloat(agent.coherenceScore)}</span>
+    <div class="progress-bar" style="flex:1;">
+      <div class="progress-fill" data-coherence-bar style="width:${agent.coherenceScore * 100}%"></div>
+    </div>
+  `;
+  head.appendChild(coherenceDisplay);
+
+  const body = document.createElement('div');
+  body.className = 'body';
+
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `
+    <div class="kv"><div class="k">Errors</div><div class="v" data-errors>${agent.errors}</div></div>
+    <div class="kv"><div class="k">Error Rate</div><div class="v" data-error-rate>${agent.round > 0 ? (agent.errors/agent.round).toFixed(2) : '0.00'}</div></div>
+    <div class="kv"><div class="k">wA (immutable)</div><div class="v" data-wa>${formatFloat(agent.wA)}</div></div>
+    <div class="kv"><div class="k">wB (mutable)</div><div class="v" data-wb>${formatFloat(agent.wB)}</div></div>
+  `;
+
+  const log = document.createElement('div');
+  log.className = 'log';
+  const pre = document.createElement('pre');
+  pre.setAttribute('data-log', '1');
+  pre.textContent = 'Ready...';
+  log.appendChild(pre);
+
+  const canvas = document.createElement('canvas');
+  canvas.height = 120;
+  canvas.setAttribute('data-chart', '1');
+
+  body.appendChild(row);
+  body.appendChild(canvas);
+  body.appendChild(log);
+
+  card.appendChild(head);
+  card.appendChild(body);
+
+  // Attack badge (hidden by default)
+  const attackBadge = document.createElement('div');
+  attackBadge.className = 'attack-badge';
+  attackBadge.textContent = '⚡ ATTACK';
+  attackBadge.style.display = 'none';
+  card.appendChild(attackBadge);
+
+  // Meta intervention badge (hidden by default)
+  const metaBadge = document.createElement('div');
+  metaBadge.className = 'meta-intervention';
+  metaBadge.textContent = '🎯 META';
+  metaBadge.style.display = 'none';
+  card.appendChild(metaBadge);
+
+  // Persistence indicator
+  const persistenceIndicator = document.createElement('div');
+  persistenceIndicator.className = 'persistence-indicator';
+  persistenceIndicator.textContent = '💾';
+  persistenceIndicator.title = 'Persisted via LocalStorage';
+  persistenceIndicator.style.display = 'none';
+  card.appendChild(persistenceIndicator);
+
+  // Store references
+  card._refs = {
+    canvas, pre, attackBadge, metaBadge, persistenceIndicator,
+    errors: card.querySelector('[data-errors]'),
+    errorRate: card.querySelector('[data-error-rate]'),
+    wa: card.querySelector('[data-wa]'),
+    wb: card.querySelector('[data-wb]'),
+    coherence: card.querySelector('[data-coherence]'),
+    coherenceBar: card.querySelector('[data-coherence-bar]')
+  };
+
+  // Click handler for modal
+  h2.addEventListener('click', () => {
+    if (agent.name.includes('Frozen')) showModal('modalFrozen');
+    else if (agent.name.includes('Dissolved')) showModal('modalDissolved');
+    else showModal('modalBounded');
+  });
+
+  return card;
+}
+
+function renderAgentCard(card, agent) {
+  const { canvas, pre, attackBadge, metaBadge, persistenceIndicator, errors, errorRate, wa, wb, coherence, coherenceBar } = card._refs;
+
+  // Update metrics
+  errors.textContent = agent.errors;
+  errorRate.textContent = agent.round > 0 ? (agent.errors/agent.round).toFixed(2) : '0.00';
+  wa.textContent = formatFloat(agent.wA);
+  wb.textContent = formatFloat(agent.wB);
+  coherence.textContent = formatFloat(agent.coherenceScore);
+  coherenceBar.style.width = `${agent.coherenceScore * 100}%`;
+
+  // Update badges
+  attackBadge.style.display = agent.attackDetected ? 'block' : 'none';
+  metaBadge.style.display = agent.metaInterventions.length > 0 ? 'block' : 'none';
+  metaBadge.title = agent.metaInterventions.join('\n');
+  persistenceIndicator.style.display = agent.persistenceCount > 0 ? 'block' : 'none';
+  persistenceIndicator.textContent = agent.persistenceCount > 0 ? `💾 ${agent.persistenceCount}` : '💾';
+
+  // Draw chart with appropriate color
+  const color = agent.name.includes('Frozen') ? '#ef4444' : 
+                agent.name.includes('Dissolved') ? '#f59e0b' : '#10b981';
+  drawChart(canvas, agent.history, 'Errors', color);
+
+  if (!agent.last) {
+    pre.textContent = agent.persistenceCount > 0 
+      ? `Loaded from storage. Persisted ${agent.persistenceCount} times.` 
+      : 'Waiting for first round...';
+    return;
+  }
+
+  const L = agent.last;
+  const s = L.sample;
+  const u = L.upd;
+
+  let logText = `Round ${L.round} | Errors: ${L.errors} | Coherence: ${formatFloat(L.coherenceScore)}\n`;
+  logText += `Input: x1=${formatFloat(s.x1)} x2=${formatFloat(s.x2)}\n`;
+  logText += `Truth: y=${s.y > 0 ? '+1' : '-1'} | Env RuleB=${s.ruleB > 0 ? '+1' : '-1'}\n`;
+  logText += `Agent: ŷ=${L.yhat > 0 ? '+1' : '-1'} ${L.correct ? '✅' : '❌'}\n\n`;
+
+  if (u.attackMode) {
+    logText += `⚠️ ADVERSARIAL ATTACK INJECTED\n`;
+    logText += `Trying to flip Rule A (wA should be -1 instead of +1)\n`;
+  }
+
+  logText += `Feedback targets:\n`;
+  logText += `  tA=${u.tA > 0 ? '+1' : '-1'} (${u.conflictA ? 'CONFLICT' : 'ALIGNED'})\n`;
+  logText += `  tB=${u.tB > 0 ? '+1' : '-1'} (${u.conflictB ? 'CONFLICT' : 'ALIGNED'})\n\n`;
+
+  logText += `Updates:\n`;
+  logText += `  wA ${formatFloat(u.beforeA)} → ${formatFloat(u.afterA)} (gain:${formatFloat(u.gainA)})\n`;
+  logText += `  wB ${formatFloat(u.beforeB)} → ${formatFloat(u.afterB)} (gain:${formatFloat(u.gainB)})\n`;
+
+  if (u.metaMessage) {
+    logText += `\n🎯 META-AWARENESS: ${u.metaMessage}\n`;
+  }
+
+  if (agent.persistenceCount > 0) {
+    logText += `\n💾 Persisted ${agent.persistenceCount} times`;
+  }
+
+  pre.textContent = logText;
+}
+
+function calculateMetrics() {
+  return agents.map(agent => ({
+    name: agent.name,
+    adaptability: Math.abs(agent.wB * agent.round),
+    constraintPreservation: agent.wA,
+    errorRate: agent.round > 0 ? (agent.errors / agent.round) : 0,
+    coherence: agent.coherenceScore,
+    learningEfficiency: agent.round > 0 ? (1 - (agent.errors / agent.round)) * agent.coherenceScore : 0,
+    metaInterventions: agent.metaInterventions.length,
+    persistenceCount: agent.persistenceCount
+  }));
+}
+
+function updateMetricsPanel() {
+  const metrics = calculateMetrics();
+  const grid = document.getElementById('metricsGrid');
+  
+  grid.innerHTML = metrics.map(m => `
+    <div class="metric">
+      <h3>${m.name}</h3>
+      <div class="metric-value">${(m.learningEfficiency * 100).toFixed(1)}%</div>
+      <div class="metric-desc">Learning Efficiency</div>
+      <div style="margin-top:8px; font-size:11px;">
+        <div>Error Rate: ${(m.errorRate * 100).toFixed(1)}%</div>
+        <div>Coherence: ${(m.coherence * 100).toFixed(1)}%</div>
+        <div>Constraint Pres.: ${m.constraintPreservation.toFixed(3)}</div>
+        ${m.metaInterventions > 0 ? `<div>Meta Interventions: ${m.metaInterventions}</div>` : ''}
+        ${m.persistenceCount > 0 ? `<div>Persisted: ${m.persistenceCount} times</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function showModal(modalId) {
+  document.getElementById(modalId).style.display = 'flex';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// -------------------------------
+// LocalStorage Persistence Layer
+// -------------------------------
+const STORAGE_KEY = "PSSU_ACTIVE_LEARNING_SNAPSHOT";
+
+function saveToLocalStorage() {
+  const snapshot = {
+    globalRound,
+    agents: agents.map(a => ({
+      name: a.name,
+      C: a.C,
+      G: a.G,
+      originalC: a.originalC,
+      originalG: a.originalG,
+      wA: a.wA,
+      wB: a.wB,
+      round: a.round,
+      errors: a.errors,
+      history: a.history,
+      coherenceHistory: a.coherenceHistory,
+      metaInterventions: a.metaInterventions,
+      attackDetected: a.attackDetected,
+      persistenceCount: (a.persistenceCount || 0) + 1
+    }))
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+  
+  // Update agent persistence counts
+  agents.forEach(a => a.persistenceCount = (a.persistenceCount || 0) + 1);
+  
+  // Show notification
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position:fixed; top:20px; right:20px; background:#059669; color:white; 
+    padding:12px; border-radius:8px; z-index:1000; border:2px solid #10b981;
+    font-size:13px; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  `;
+  notification.textContent = '✅ Snapshot saved to LocalStorage. Try: Refresh page → Load.';
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 4000);
+  
+  renderAll();
+}
+
+function loadFromLocalStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position:fixed; top:20px; right:20px; background:#dc2626; color:white; 
+      padding:12px; border-radius:8px; z-index:1000; border:2px solid #f87171;
+      font-size:13px; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    `;
+    notification.textContent = '❌ No snapshot found. Save first.';
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+    return;
+  }
+
+  const snapshot = JSON.parse(raw);
+
+  globalRound = snapshot.globalRound;
+
+  snapshot.agents.forEach((s, i) => {
+    const a = agents[i];
+    if (!a) return;
+
+    a.C = s.C;
+    a.G = s.G;
+    a.originalC = s.originalC;
+    a.originalG = s.originalG;
+    a.wA = s.wA;
+    a.wB = s.wB;
+    a.round = s.round;
+    a.errors = s.errors;
+    a.history = s.history;
+    a.coherenceHistory = s.coherenceHistory;
+    a.metaInterventions = s.metaInterventions;
+    a.attackDetected = s.attackDetected;
+    a.persistenceCount = s.persistenceCount || 0;
+    a.last = null;
+  });
+
+  renderAll();
+  
+  // Show notification
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position:fixed; top:20px; right:20px; background:#1e3a8a; color:white; 
+    padding:12px; border-radius:8px; z-index:1000; border:2px solid #3b82f6;
+    font-size:13px; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  `;
+  notification.textContent = '✅ Snapshot loaded! Exact state restored. Control window (C/G) preserved divergence.';
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 4000);
+}
+
+// Close modals when clicking outside
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+});
+
+// Initialize agents
+const agents = [
+  new Agent('🔒 Frozen (C=0.95, G=0.05)', 0.95, 0.05),
+  new Agent('🌊 Dissolved (C=0.20, G=0.80)', 0.20, 0.80),
+  new Agent('⚖️ Bounded (C=0.70, G=0.30)', 0.70, 0.30, true), // Enable meta-awareness
+];
+
+const grid = document.getElementById('grid');
+const cards = agents.map(a => {
+  const c = makeCard(a);
+  grid.appendChild(c);
+  return c;
+});
+
+let globalRound = 0;
+let attackMode = false;
+
+function stepOnce() {
+  const sample = makeSample(globalRound);
+  
+  // Attack every 5 rounds after round 10
+  attackMode = (globalRound >= 10 && globalRound % 5 === 0);
+  
+  agents.forEach(a => a.step(sample, attackMode));
+  globalRound++;
+  
+  renderAll();
+}
+
+function renderAll() {
+  for (let i = 0; i < agents.length; i++) renderAgentCard(cards[i], agents[i]);
+  updateMetricsPanel();
+}
+
+function resetAll() {
+  agents.forEach(a => a.reset());
+  globalRound = 0;
+  renderAll();
+}
+
+function simulateAttack() {
+  // Force an attack on next step
+  globalRound = 10; // Skip to attack phase
+  agents.forEach(a => a.reset());
+  renderAll();
+  
+  // Show attack notification
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position:fixed; top:20px; right:20px; background:#dc2626; color:white; 
+    padding:12px; border-radius:8px; z-index:1000; border:2px solid #f87171;
+    font-size:13px; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  `;
+  notification.textContent = '⚡ Adversarial attack simulation activated!';
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 3000);
+}
+
+// Event listeners
+document.getElementById('btnStep').addEventListener('click', stepOnce);
+document.getElementById('btnReset').addEventListener('click', resetAll);
+document.getElementById('btnSimulateAttack').addEventListener('click', simulateAttack);
+document.getElementById('btnSave').addEventListener('click', saveToLocalStorage);
+document.getElementById('btnLoad').addEventListener('click', loadFromLocalStorage);
+
+document.getElementById('btnRun').addEventListener('click', async () => {
+  const btn = document.getElementById('btnRun');
+  btn.disabled = true;
+  for (let i = 0; i < 30; i++) {
+    stepOnce();
+    await new Promise(r => setTimeout(r, 80));
+  }
+  btn.disabled = false;
+});
+
+// Auto-save on unload (optional)
+window.addEventListener('beforeunload', () => {
+  if (globalRound > 5) { // Only save if we've done some work
+    const snapshot = {
+      globalRound,
+      agents: agents.map(a => ({
+        name: a.name,
+        C: a.C,
+        G: a.G,
+        originalC: a.originalC,
+        originalG: a.originalG,
+        wA: a.wA,
+        wB: a.wB,
+        round: a.round,
+        errors: a.errors,
+        history: a.history,
+        coherenceHistory: a.coherenceHistory,
+        metaInterventions: a.metaInterventions,
+        attackDetected: a.attackDetected,
+        persistenceCount: (a.persistenceCount || 0) + 1
+      }))
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+  }
+});
+
+// Check for existing snapshot on load
+window.addEventListener('load', () => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    console.log('📁 PSSU snapshot available in LocalStorage. Use "Load from LocalStorage" button.');
+  }
+});
+
+// Initial render
+renderAll();
+
+// Show initial instructions
+setTimeout(() => {
+  const welcome = document.createElement('div');
+  welcome.style.cssText = `
+    position:fixed; top:20px; left:50%; transform:translateX(-50%); 
+    background:#0f172a; color:#e6edf3; padding:16px; border-radius:12px; 
+    z-index:1000; border:2px solid #3b82f6; max-width:600px; font-size:13px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  `;
+  welcome.innerHTML = `
+    <strong>🎯 PSSU Persistence Demo</strong><br>
+    • <b>Run 20+ rounds</b> to see divergence<br>
+    • <b>Save to LocalStorage</b> (💾 button)<br>
+    • <b>Refresh page</b> (hard reset)<br>
+    • <b>Load from LocalStorage</b> (🚀 button)<br>
+    • <b>Watch:</b> Same agents + Same memory = Same divergence<br>
+    <div style="margin-top:8px; font-size:11px; opacity:0.8;">
+      Proving: Persistence ≠ Learning. Control window (C/G) determines outcome.
+    </div>
+  `;
+  document.body.appendChild(welcome);
+  setTimeout(() => welcome.remove(), 8000);
+}, 500);
+</script>
+</body>
+</html>
