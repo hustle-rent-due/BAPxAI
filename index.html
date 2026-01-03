@@ -7,66 +7,36 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <!-- Modern font -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root { 
-      --primary: #6C63FF; 
-      --secondary: #4F46E5; 
-      --accent: #00D4AA;
-      --dark-bg: #0A0F1E;
-      --card-bg: rgba(18, 24, 45, 0.8);
-      --glass-bg: rgba(255, 255, 255, 0.05);
+      --primary: #2563EB; 
+      --accent: #06B6D4; 
+      --glass-bg: rgba(255, 255, 255, 0.06);
       --glass-border: rgba(255, 255, 255, 0.08);
     }
     
     body { 
-      background: var(--dark-bg) url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%23182347" fill-opacity="0.4" fill-rule="evenodd"/%3E%3C/svg%3E') repeat;
-      color: #E2E8F0; 
-      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
+      background: #0b1220;
+      color: #e6f0fb; 
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
       position: relative;
+      overflow-x: hidden;
     }
     
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 15% 20%, rgba(108, 99, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(0, 212, 170, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 50% 80%, rgba(79, 70, 229, 0.08) 0%, transparent 40%);
-      z-index: -1;
+    .glass { 
+      background: var(--glass-bg); 
+      backdrop-filter: blur(10px); 
+      border: 1px solid var(--glass-border); 
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
-    .card-modern {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .card-modern::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    }
-    
-    .card-modern:hover {
+    .glass:hover {
       transform: translateY(-4px);
-      border-color: rgba(108, 99, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(108, 99, 255, 0.1);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
     }
     
     .btn-primary { 
@@ -86,55 +56,12 @@
     }
     
     .btn-ai {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      border: none;
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      text-decoration: none;
-    }
-    
-    .btn-ai::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: 0.5s;
-    }
-    
-    .btn-ai:hover::after {
-      left: 100%;
-    }
-    
-    .btn-outline {
-      background: transparent;
-      color: var(--accent);
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-      border: 2px solid var(--accent);
-      transition: all 0.3s ease;
-      display: inline-block;
-      text-decoration: none;
-    }
-    
-    .btn-outline:hover {
-      background: rgba(0, 212, 170, 0.1);
-      transform: translateY(-2px);
-    }
-    
-    .nav-glass {
-      background: rgba(10, 15, 30, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      color: #fff;
+      padding: .7rem 1rem;
+      border-radius: .6rem;
+      font-weight: 700;
+      border: 1px solid rgba(139, 92, 246, 0.3);
     }
     
     .section { 
@@ -161,42 +88,16 @@
     .brand-text {
       font-weight: 800;
       font-size: 1.2rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, #60a5fa, #22c55e 50%, #d946ef 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     
-    a, button { 
-      transition: all 0.2s ease; 
-    }
-    
-    a:hover, button:hover { 
-      opacity: 0.9; 
-    }
-    
-    .toast {
-      position: fixed; 
-      right: 16px; 
-      bottom: 16px; 
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff; 
-      padding: .6rem .8rem; 
-      border-radius: .5rem; 
-      opacity: 0; 
-      transform: translateY(12px); 
-      transition: all 0.3s ease; 
-      z-index: 9999;
-    }
-    
-    .toast.show { 
-      opacity: 1; 
-      transform: translateY(0); 
-    }
-    
+    /* AI Identity Demo Styles */
     .ai-demo-card {
-      background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(0, 212, 170, 0.1));
-      border: 1px solid rgba(108, 99, 255, 0.2);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.2);
       border-radius: 12px;
     }
     
@@ -211,7 +112,7 @@
     .metric-value {
       font-size: 1.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--accent), var(--primary));
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -232,142 +133,104 @@
     
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
       transition: width 0.5s ease;
     }
     
-    .section-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #E2E8F0, #94A3B8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      position: relative;
-      display: inline-block;
+    /* Anti-claim banner */
+    .anti-claim {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.875rem;
+      margin: 1rem 0;
     }
     
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 2px;
-    }
-    
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    /* Architecture card */
+    .arch-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      color: white;
-    }
-    
-    .ai-badge {
-      background: linear-gradient(135deg, rgba(108, 99, 255, 0.2), rgba(0, 212, 170, 0.2));
-      color: var(--accent);
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      border: 1px solid rgba(0, 212, 170, 0.3);
-    }
-    
-    .progress-modern {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .floating {
-      animation: float 6s ease-in-out infinite;
+      padding: 1.5rem;
     }
     
     @media (max-width: 768px) {
       .section { padding: 2rem 0; }
       .brand-logo { height: 32px; }
       .brand-text { font-size: 1rem; }
-      .section-title { font-size: 2rem; }
-      .metric-value { font-size: 1.5rem; }
-    }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
   </style>
 </head>
-<body class="antialiased">
+<body>
 
   <!-- NAV -->
-  <nav class="fixed top-0 inset-x-0 z-50 nav-glass py-4">
-    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+  <nav class="fixed top-0 inset-x-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="brand-container">
         <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" 
              alt="BAP Logo" 
              class="brand-logo">
-        <div class="brand-text">BAP UI™ + AI Labs</div>
+        <div class="brand-text">BAP UI™</div>
       </div>
       <div class="hidden md:flex items-center space-x-6 text-sm">
-        <a href="#ai-identity" class="hover:text-purple-300 font-medium">AI Identity</a>
-        <a href="#secops-demo" class="hover:text-blue-300 font-medium">SecOps</a>
-        <a href="#hubs" class="hover:text-blue-300 font-medium">Hubs</a>
-        <a href="vq-audit.html" class="hover:text-green-300 font-medium">VQ Audit</a>
+        <a href="#ai-identity" class="hover:text-purple-300">AI Identity</a>
+        <a href="#secops" class="hover:text-blue-300">SecOps</a>
+        <a href="#architecture" class="hover:text-blue-300">Architecture</a>
         <a href="#demo" class="btn-primary">Book Walkthrough</a>
       </div>
     </div>
   </nav>
 
   <!-- HERO SECTION -->
-  <header class="pt-32 pb-10">
+  <header class="pt-28 pb-10">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid md:grid-cols-2 gap-8 items-center">
-        <!-- AI Identity Section -->
+        <!-- Left: Core message -->
         <div>
-          <div class="uppercase tracking-wide text-xs mb-2 opacity-70">AI Identity Persistence</div>
+          <div class="uppercase tracking-wide text-xs mb-2 opacity-70">AI State Management</div>
           <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
             Identity ≠ Chat History<br>
-            <span class="gradient-text">Proven in Browser</span>
+            <span class="text-purple-300">Demonstrated in Browser</span>
           </h1>
+          
+          <!-- Clarifying sentence -->
+          <div class="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+            <p class="text-sm">
+              <span class="font-semibold">Identity state includes bounded signals:</span> trust calibration, interaction style, risk posture, and response preferences — <span class="font-semibold">not raw conversation history.</span>
+            </p>
+          </div>
+          
           <p class="mt-4 opacity-90">
             PermaMind™ v3 demonstrates identity persistence independent of chat history. 
             Enterprise-ready AI that maintains state across sessions, resets, and deployments.
           </p>
+          
+          <!-- Anti-claim banner -->
+          <div class="anti-claim mt-4">
+            <i class="fa-solid fa-shield-check text-red-400 mr-2"></i>
+            <span class="font-medium">This demo does not store:</span> chat transcripts, personal data, or sensitive attributes.
+          </div>
+          
           <div class="mt-5 flex flex-wrap gap-3">
-            <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
-              <i class="fa-solid fa-brain mr-2"></i>🚀 Live Demo
+            <a href="pssu.html" class="btn-ai">
+              <i class="fa-solid fa-play mr-2"></i>Start Demo
             </a>
-            <a href="#architecture" class="btn-outline">
+            <a href="#architecture" class="btn-ghost">
               <i class="fa-solid fa-diagram-project mr-2"></i>View Architecture
-            </a>
-            <a href="#secops-demo" class="btn-ghost">
-              <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
             </a>
           </div>
         </div>
 
-        <!-- AI Identity Metrics Preview -->
-        <div class="ai-demo-card card-modern p-6 floating">
+        <!-- Right: Live metrics preview -->
+        <div class="ai-demo-card glass p-6">
           <div class="flex items-center justify-between mb-4">
             <div>
               <h3 class="font-bold text-lg">PermaMind™ v3</h3>
               <div class="text-sm opacity-70">Identity Persistence Demo</div>
             </div>
-            <div class="ai-badge">
-              Live Preview
+            <div class="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">
+              Static HTML • localStorage
             </div>
           </div>
           
@@ -397,7 +260,7 @@
           
           <div class="text-sm opacity-80 mb-4">
             <i class="fa-solid fa-lightbulb mr-2 text-yellow-400"></i>
-            <b>Quick test:</b> Trigger events → Reset → Type "hey" → Observe persistent identity
+            <span class="font-medium">Falsifiable test:</span> Trigger events → Reset → Type "hey" → Observe persistent identity
           </div>
           
           <div class="flex gap-2">
@@ -405,9 +268,9 @@
               <i class="fa-solid fa-check mr-1"></i>Check-in
             </button>
             <button onclick="simulateAIReset()" class="btn-ghost flex-1 text-sm">
-              <i class="fa-solid fa-rotate mr-1"></i>Reset
+              <i class="fa-solid fa-rotate mr-1"></i>Hard Reset
             </button>
-            <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai flex-1 text-sm text-center">
+            <a href="pssu.html" class="btn-ai flex-1 text-sm text-center">
               <i class="fa-solid fa-arrow-right mr-1"></i>Full Demo
             </a>
           </div>
@@ -416,92 +279,50 @@
     </div>
   </header>
 
-  <!-- AI IDENTITY DEMO SECTION -->
-  <section id="ai-identity" class="section">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="section-title mb-2">AI Identity Persistence</h2>
-      <p class="opacity-80 mb-6">Proving that AI identity can persist independently of chat history. Survives resets, redeploys, and version updates.</p>
-      
-      <div class="grid md:grid-cols-3 gap-6 mb-8">
-        <div class="card-modern p-5">
-          <div class="feature-icon mb-3">
-            <i class="fa-solid fa-infinity"></i>
-          </div>
-          <h3 class="font-bold text-lg mb-2">Persistence Across Sessions</h3>
-          <p class="text-sm opacity-90">Identity state persists even when chat history is cleared. The AI remembers its relationship with users.</p>
-        </div>
-        <div class="card-modern p-5">
-          <div class="feature-icon mb-3">
-            <i class="fa-solid fa-chart-line"></i>
-          </div>
-          <h3 class="font-bold text-lg mb-2">Adaptive Learning</h3>
-          <p class="text-sm opacity-90">Trust, vigilance, warmth, and coherence evolve based on interaction patterns.</p>
-        </div>
-        <div class="card-modern p-5">
-          <div class="feature-icon mb-3">
-            <i class="fa-solid fa-shield-alt"></i>
-          </div>
-          <h3 class="font-bold text-lg mb-2">Enterprise Ready</h3>
-          <p class="text-sm opacity-90">Drop-in SDK + API for production systems. Pilot pricing: $35K–$75K.</p>
-        </div>
-      </div>
-      
-      <!-- Demo Call to Action -->
-      <div class="card-modern p-8 text-center">
-        <h3 class="text-xl font-bold mb-4">Try the Full Interactive Demo</h3>
-        <p class="opacity-80 mb-6 max-w-2xl mx-auto">
-          Experience identity persistence in action. See how AI maintains personality across resets, 
-          and export the state for production use.
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-          <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai px-8">
-            <i class="fa-solid fa-play mr-2"></i>Launch PermaMind Demo
-          </a>
-          <button onclick="showArchitecture()" class="btn-outline">
-            <i class="fa-solid fa-code mr-2"></i>View Technical Specs
-          </button>
-        </div>
-        <p class="text-xs opacity-60 mt-4">No installation required. Runs entirely in your browser.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ARCHITECTURE SECTION -->
-  <section id="architecture" class="section bg-opacity-50">
+  <section id="architecture" class="section">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="section-title mb-2">Architecture & Deployment</h2>
-      <p class="opacity-90 mb-6">Single container deployment. No data leaves your environment.</p>
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Architecture: Static Demo → Production Container</h2>
+      <p class="opacity-80 mb-6">Browser-based proof demonstrates identity persistence is an architectural choice, not model capability.</p>
       
       <div class="grid md:grid-cols-2 gap-8">
-        <div class="card-modern p-6">
-          <h3 class="font-bold text-lg mb-4 gradient-text">Demo Environment</h3>
+        <!-- Demo Architecture -->
+        <div class="arch-card">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="text-2xl">⚡</div>
+            <h3 class="font-bold text-lg">Demo Architecture</h3>
+          </div>
           <ul class="space-y-3">
             <li class="flex items-start">
               <i class="fa-solid fa-check text-green-400 mt-1 mr-3"></i>
               <div>
-                <div class="font-medium">Static HTML (This page)</div>
-                <div class="text-sm opacity-70">GitHub Pages deployable, simulated data</div>
+                <div class="font-medium">Static HTML • Zero Backend</div>
+                <div class="text-sm opacity-70">GitHub Pages deployable, no servers</div>
               </div>
             </li>
             <li class="flex items-start">
               <i class="fa-solid fa-check text-green-400 mt-1 mr-3"></i>
               <div>
-                <div class="font-medium">Browser Storage</div>
-                <div class="text-sm opacity-70">localStorage persistence, no servers needed</div>
+                <div class="font-medium">localStorage State</div>
+                <div class="text-sm opacity-70">Persists across sessions, survives resets</div>
               </div>
             </li>
             <li class="flex items-start">
               <i class="fa-solid fa-check text-green-400 mt-1 mr-3"></i>
               <div>
-                <div class="font-medium">Zero Infrastructure</div>
-                <div class="text-sm opacity-70">No databases, no APIs, just JavaScript</div>
+                <div class="font-medium">Falsifiable Proof</div>
+                <div class="text-sm opacity-70">Clear demonstration of state ≠ transcript</div>
               </div>
             </li>
           </ul>
         </div>
         
-        <div class="card-modern p-6">
-          <h3 class="font-bold text-lg mb-4 gradient-text">Production Deployment</h3>
+        <!-- Production Architecture -->
+        <div class="arch-card border border-green-400/30">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="text-2xl">🚀</div>
+            <h3 class="font-bold text-lg">Production Deployment</h3>
+          </div>
           <ul class="space-y-3">
             <li class="flex items-start">
               <i class="fa-solid fa-server text-blue-400 mt-1 mr-3"></i>
@@ -514,358 +335,247 @@
               <i class="fa-solid fa-plug text-blue-400 mt-1 mr-3"></i>
               <div>
                 <div class="font-medium">Your Data Sources</div>
-                <div class="text-sm opacity-70">Read-only to Splunk, CrowdStrike, Okta</div>
+                <div class="text-sm opacity-70">Read-only to your existing tools</div>
               </div>
             </li>
             <li class="flex items-start">
               <i class="fa-solid fa-lock text-blue-400 mt-1 mr-3"></i>
               <div>
-                <div class="font-medium">Your Auth, Your Data</div>
-                <div class="text-sm opacity-70">SSO + RBAC + Audit logs, no data exfiltration</div>
+                <div class="font-medium">Zero Data Exfiltration</div>
+                <div class="text-sm opacity-70">No data leaves your environment</div>
               </div>
             </li>
           </ul>
         </div>
       </div>
+      
+      <!-- Key Insight Box -->
+      <div class="glass p-6 mt-8 border border-yellow-500/30">
+        <div class="flex items-start gap-3">
+          <div class="text-2xl">💡</div>
+          <div>
+            <h4 class="font-bold mb-2">Why Browser-based Proof Matters</h4>
+            <p class="text-sm opacity-80">
+              Static HTML + localStorage demonstrates identity persistence is an <span class="font-semibold">architectural choice</span>, not a model capability. 
+              Engineers see: resets happen, history is cleared, state still evolves. 
+              This clean falsifiable demo separates us from "memory = logs" approaches.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- SECOPS DEMO SECTION -->
-  <section id="secops-demo" class="section">
+  <!-- SECOPS CONNECTION -->
+  <section class="section glass">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="section-title mb-2">SecOps & Compliance Command Center</h2>
-      <p class="opacity-90">Live Ops → SOC2/ISO/NIST export in minutes. Works with your stack.</p>
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Strategic Pairing: AI Identity + SecOps</h2>
+      <p class="opacity-80 mb-6">Identity persistence isn't just chat UX—it's operational state management that fits SOC2/ISO/NIST thinking.</p>
       
-      <div class="card-modern p-6 mt-6">
-        <div class="text-sm mb-4 flex items-center justify-between">
-          <div class="font-semibold">SecOps Command Center (demo)</div>
-          <div class="ai-badge">live simulated data</div>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="md:col-span-1">
-            <canvas id="riskChart" class="w-full"></canvas>
-            <div class="grid grid-cols-3 gap-3 mt-3 text-center text-xs">
-              <div class="card-modern p-3">
-                <div class="opacity-70">MTTD</div>
-                <div id="mttd" class="metric-value text-lg">28m</div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Left: Identity Metrics -->
+        <div class="p-6 border border-purple-500/30 rounded-xl">
+          <h3 class="font-bold text-lg mb-4">AI Identity Metrics</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">Trust Calibration</span>
+                <span class="text-sm opacity-70">0.68</span>
               </div>
-              <div class="card-modern p-3">
-                <div class="opacity-70">MTTR</div>
-                <div id="mttr" class="metric-value text-lg">9h</div>
-              </div>
-              <div class="card-modern p-3">
-                <div class="opacity-70">Open</div>
-                <div id="openInc" class="metric-value text-lg">7</div>
-              </div>
+              <div class="text-xs opacity-70">Adapts to interaction patterns, builds with consistency</div>
             </div>
-            <div class="mt-3 flex gap-2">
-              <button id="simulate" class="btn-outline w-full text-xs">Simulate</button>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">Coherence</span>
+                <span class="text-sm opacity-70">0.82</span>
+              </div>
+              <div class="text-xs opacity-70">Maintains consistent personality across sessions</div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="font-medium">Adaptation Rate</span>
+                <span class="text-sm opacity-70">0.14</span>
+              </div>
+              <div class="text-xs opacity-70">Learns from interaction patterns, adjusts appropriately</div>
             </div>
           </div>
-          <div class="md:col-span-1">
-            <h3 class="font-bold text-sm mb-3">Incident Feed</h3>
-            <ul id="feed" class="space-y-2 text-xs"></ul>
-            <h3 class="font-bold text-sm mt-4 mb-3">Next Best Actions</h3>
-            <div id="nba" class="space-y-2 text-xs"></div>
-          </div>
-          <div class="md:col-span-1">
-            <div class="flex items-center justify-between">
-              <h3 class="font-bold text-sm mb-3">Compliance</h3>
-              <button id="exportCompliance" class="btn-outline text-xs">Export CSV</button>
-            </div>
-            <div class="mt-1 text-xs">
-              <div class="mb-2">SOC2 Coverage <span id="soc2Pct" class="float-right">72%</span>
-                <div class="progress-modern"><div id="soc2Bar" class="progress-fill" style="width:72%"></div></div>
+        </div>
+        
+        <!-- Right: SecOps Connection -->
+        <div class="p-6 border border-blue-500/30 rounded-xl">
+          <h3 class="font-bold text-lg mb-4">SecOps State Management</h3>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa-solid fa-check text-blue-400 mt-1 mr-3"></i>
+              <div>
+                <div class="font-medium">Risk Posture Tracking</div>
+                <div class="text-sm opacity-70">Same state management principles</div>
               </div>
-              <div class="mb-2">ISO 27001 <span id="isoPct" class="float-right">61%</span>
-                <div class="progress-modern"><div id="isoBar" class="progress-fill" style="width:61%"></div></div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check text-blue-400 mt-1 mr-3"></i>
+              <div>
+                <div class="font-medium">Compliance State Persistence</div>
+                <div class="text-sm opacity-70">SOC2/ISO/NIST evidence tracking</div>
               </div>
-              <div class="mb-2">NIST CSF <span id="nistPct" class="float-right">54%</span>
-                <div class="progress-modern"><div id="nistBar" class="progress-fill" style="width:54%"></div></div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa-solid fa-check text-blue-400 mt-1 mr-3"></i>
+              <div>
+                <div class="font-medium">Audit Trail Consistency</div>
+                <div class="text-sm opacity-70">State survives deployments and updates</div>
               </div>
-            </div>
-            <p class="mt-2 text-[11px] opacity-70">Read-only to Splunk • CrowdStrike • Okta. SSO • RBAC • Audit logs.</p>
-          </div>
-        </div>
-        <p class="text-[11px] opacity-60 mt-4 pt-4 border-t border-white/10">This inline demo is self-contained—no external files.</p>
-      </div>
-    </div>
-  
-  </section>
-  <!-- HUBS SECTION -->
-  <section id="hubs" class="section">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="section-title mb-2">The 4 hubs leaders want first</h2>
-      <p class="opacity-80">Answer: What's burning? Who owns it? Are we compliant? How fast do we fix?</p>
-      <div class="grid md:grid-cols-2 gap-5 mt-6">
-        <div class="card-modern p-4">
-          <h3 class="font-bold">Live SecOps</h3>
-          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
-            <li>Risk gauge, incident feed, geo map</li>
-            <li>Owner prompts, escalation, trends</li>
-            <li>MTTD / MTTR visibility</li>
-          </ul>
-        </div>
-        <div class="card-modern p-4">
-          <h3 class="font-bold">Compliance & Evidence</h3>
-          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
-            <li>SOC2 / ISO 27001 / NIST CSF coverage</li>
-            <li>One-click CSV/PDF exports</li>
-            <li>Audit trails, access logs</li>
-          </ul>
-        </div>
-        <div class="card-modern p-4">
-          <h3 class="font-bold">Vulnerability & Patch</h3>
-          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
-            <li>Overdue criticals, SLAs, patch score</li>
-            <li>Owner nudges into Jira/ServiceNow</li>
-            <li>Coverage by BU / platform</li>
-          </ul>
-        </div>
-        <div class="card-modern p-4">
-          <h3 class="font-bold">Identity & Access</h3>
-          <ul class="mt-2 text-sm opacity-90 list-disc ml-5">
-            <li>MFA coverage, stale accounts</li>
-            <li>JML (joiner/mover/leaver) pipeline</li>
-            <li>Privileged access review</li>
+            </li>
           </ul>
         </div>
       </div>
-    </div>
-  </section>
-  <!-- TWO DEMOS ONE PLATFORM -->
-  <section class="section bg-opacity-50">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <div class="card-modern p-8">
-        <h3 class="text-xl font-bold mb-4">Two Demos, One Platform</h3>
-        <p class="opacity-80 mb-6 max-w-3xl mx-auto">
-          BAP UI now showcases both AI Identity Persistence and SecOps Command Center. 
-          Both demonstrate our core philosophy: <b>powerful functionality that runs anywhere</b>—from static HTML demos to enterprise containers in your cloud.
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-          <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
-            <i class="fa-solid fa-brain mr-2"></i>AI Identity Demo
-          </a>
-          <a href="#secops-demo" class="btn-primary">
-            <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
-          </a>
-          <a href="#demo" class="btn-outline">
-            <i class="fa-solid fa-calendar mr-2"></i>Book Full Walkthrough
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- DEMO CTA -->
-  <section id="demo" class="section">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <h2 class="section-title">Book a 10-minute walkthrough</h2>
-      <p class="opacity-80 mt-2">See both AI Identity and SecOps demos live. Read-only + SSO. Zero pressure.</p>
-      <div class="mt-4 flex flex-wrap justify-center gap-3">
-        <a href="mailto:nile@bapxai.com" class="btn-primary"><i class="fa-solid fa-envelope mr-2"></i>Email Nile</a>
-        <a href="tel:570-277-5107" class="btn-outline"><i class="fa-solid fa-phone mr-2"></i>Call</a>
-        <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
-          <i class="fa-solid fa-brain mr-2"></i>AI Identity Demo
+      
+      <div class="mt-8 text-center">
+        <a href="#demo" class="btn-primary">
+          <i class="fa-solid fa-calendar mr-2"></i>Book Technical Walkthrough
         </a>
       </div>
     </div>
   </section>
+
+  <!-- ENTERPRISE LANGUAGE SECTION -->
+  <section class="section">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Enterprise-Safe Language, Not Philosophy</h2>
+      <p class="opacity-80 mb-6">Product metrics, not philosophical ones. Trust calibration, not "self-awareness".</p>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="arch-card">
+          <div class="text-3xl mb-3">🎯</div>
+          <h3 class="font-bold text-lg mb-2">Trust Calibration</h3>
+          <p class="text-sm opacity-80">Adapts interaction confidence based on reliability patterns</p>
+        </div>
+        <div class="arch-card">
+          <div class="text-3xl mb-3">🔄</div>
+          <h3 class="font-bold text-lg mb-2">Coherence Maintenance</h3>
+          <p class="text-sm opacity-80">Ensures consistent personality across sessions and resets</p>
+        </div>
+        <div class="arch-card">
+          <div class="text-3xl mb-3">📈</div>
+          <h3 class="font-bold text-lg mb-2">Adaptation Rate</h3>
+          <p class="text-sm opacity-80">Learns appropriate response styles from interaction history</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section id="demo" class="section">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-extrabold">See the Architecture Difference</h2>
+      <p class="opacity-80 mt-2 max-w-3xl mx-auto">
+        Identity persistence is an architectural choice, not model capability. 
+        See how browser-based proof translates to enterprise deployment.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-4 justify-center">
+        <a href="pssu.html" class="btn-ai">
+          <i class="fa-solid fa-play mr-2"></i>Start Demo (pssu.html)
+        </a>
+        <a href="mailto:nile@bapxai.com" class="btn-primary">
+          <i class="fa-solid fa-envelope mr-2"></i>Email Technical Questions
+        </a>
+        <a href="#architecture" class="btn-ghost">
+          <i class="fa-solid fa-code mr-2"></i>View Architecture
+        </a>
+      </div>
+    </div>
+  </section>
+
   <footer class="py-8 text-center text-sm opacity-70">
-    © 2025 Breakthrough AI Protocols · BAP UI™ + AI Labs · 
-    <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="gradient-text hover:opacity-80">AI Identity Demo</a> · 
-    <a href="vq-audit.html" class="text-accent hover:opacity-80">VQ-MODEL™ Audit</a>
+    © 2025 Breakthrough AI Protocols · BAP UI™ · 
+    <a href="pssu.html" class="text-purple-300 hover:text-purple-200">AI Identity Demo</a> · 
+    Identity ≠ Chat History · Browser-based proof
   </footer>
-  <div id="toast" class="toast"></div>
+
   <script>
     // AI Identity Preview Simulation
+    let trustLevel = 0.68;
+    let coherenceLevel = 0.82;
+    let adaptationRate = 0.14;
+    
     function simulateAICheckin() {
-      const trust = document.getElementById('preview-trust');
-      const coherence = document.getElementById('preview-coherence');
+      // Increase trust and coherence
+      trustLevel = Math.min(0.95, trustLevel + 0.07);
+      coherenceLevel = Math.min(0.95, coherenceLevel + 0.05);
+      adaptationRate = Math.min(0.30, adaptationRate + 0.02);
       
-      let trustVal = parseFloat(trust.textContent);
-      let coherenceVal = parseFloat(coherence.textContent);
+      updatePreviewMetrics();
       
-      trustVal = Math.min(0.95, trustVal + 0.07);
-      coherenceVal = Math.min(0.95, coherenceVal + 0.05);
+      // Visual feedback
+      const demoBtn = event.target.closest('button') || event.target;
+      const originalText = demoBtn.innerHTML;
+      demoBtn.innerHTML = '<i class="fa-solid fa-check mr-1"></i>Checked in';
+      demoBtn.classList.add('bg-green-500');
       
-      trust.textContent = trustVal.toFixed(2);
-      coherence.textContent = coherenceVal.toFixed(2);
+      setTimeout(() => {
+        demoBtn.innerHTML = originalText;
+        demoBtn.classList.remove('bg-green-500');
+      }, 1000);
       
-      document.querySelectorAll('.progress-fill')[0].style.width = (trustVal * 100) + '%';
-      document.querySelectorAll('.progress-fill')[1].style.width = (coherenceVal * 100) + '%';
-      
-      showToast('AI Trust increased: Consistent check-in simulated', true);
+      showToast('Trust +0.07, Coherence +0.05', true);
     }
     
     function simulateAIReset() {
-      document.getElementById('preview-trust').textContent = '0.50';
-      document.getElementById('preview-coherence').textContent = '0.85';
-      document.getElementById('preview-adaptation').textContent = '0.12';
+      // Reset only chat, not identity
+      trustLevel = Math.max(0.50, trustLevel - 0.05);
+      coherenceLevel = Math.max(0.75, coherenceLevel - 0.03);
       
-      document.querySelectorAll('.progress-fill')[0].style.width = '50%';
-      document.querySelectorAll('.progress-fill')[1].style.width = '85%';
-      document.querySelectorAll('.progress-fill')[2].style.width = '12%';
+      updatePreviewMetrics();
       
-      showToast('AI reset to baseline. Note: Identity would persist in full demo.', true);
+      showToast('Chat cleared. Identity persists (Trust: ' + trustLevel.toFixed(2) + ')', true);
     }
     
-    function showArchitecture() {
-      showToast('Architecture: Static demo → Single container in your cloud → No data exfiltration', true);
+    function updatePreviewMetrics() {
+      document.getElementById('preview-trust').textContent = trustLevel.toFixed(2);
+      document.getElementById('preview-coherence').textContent = coherenceLevel.toFixed(2);
+      document.getElementById('preview-adaptation').textContent = adaptationRate.toFixed(2);
+      
+      document.querySelectorAll('.progress-fill')[0].style.width = (trustLevel * 100) + '%';
+      document.querySelectorAll('.progress-fill')[1].style.width = (coherenceLevel * 100) + '%';
+      document.querySelectorAll('.progress-fill')[2].style.width = (adaptationRate * 100) + '%';
     }
     
-    function showToast(msg, ok=true){
-      const t=document.getElementById('toast');
-      t.textContent=msg;
-      t.style.background = ok ? 'linear-gradient(135deg, var(--primary), var(--secondary))' : 'linear-gradient(135deg, #EF4444, #DC2626)';
-      t.classList.add('show');
-      setTimeout(()=>t.classList.remove('show'),3000);
-    }
-    
-    // Initialize SecOps demo
-    function initSecOpsDemo() {
-      const ctx = document.getElementById('riskChart').getContext('2d');
-      let risk = 72;
-      const riskChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: { 
-          labels: ['Risk','Remaining'], 
-          datasets: [{ 
-            data: [risk, 100-risk], 
-            borderWidth: 0,
-            backgroundColor: ['#6C63FF', 'rgba(255,255,255,0.05)']
-          }] 
-        },
-        options: { 
-          responsive: true, 
-          cutout: '70%', 
-          plugins: { 
-            legend: { display: false }, 
-            tooltip: { enabled: false } 
-          } 
-        }
-      });
-      
-      const centerLabel = { 
-        id: 'centerLabel', 
-        afterDraw(chart){
-          const {ctx} = chart;
-          const m = chart.getDatasetMeta(0).data[0];
-          if(!m) return;
-          ctx.save(); 
-          ctx.fillStyle='#E2E8F0'; 
-          ctx.textAlign='center';
-          ctx.font='700 22px Plus Jakarta Sans'; 
-          ctx.fillText('RISK', m.x, m.y-4);
-          ctx.font='700 28px Plus Jakarta Sans'; 
-          ctx.fillText(Math.round(risk)+'%', m.x, m.y+24); 
-          ctx.restore();
-        }
-      };
-      riskChart.config.plugins = [centerLabel]; 
-      riskChart.update();
-
-      const feed = document.getElementById('feed');
-      const nba = document.getElementById('nba');
-      const incidents = [
-        {t:"Multiple failed logins", owner:"IAM"},
-        {t:"EDR alert: suspicious PowerShell", owner:"SecOps"},
-        {t:"MFA disabled on 3 accounts", owner:"IT"},
-        {t:"Unpatched critical CVE on 12 hosts", owner:"Platform"},
-        {t:"Privileged role granted outside CAB", owner:"Change Mgmt"},
-        {t:"Public S3 bucket detected", owner:"Cloud"},
-        {t:"High-risk vendor missing questionnaire", owner:"GRC"}
-      ];
-      
-      function renderFeed(items){
-        feed.innerHTML="";
-        items.forEach(x=>{
-          const li=document.createElement('li');
-          li.className="p-2 rounded bg-white bg-opacity-5 flex items-center justify-between";
-          li.innerHTML = `<span>${x.t} — <span class="opacity-70">Owner: ${x.owner}</span></span>
-            <button class="btn-outline text-[11px]" onclick="secOpsAssign('${x.owner}','${x.t}')">Assign</button>`;
-          feed.appendChild(li);
-        });
+    function showToast(msg, ok=true) {
+      // Create toast if it doesn't exist
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-sm z-50 opacity-0 transition-opacity duration-300';
+        document.body.appendChild(toast);
       }
       
-      function renderNBA(){
-        nba.innerHTML="";
-        const suggestions = [
-          {a:"Re-enable MFA on 3 accounts", owner:"IAM"},
-          {a:"Quarantine host from EDR alert", owner:"SecOps"},
-          {a:"Open change for critical patch", owner:"Platform"},
-        ];
-        suggestions.forEach(s=>{
-          const div=document.createElement('div');
-          div.className="p-2 rounded bg-white bg-opacity-5 flex items-center justify-between";
-          div.innerHTML=`<span>${s.a} — <span class="opacity-70">Owner: ${s.owner}</span></span>
-            <div class="flex gap-2">
-              <button class="btn-outline text-[11px]" onclick="secOpsAssign('${s.owner}','${s.a}')">Assign</button>
-              <button class="btn-outline text-[11px]" onclick="secOpsJira('${s.a}')">Open Jira</button>
-            </div>`;
-          nba.appendChild(div);
-        });
-      }
+      toast.textContent = msg;
+      toast.style.background = ok ? '#10b981' : '#ef4444';
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
       
-      window.secOpsAssign = function(owner, what){ showToast(`Assigned to ${owner}: ${what}`); }
-      window.secOpsJira = function(what){ showToast(`Jira ticket created: ${what}`); }
-
-      renderFeed(incidents.slice(0,5));
-      renderNBA();
-
-      function setPct(idTxt,idBar,val){
-        document.getElementById(idTxt).textContent = val + "%";
-        document.getElementById(idBar).style.width = val + "%";
-      }
-      
-      let soc2=72, iso=61, nist=54;
-
-      document.getElementById('simulate').onclick = ()=>{
-        risk = Math.max(20, Math.min(95, risk + (Math.random()*16-8)));
-        riskChart.data.datasets[0].data = [risk, 100-risk]; 
-        riskChart.update();
-        document.getElementById('mttd').textContent = Math.round(18 + Math.random()*20) + "m";
-        document.getElementById('mttr').textContent = Math.round(4 + Math.random()*16) + "h";
-        document.getElementById('openInc').textContent = Math.round(4 + Math.random()*9);
-        soc2 = Math.max(40, Math.min(95, soc2 + (Math.random()*6-3)));
-        iso  = Math.max(35, Math.min(90, iso  + (Math.random()*6-3)));
-        nist = Math.max(30, Math.min(85, nist + (Math.random()*6-3)));
-        setPct('soc2Pct','soc2Bar',Math.round(soc2));
-        setPct('isoPct','isoBar',Math.round(iso));
-        setPct('nistPct','nistBar',Math.round(nist));
-        renderFeed(incidents.sort(()=>0.5-Math.random()).slice(0,5));
-        renderNBA();
-      };
-
-      document.getElementById('exportCompliance').onclick = ()=>{
-        const rows = [
-          ["Framework","Control","Status","Owner","Evidence"],
-          ["SOC2","CC6.1 — Access Control", soc2>70?"Covered":"Gap","Security","Okta group membership + review"],
-          ["ISO27001","A.5 — Policies", iso>60?"Covered":"Gap","GRC","Policy doc + sign-off"],
-          ["NIST CSF","PR.AC-1 — Id Mgmt", nist>60?"Covered":"Gap","IAM","MFA logs + identity proof"]
-        ];
-        const csv = rows.map(r => r.map(x => `"${String(x).replaceAll('"','""')}"`).join(",")).join("\n");
-        const blob = new Blob([csv], {type:"text/csv"});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "BAP_Compliance_Export.csv";
-        a.click();
-        URL.revokeObjectURL(a.href);
-      };
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 3000);
     }
     
+    // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-      initSecOpsDemo();
+      updatePreviewMetrics();
       
+      // Add smooth scrolling
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === '#') return;
           
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
             window.scrollTo({
-              top: targetElement.offsetTop - 100,
+              top: target.offsetTop - 80,
               behavior: 'smooth'
             });
           }
