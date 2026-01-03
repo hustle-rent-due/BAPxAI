@@ -43,15 +43,6 @@
       z-index: -1;
     }
     
-    /* Geometric accent lines */
-    .accent-line {
-      position: absolute;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      height: 1px;
-      width: 100%;
-      opacity: 0.3;
-    }
-    
     .card-modern {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
@@ -104,6 +95,8 @@
       border: none;
       position: relative;
       overflow: hidden;
+      display: inline-block;
+      text-decoration: none;
     }
     
     .btn-ai::after {
@@ -129,6 +122,8 @@
       font-weight: 600;
       border: 2px solid var(--accent);
       transition: all 0.3s ease;
+      display: inline-block;
+      text-decoration: none;
     }
     
     .btn-outline:hover {
@@ -140,13 +135,6 @@
       background: rgba(10, 15, 30, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    .kpi { 
-      background: rgba(255, 255, 255, 0.05); 
-      padding: .75rem; 
-      border-radius: .6rem; 
-      border: 1px solid rgba(255, 255, 255, 0.08);
     }
     
     .section { 
@@ -185,7 +173,6 @@
     
     a:hover, button:hover { 
       opacity: 0.9; 
-      transform: scale(1.05); 
     }
     
     .toast {
@@ -207,7 +194,6 @@
       transform: translateY(0); 
     }
     
-    /* AI Identity Demo Styles */
     .ai-demo-card {
       background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(0, 212, 170, 0.1));
       border: 1px solid rgba(108, 99, 255, 0.2);
@@ -250,33 +236,6 @@
       transition: width 0.5s ease;
     }
     
-    .chat-bubble {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.75rem;
-      max-width: 85%;
-    }
-    
-    .chat-bubble.user {
-      margin-left: auto;
-      background: rgba(108, 99, 255, 0.15);
-      border-color: rgba(108, 99, 255, 0.3);
-    }
-    
-    .chat-bubble.ai {
-      background: rgba(0, 212, 170, 0.15);
-      border-color: rgba(0, 212, 170, 0.3);
-    }
-    
-    .metric-card {
-      background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(79, 70, 229, 0.05));
-      border-radius: 12px;
-      padding: 1.5rem;
-      border: 1px solid rgba(108, 99, 255, 0.15);
-    }
-    
     .section-title {
       font-size: 2.5rem;
       font-weight: 800;
@@ -310,24 +269,6 @@
       color: white;
     }
     
-    .status-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.3);
-    }
-    
-    .status-indicator.warning {
-      background: #F59E0B;
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
-    }
-    
-    .status-indicator.critical {
-      background: #EF4444;
-      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
-    }
-    
     .ai-badge {
       background: linear-gradient(135deg, rgba(108, 99, 255, 0.2), rgba(0, 212, 170, 0.2));
       color: var(--accent);
@@ -345,7 +286,6 @@
       overflow: hidden;
     }
     
-    /* Floating elements animation */
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
@@ -355,45 +295,18 @@
       animation: float 6s ease-in-out infinite;
     }
     
-    /* Print styles for Exec Brief */
-    @media print {
-      #exec-brief { display: block !important; }
-      nav, header, section:not(#brief-section), footer { display: none !important; }
-      body { background: #fff; color: #111827; }
-      body::before { display: none; }
-    }
-    
     @media (max-width: 768px) {
       .section { padding: 2rem 0; }
       .brand-logo { height: 32px; }
       .brand-text { font-size: 1rem; }
-      .section-title {
-        font-size: 2rem;
-      }
-      .metric-value {
-        font-size: 1.5rem;
-      }
+      .section-title { font-size: 2rem; }
+      .metric-value { font-size: 1.5rem; }
     }
     
     .gradient-text {
       background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-    
-    /* Glass effect for backward compatibility */
-    .glass { 
-      background: var(--card-bg); 
-      backdrop-filter: blur(10px); 
-      border: 1px solid rgba(255, 255, 255, 0.08); 
-      border-radius: 12px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .glass:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
     }
   </style>
 </head>
@@ -418,11 +331,11 @@
     </div>
   </nav>
 
-  <!-- UPDATED HERO SECTION WITH AI IDENTITY -->
+  <!-- HERO SECTION -->
   <header class="pt-32 pb-10">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid md:grid-cols-2 gap-8 items-center">
-    <!-- AI Identity Section -->
+        <!-- AI Identity Section -->
         <div>
           <div class="uppercase tracking-wide text-xs mb-2 opacity-70">AI Identity Persistence</div>
           <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
@@ -434,52 +347,8 @@
             Enterprise-ready AI that maintains state across sessions, resets, and deployments.
           </p>
           <div class="mt-5 flex flex-wrap gap-3">
-          <a href="https://permamind-enterprise-production.up.railway.app">Live Demo</a>" class="btn-ai">
-              <i class="fa-solid fa-brain mr-2"></i>Start Demo
-            </a>
-            <a href="#architecture" class="btn-outline">
-              <i class="fa-solid fa-diagram-project mr-2"></i>View Architecture
-            </a>
-            <a href="#secops-demo" class="btn-ghost">
-              <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
-            </a>
-          </div>
-        </div> <!-- AI Identity Section -->
-        <div>
-          <div class="uppercase tracking-wide text-xs mb-2 opacity-70">AI Identity Persistence</div>
-          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
-            Identity ≠ Chat History<br>
-            <span class="gradient-text">Proven in Browser</span>
-          </h1>
-          <p class="mt-4 opacity-90">
-            PermaMind™ v3 demonstrates identity persistence independent of chat history. 
-            Enterprise-ready AI that maintains state across sessions, resets, and deployments.
-          </p>
-          <div class="mt-5 flex flex-wrap gap-3">
-          <a href="https://permamind-enterprise-production.up.railway.app">Live Demo</a>" class="btn-ai">
-              <i class="fa-solid fa-brain mr-2"></i>Start Demo
-            </a>
-            <a href="#architecture" class="btn-outline">
-              <i class="fa-solid fa-diagram-project mr-2"></i>View Architecture
-            </a>
-            <a href="#secops-demo" class="btn-ghost">
-              <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
-            </a>
-          </div>
-        </div> <!-- AI Identity Section -->
-        <div>
-          <div class="uppercase tracking-wide text-xs mb-2 opacity-70">AI Identity Persistence</div>
-          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
-            Identity ≠ Chat History<br>
-            <span class="gradient-text">Proven in Browser</span>
-          </h1>
-          <p class="mt-4 opacity-90">
-            PermaMind™ v3 demonstrates identity persistence independent of chat history. 
-            Enterprise-ready AI that maintains state across sessions, resets, and deployments.
-          </p>
-          <div class="mt-5 flex flex-wrap gap-3">
-          <a href="https://permamind-enterprise-production.up.railway.app">Live Demo</a>" class="btn-ai">
-              <i class="fa-solid fa-brain mr-2"></i>Start Demo
+            <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
+              <i class="fa-solid fa-brain mr-2"></i>🚀 Live Demo
             </a>
             <a href="#architecture" class="btn-outline">
               <i class="fa-solid fa-diagram-project mr-2"></i>View Architecture
@@ -538,7 +407,7 @@
             <button onclick="simulateAIReset()" class="btn-ghost flex-1 text-sm">
               <i class="fa-solid fa-rotate mr-1"></i>Reset
             </button>
-            <a href="pssu.html" class="btn-ai flex-1 text-sm text-center">
+            <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai flex-1 text-sm text-center">
               <i class="fa-solid fa-arrow-right mr-1"></i>Full Demo
             </a>
           </div>
@@ -585,7 +454,7 @@
           and export the state for production use.
         </p>
         <div class="flex flex-wrap gap-4 justify-center">
-          <a href="pssu.html" class="btn-ai px-8">
+          <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai px-8">
             <i class="fa-solid fa-play mr-2"></i>Launch PermaMind Demo
           </a>
           <button onclick="showArchitecture()" class="btn-outline">
@@ -598,13 +467,13 @@
   </section>
 
   <!-- ARCHITECTURE SECTION -->
-  <section id="architecture" class="section card-modern">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+  <section id="architecture" class="section bg-opacity-50">
+    <div class="max-w-7xl mx-auto px-4">
       <h2 class="section-title mb-2">Architecture & Deployment</h2>
       <p class="opacity-90 mb-6">Single container deployment. No data leaves your environment.</p>
       
       <div class="grid md:grid-cols-2 gap-8">
-        <div>
+        <div class="card-modern p-6">
           <h3 class="font-bold text-lg mb-4 gradient-text">Demo Environment</h3>
           <ul class="space-y-3">
             <li class="flex items-start">
@@ -631,7 +500,7 @@
           </ul>
         </div>
         
-        <div>
+        <div class="card-modern p-6">
           <h3 class="font-bold text-lg mb-4 gradient-text">Production Deployment</h3>
           <ul class="space-y-3">
             <li class="flex items-start">
@@ -661,13 +530,12 @@
     </div>
   </section>
 
-  <!-- EXISTING SECOPS DEMO (KEEP AS IS) -->
+  <!-- SECOPS DEMO SECTION -->
   <section id="secops-demo" class="section">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="section-title mb-2">SecOps & Compliance Command Center</h2>
       <p class="opacity-90">Live Ops → SOC2/ISO/NIST export in minutes. Works with your stack.</p>
       
-      <!-- Your existing SecOps demo inline -->
       <div class="card-modern p-6 mt-6">
         <div class="text-sm mb-4 flex items-center justify-between">
           <div class="font-semibold">SecOps Command Center (demo)</div>
@@ -677,17 +545,17 @@
           <div class="md:col-span-1">
             <canvas id="riskChart" class="w-full"></canvas>
             <div class="grid grid-cols-3 gap-3 mt-3 text-center text-xs">
-              <div class="metric-card">
+              <div class="card-modern p-3">
                 <div class="opacity-70">MTTD</div>
-                <div id="mttd" class="metric-value">28m</div>
+                <div id="mttd" class="metric-value text-lg">28m</div>
               </div>
-              <div class="metric-card">
+              <div class="card-modern p-3">
                 <div class="opacity-70">MTTR</div>
-                <div id="mttr" class="metric-value">9h</div>
+                <div id="mttr" class="metric-value text-lg">9h</div>
               </div>
-              <div class="metric-card">
+              <div class="card-modern p-3">
                 <div class="opacity-70">Open</div>
-                <div id="openInc" class="metric-value">7</div>
+                <div id="openInc" class="metric-value text-lg">7</div>
               </div>
             </div>
             <div class="mt-3 flex gap-2">
@@ -722,8 +590,8 @@
         <p class="text-[11px] opacity-60 mt-4 pt-4 border-t border-white/10">This inline demo is self-contained—no external files.</p>
       </div>
     </div>
+  
   </section>
-
   <!-- HUBS SECTION -->
   <section id="hubs" class="section">
     <div class="max-w-7xl mx-auto px-4">
@@ -765,64 +633,55 @@
       </div>
     </div>
   </section>
-
-  <!-- Add a note about the AI Identity in the existing sections -->
-  <section class="section card-modern">
-    <div class="max-w-7xl mx-auto px-4 py-8 text-center">
-      <h3 class="text-xl font-bold mb-4">Two Demos, One Platform</h3>
-      <p class="opacity-80 mb-6 max-w-3xl mx-auto">
-        BAP UI now showcases both AI Identity Persistence and SecOps Command Center. 
-        Both demonstrate our core philosophy: <b>powerful functionality that runs anywhere</b>—from static HTML demos to enterprise containers in your cloud.
-      </p>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <a href="pssu.html" class="btn-ai">
-          <i class="fa-solid fa-brain mr-2"></i>AI Identity Demo
-        </a>
-        <a href="#secops-demo" class="btn-primary">
-          <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
-        </a>
-        <a href="#demo" class="btn-outline">
-          <i class="fa-solid fa-calendar mr-2"></i>Book Full Walkthrough
-        </a>
+  <!-- TWO DEMOS ONE PLATFORM -->
+  <section class="section bg-opacity-50">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <div class="card-modern p-8">
+        <h3 class="text-xl font-bold mb-4">Two Demos, One Platform</h3>
+        <p class="opacity-80 mb-6 max-w-3xl mx-auto">
+          BAP UI now showcases both AI Identity Persistence and SecOps Command Center. 
+          Both demonstrate our core philosophy: <b>powerful functionality that runs anywhere</b>—from static HTML demos to enterprise containers in your cloud.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
+            <i class="fa-solid fa-brain mr-2"></i>AI Identity Demo
+          </a>
+          <a href="#secops-demo" class="btn-primary">
+            <i class="fa-solid fa-shield-alt mr-2"></i>SecOps Demo
+          </a>
+          <a href="#demo" class="btn-outline">
+            <i class="fa-solid fa-calendar mr-2"></i>Book Full Walkthrough
+          </a>
+        </div>
       </div>
     </div>
   </section>
-
   <!-- DEMO CTA -->
   <section id="demo" class="section">
     <div class="max-w-7xl mx-auto px-4 text-center">
       <h2 class="section-title">Book a 10-minute walkthrough</h2>
       <p class="opacity-80 mt-2">See both AI Identity and SecOps demos live. Read-only + SSO. Zero pressure.</p>
-      <div class="mt-4 flex justify-center gap-3">
+      <div class="mt-4 flex flex-wrap justify-center gap-3">
         <a href="mailto:nile@bapxai.com" class="btn-primary"><i class="fa-solid fa-envelope mr-2"></i>Email Nile</a>
         <a href="tel:570-277-5107" class="btn-outline"><i class="fa-solid fa-phone mr-2"></i>Call</a>
-        <a href="pssu.html" class="btn-ai">
+        <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="btn-ai">
           <i class="fa-solid fa-brain mr-2"></i>AI Identity Demo
         </a>
       </div>
     </div>
   </section>
-
   <footer class="py-8 text-center text-sm opacity-70">
     © 2025 Breakthrough AI Protocols · BAP UI™ + AI Labs · 
-    <a href="pssu.html" class="gradient-text hover:opacity-80">AI Identity Demo</a> · 
+    <a href="https://permamind-enterprise-production.up.railway.app" target="_blank" class="gradient-text hover:opacity-80">AI Identity Demo</a> · 
     <a href="vq-audit.html" class="text-accent hover:opacity-80">VQ-MODEL™ Audit</a>
   </footer>
-
-  <!-- HIDDEN PRINT BRIEF (keep as is) -->
-  <section id="exec-brief" style="display:none">
-    <!-- Your existing exec brief content -->
-  </section>
-
   <div id="toast" class="toast"></div>
-
   <script>
     // AI Identity Preview Simulation
     function simulateAICheckin() {
       const trust = document.getElementById('preview-trust');
       const coherence = document.getElementById('preview-coherence');
       
-      // Increase values slightly
       let trustVal = parseFloat(trust.textContent);
       let coherenceVal = parseFloat(coherence.textContent);
       
@@ -832,7 +691,6 @@
       trust.textContent = trustVal.toFixed(2);
       coherence.textContent = coherenceVal.toFixed(2);
       
-      // Update progress bars
       document.querySelectorAll('.progress-fill')[0].style.width = (trustVal * 100) + '%';
       document.querySelectorAll('.progress-fill')[1].style.width = (coherenceVal * 100) + '%';
       
@@ -840,12 +698,10 @@
     }
     
     function simulateAIReset() {
-      // Reset to baseline values
       document.getElementById('preview-trust').textContent = '0.50';
       document.getElementById('preview-coherence').textContent = '0.85';
       document.getElementById('preview-adaptation').textContent = '0.12';
       
-      // Reset progress bars
       document.querySelectorAll('.progress-fill')[0].style.width = '50%';
       document.querySelectorAll('.progress-fill')[1].style.width = '85%';
       document.querySelectorAll('.progress-fill')[2].style.width = '12%';
@@ -857,7 +713,6 @@
       showToast('Architecture: Static demo → Single container in your cloud → No data exfiltration', true);
     }
     
-    // Toast function
     function showToast(msg, ok=true){
       const t=document.getElementById('toast');
       t.textContent=msg;
@@ -866,9 +721,8 @@
       setTimeout(()=>t.classList.remove('show'),3000);
     }
     
-    // Initialize SecOps demo (your existing code)
+    // Initialize SecOps demo
     function initSecOpsDemo() {
-      // Risk doughnut
       const ctx = document.getElementById('riskChart').getContext('2d');
       let risk = 72;
       const riskChart = new Chart(ctx, {
@@ -910,7 +764,6 @@
       riskChart.config.plugins = [centerLabel]; 
       riskChart.update();
 
-      // Incident feed + next best actions
       const feed = document.getElementById('feed');
       const nba = document.getElementById('nba');
       const incidents = [
@@ -959,7 +812,6 @@
       renderFeed(incidents.slice(0,5));
       renderNBA();
 
-      // Compliance values + simulate
       function setPct(idTxt,idBar,val){
         document.getElementById(idTxt).textContent = val + "%";
         document.getElementById(idBar).style.width = val + "%";
@@ -984,7 +836,6 @@
         renderNBA();
       };
 
-      // Export Compliance CSV
       document.getElementById('exportCompliance').onclick = ()=>{
         const rows = [
           ["Framework","Control","Status","Owner","Evidence"],
@@ -1002,11 +853,9 @@
       };
     }
     
-    // Initialize everything when page loads
     document.addEventListener('DOMContentLoaded', function() {
       initSecOpsDemo();
       
-      // Add smooth scrolling for anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
