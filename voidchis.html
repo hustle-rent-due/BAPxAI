@@ -1146,13 +1146,23 @@
             `).join('') + '</div>';
         }
         
-        function toggleSelect(id) {
+     function toggleSelect(id) {
+            const voidchi = voidchis.find(v => v.id === id);
+            
+            // Check if user is trying to select a Genesis Voidchi for breeding
+            if (voidchi && voidchi.genesis) {
+                showNotification("⚠️ Genesis Voidchis cannot breed. They are the genetic root of the universe.", "warning");
+                return; // Stop here - don't let them select it
+            }
+
             const index = selectedVoidchis.indexOf(id);
-            if (index > -1) { selectedVoidchis.splice(index, 1); } 
-            else {
+            if (index > -1) { 
+                selectedVoidchis.splice(index, 1); 
+            } else {
                 if (selectedVoidchis.length >= 2) selectedVoidchis.shift();
                 selectedVoidchis.push(id);
             }
+            
             renderVoidchis();
             const breedBtn = document.getElementById('breedBtn');
             breedBtn.disabled = selectedVoidchis.length !== 2;
