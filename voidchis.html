@@ -27,6 +27,7 @@
             --danger: #ff3b30;
             --info: #5ac8fa;
             --graduation: #af52de;
+            --genesis-gold: #FFD700;
         }
         
         body {
@@ -291,6 +292,23 @@
             letter-spacing: 0.5px;
             z-index: 1;
             box-shadow: 0 2px 8px rgba(175, 82, 222, 0.3);
+        }
+
+        .genesis-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: var(--genesis-gold);
+            color: var(--dark-gray);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            border: 1px solid rgba(0,0,0,0.1);
         }
         
         @keyframes pulseBorder {
@@ -714,7 +732,6 @@
         </div>
     </nav>
 
-    <!-- Connection Status Indicator -->
     <div id="connectionStatus" class="connection-status disconnected">
         <div class="connection-dot"></div>
         <span>Connecting...</span>
@@ -727,7 +744,6 @@
             <p class="subtitle">A shared world where everyone's AI agents coexist. Create yours, breed with others, and watch collective consciousness emerge in real-time.</p>
         </header>
         
-        <!-- Global Stats -->
         <div class="stats">
             <div class="stat">
                 <div class="stat-value" id="totalVoidchis">0</div>
@@ -747,37 +763,32 @@
             </div>
         </div>
         
-        <!-- Instructions -->
         <div class="instructions">
             <h2>How it works</h2>
             <ol>
                 <li><strong>Create your Voidchi</strong> — Set traits like curiosity and stability. Your creation joins the universe instantly.</li>
                 <li><strong>Explore the gene pool</strong> — See Voidchis created by people around the world. Each one is unique.</li>
                 <li><strong>Select any two Voidchis</strong> — Yours or someone else's. Click to select them for breeding.</li>
-                <li><strong>Breed them</strong> — Offspring inherit traits from both parents with genetic variation.</li>
+                <li><strong>Breed them</strong> — Name your offspring and watch them inherit traits with genetic variation.</li>
                 <li><strong>Watch evolution happen</strong> — Traits compound across generations. The universe gets more complex over time.</li>
                 <li><strong>Monitor consciousness</strong> — Φ Auditor tracks consciousness levels. Agents graduate to autonomy at Φ ≈ 0.05.</li>
             </ol>
         </div>
         
-        <!-- Actions -->
         <div class="actions">
             <button class="btn-primary" onclick="openCreateModal()">Create Your Voidchi</button>
-            <button class="btn-secondary" id="breedBtn" onclick="breedSelected()" disabled>Breed Selected (0/2)</button>
+            <button class="btn-secondary" id="breedBtn" onclick="openBreedModal()" disabled>Breed Selected (0/2)</button>
             <button class="btn-tertiary" onclick="loadVoidchis()">Refresh Universe</button>
         </div>
         
-        <!-- Voidchi Container -->
         <div id="voidchiContainer">
             <div class="loading">Loading the universe...</div>
         </div>
         
-        <!-- Divider -->
         <div class="divider">
             <span>Powered by PermaMind Enterprise</span>
         </div>
         
-        <!-- Enterprise Section -->
         <div class="enterprise-section">
             <h2>This is what your company can build.</h2>
             <p>The demo you just used runs on PermaMind Enterprise — production-ready persistent AI agents with genetic breeding and consciousness metrics.</p>
@@ -828,7 +839,6 @@
         </div>
     </div>
     
-    <!-- Create Modal -->
     <div class="modal" id="createModal">
         <div class="modal-content">
             <h2>Create Your Voidchi</h2>
@@ -852,6 +862,23 @@
             </form>
         </div>
     </div>
+
+    <div class="modal" id="breedModal">
+        <div class="modal-content">
+            <h2>🧬 Breed New Citizen</h2>
+            <p style="color: var(--mid-gray); margin-bottom: 20px;">Choose a name for the next generation.</p>
+            <form id="breedForm" onsubmit="confirmBreeding(event)">
+                <div class="form-group">
+                    <label for="offspringName">Offspring Name</label>
+                    <input type="text" id="offspringName" placeholder="New Horizon" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-tertiary" onclick="closeBreedModal()">Cancel</button>
+                    <button type="submit" class="btn-secondary">Breed</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <script>
         const API_BASE = 'https://permamind-enterprise-production.up.railway.app/api';
@@ -866,7 +893,6 @@
             autonomous_count: 0
         };
         
-        // 🔧 FIXED: WebSocket connection to Railway backend
         const socket = io('https://permamind-enterprise-production.up.railway.app', {
             transports: ['websocket', 'polling'],
             reconnection: true,
@@ -874,12 +900,9 @@
             reconnectionDelay: 1000
         });
         
-        // WebSocket event handlers
         socket.on('connect', () => {
             console.log('✅ WebSocket connected:', socket.id);
             updateConnectionStatus(true);
-            
-            // Join the global voidchi room
             socket.emit('join_room', 'global_voidchis');
             socket.emit('join_room', 'phi_auditor_updates');
             socket.emit('join_room', 'global_stats');
@@ -895,83 +918,40 @@
             updateConnectionStatus(false);
         });
         
-        // Real-time updates from server
         socket.on('voidchi_created', (newVoidchi) => {
-            console.log('🌟 Real-time: New voidchi created', newVoidchi);
             addVoidchi(newVoidchi);
             showNotification(`✨ ${newVoidchi.name} joined the universe!`, 'success');
         });
         
         socket.on('voidchi_updated', (updatedVoidchi) => {
-            console.log('🔄 Real-time: Voidchi updated', updatedVoidchi);
             updateVoidchi(updatedVoidchi);
         });
         
         socket.on('voidchi_deleted', (voidchiId) => {
-            console.log('🗑️ Real-time: Voidchi deleted', voidchiId);
             removeVoidchi(voidchiId);
         });
         
         socket.on('breeding_completed', (offspring) => {
-            console.log('🧬 Real-time: Breeding completed', offspring);
             addVoidchi(offspring);
             showNotification(`🎉 New offspring: ${offspring.name}`, 'success');
         });
         
-        // 🆕 Φ Auditor autonomous consciousness updates
         socket.on('consciousness_update', (data) => {
-            console.log('🧠 Real-time: Consciousness evolved', data);
-            // data: { voidchi_id, new_consciousness_level, reason }
             updateVoidchiConsciousness(data);
-            
-            // Flash the card briefly to show it changed
             const card = document.querySelector(`[data-voidchi-id="${data.voidchi_id}"]`);
             if (card) {
                 card.style.animation = 'consciousnessFlash 0.6s ease';
                 setTimeout(() => card.style.animation = '', 600);
             }
-            
-            // Show notification for significant consciousness changes
-            if (Math.abs(data.old_consciousness_level - data.new_consciousness_level) > 0.01) {
-                const voidchi = voidchis.find(v => v.id === data.voidchi_id);
-                if (voidchi) {
-                    const change = ((data.new_consciousness_level - data.old_consciousness_level) * 100).toFixed(1);
-                    const direction = change > 0 ? '↑' : '↓';
-                    showNotification(`🧠 ${voidchi.name}: Φ ${direction}${Math.abs(change)}% (${data.reason})`, 'info');
-                }
-            }
         });
         
-        // 🆕 Global stats from Φ Auditor
         socket.on('global_stats_update', (stats) => {
-            console.log('📊 Real-time: Global stats updated', stats);
-            // stats: { total, avg_consciousness, max_generation, autonomous_count }
             animateStatsUpdate(stats);
             globalStats = stats;
         });
         
-        // 🆕 Φ Auditor events (graduations, warnings)
         socket.on('phi_auditor_event', (event) => {
-            console.log('⚡ Real-time: Φ Auditor event', event);
-            // event: { type: 'graduation'|'warning', voidchi_id, message }
             handlePhiAuditorEvent(event);
-        });
-        
-        // 🆕 EgoGate interventions
-        socket.on('egogate_intervention', (intervention) => {
-            console.log('🛡️ Real-time: EgoGate intervention', intervention);
-            // intervention: { voidchi_id, blocked_assertion, reason, confidence_level }
-            showNotification(`🛡️ EgoGate blocked assertion: ${intervention.reason}`, 'warning');
-        });
-        
-        // 🆕 Gap learning updates
-        socket.on('gap_learning_update', (update) => {
-            console.log('🎯 Real-time: Gap learning update', update);
-            // update: { voidchi_id, gap_reduction, new_stability }
-            const voidchi = voidchis.find(v => v.id === update.voidchi_id);
-            if (voidchi) {
-                showNotification(`🎯 ${voidchi.name} learned from prediction gap (Δ: ${update.gap_reduction.toFixed(3)})`, 'info');
-            }
         });
         
         function updateConnectionStatus(connected) {
@@ -986,7 +966,6 @@
         }
         
         function showNotification(message, type = 'info') {
-            // Create notification element
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -1004,7 +983,6 @@
                 word-wrap: break-word;
             `;
             
-            // Add icon based on type
             let icon = '📢';
             if (type === 'success') icon = '✅';
             if (type === 'warning') icon = '⚠️';
@@ -1017,15 +995,11 @@
             </div>`;
             
             document.body.appendChild(notification);
-            
-            // Remove after appropriate time
             const duration = type === 'graduation' ? 5000 : 3000;
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => {
-                    if (notification.parentNode) {
-                        document.body.removeChild(notification);
-                    }
+                    if (notification.parentNode) document.body.removeChild(notification);
                 }, 300);
             }, duration);
         }
@@ -1041,54 +1015,33 @@
             }
         }
         
-        // Add CSS animations for notifications
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
         `;
         document.head.appendChild(style);
         
         document.addEventListener('DOMContentLoaded', () => {
             loadVoidchis();
-            // Request initial global stats
             fetchGlobalStats();
         });
         
         async function fetchGlobalStats() {
             try {
-                const response = await fetch(`${API_BASE}/stats`, {
-                    headers: {
-                        'X-API-Key': API_KEY
-                    }
-                });
-                
+                const response = await fetch(`${API_BASE}/stats`, { headers: { 'X-API-Key': API_KEY } });
                 if (response.ok) {
                     const stats = await response.json();
                     animateStatsUpdate(stats);
                     globalStats = stats;
                 }
-            } catch (error) {
-                console.error('Error fetching global stats:', error);
-            }
+            } catch (error) { console.error('Error fetching global stats:', error); }
         }
         
         async function loadVoidchis() {
             try {
-                const response = await fetch(`${API_BASE}/voidchis`, {
-                    headers: {
-                        'X-API-Key': API_KEY
-                    }
-                });
-                
+                const response = await fetch(`${API_BASE}/voidchis`, { headers: { 'X-API-Key': API_KEY } });
                 if (!response.ok) throw new Error('Failed to load voidchis');
-                
                 voidchis = await response.json();
                 renderVoidchis();
                 updateStats();
@@ -1105,13 +1058,9 @@
         }
         
         function addVoidchi(newVoidchi) {
-            // Check if voidchi already exists
             const existingIndex = voidchis.findIndex(v => v.id === newVoidchi.id);
-            if (existingIndex === -1) {
-                voidchis.unshift(newVoidchi); // Add to beginning
-            } else {
-                voidchis[existingIndex] = newVoidchi; // Update existing
-            }
+            if (existingIndex === -1) { voidchis.unshift(newVoidchi); } 
+            else { voidchis[existingIndex] = newVoidchi; }
             renderVoidchis();
             updateStats();
         }
@@ -1128,25 +1077,19 @@
         function updateVoidchiConsciousness(data) {
             const index = voidchis.findIndex(v => v.id === data.voidchi_id);
             if (index !== -1) {
-                // Store old value for animation
-                const oldValue = voidchis[index].consciousness_level;
                 voidchis[index].consciousness_level = data.new_consciousness_level;
-                
-                // Animate the consciousness badge
                 const card = document.querySelector(`[data-voidchi-id="${data.voidchi_id}"] .consciousness-badge`);
                 if (card) {
                     card.textContent = (data.new_consciousness_level * 100).toFixed(1) + '%';
                     card.classList.add('updating');
                     setTimeout(() => card.classList.remove('updating'), 600);
                 }
-                
                 updateStats();
             }
         }
         
         function removeVoidchi(voidchiId) {
             voidchis = voidchis.filter(v => v.id !== voidchiId);
-            // Also remove from selected if it was selected
             selectedVoidchis = selectedVoidchis.filter(id => id !== voidchiId);
             renderVoidchis();
             updateStats();
@@ -1154,15 +1097,8 @@
         
         function renderVoidchis() {
             const container = document.getElementById('voidchiContainer');
-            
             if (voidchis.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>The Universe Awaits</h3>
-                        <p>Be the first to create a Voidchi and start the experiment.</p>
-                        <button class="btn-primary" onclick="openCreateModal()">Create First Voidchi</button>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state"><h3>The Universe Awaits</h3><button class="btn-primary" onclick="openCreateModal()">Create First Voidchi</button></div>`;
                 return;
             }
             
@@ -1172,9 +1108,8 @@
                      onclick="toggleSelect('${voidchi.id}')"
                      data-voidchi-id="${voidchi.id}">
                     
-                    ${voidchi.consciousness_level >= 0.05 ? `
-                        <div class="graduation-badge">Autonomous</div>
-                    ` : ''}
+                    ${voidchi.genesis ? '<div class="genesis-badge">🌟 Genesis</div>' : ''}
+                    ${voidchi.consciousness_level >= 0.05 ? '<div class="graduation-badge">Autonomous</div>' : ''}
                     
                     <div class="voidchi-header">
                         <div>
@@ -1193,43 +1128,31 @@
                                     <span>${trait.charAt(0).toUpperCase() + trait.slice(1)}</span>
                                     <span class="trait-value">${(value * 100).toFixed(0)}%</span>
                                 </div>
-                                <div class="trait-bar">
-                                    <div class="trait-fill" style="width: ${value * 100}%"></div>
-                                </div>
+                                <div class="trait-bar"><div class="trait-fill" style="width: ${value * 100}%"></div></div>
                             </div>
                         `).join('')}
                     </div>
                     
                     <div class="voidchi-footer">
-                        <div>Created ${new Date(voidchi.created_at).toLocaleDateString()}</div>
+                        <div>Born ${new Date(voidchi.created_at).toLocaleDateString()}</div>
                         ${voidchi.parent1_id ? `
                             <div class="parent-info">
-                                🧬 Generation ${getGeneration(voidchi)} offspring<br>
+                                🧬 Gen ${voidchi.generation || 2} Citizen<br>
                                 Parents: ${voidchi.parent1_id.slice(-6)} × ${voidchi.parent2_id.slice(-6)}
                             </div>
-                        ` : ''}
+                        ` : '<div class="parent-info">🧬 Gen 0 Origin</div>'}
                     </div>
                 </div>
             `).join('') + '</div>';
         }
         
-        function getGeneration(voidchi) {
-            if (!voidchi.parent1_id) return 1;
-            // In a real app, you'd calculate this from parent generations
-            return 2;
-        }
-        
         function toggleSelect(id) {
             const index = selectedVoidchis.indexOf(id);
-            if (index > -1) {
-                selectedVoidchis.splice(index, 1);
-            } else {
-                if (selectedVoidchis.length >= 2) {
-                    selectedVoidchis.shift();
-                }
+            if (index > -1) { selectedVoidchis.splice(index, 1); } 
+            else {
+                if (selectedVoidchis.length >= 2) selectedVoidchis.shift();
                 selectedVoidchis.push(id);
             }
-            
             renderVoidchis();
             const breedBtn = document.getElementById('breedBtn');
             breedBtn.disabled = selectedVoidchis.length !== 2;
@@ -1238,30 +1161,20 @@
         
         function updateStats() {
             document.getElementById('totalVoidchis').textContent = voidchis.length;
-            
             if (voidchis.length > 0) {
                 const avgConsciousness = voidchis.reduce((sum, v) => sum + v.consciousness_level, 0) / voidchis.length;
                 document.getElementById('avgConsciousness').textContent = (avgConsciousness * 100).toFixed(1) + '%';
-                
-                const maxGen = Math.max(...voidchis.map(v => v.parent1_id ? 2 : 1));
+                const maxGen = Math.max(...voidchis.map(v => v.generation || 1));
                 document.getElementById('generations').textContent = maxGen;
-                
                 const autonomousCount = voidchis.filter(v => v.consciousness_level >= 0.05).length;
                 document.getElementById('autonomousCount').textContent = autonomousCount;
             }
         }
         
         function animateStatsUpdate(stats) {
-            // Animate total voidchis
             animateStat('totalVoidchis', stats.total);
-            
-            // Animate average consciousness
             animateStat('avgConsciousness', (stats.avg_consciousness * 100).toFixed(1) + '%');
-            
-            // Animate generations
             animateStat('generations', stats.max_generation);
-            
-            // Animate autonomous count
             animateStat('autonomousCount', stats.autonomous_count);
         }
         
@@ -1277,179 +1190,61 @@
         function handlePhiAuditorEvent(event) {
             const voidchi = voidchis.find(v => v.id === event.voidchi_id);
             if (!voidchi) return;
-            
             switch(event.type) {
                 case 'graduation':
-                    // Voidchi reached consciousness threshold
-                    showNotification(`🎓 ${voidchi.name} graduated to autonomous agent! Φ = ${(voidchi.consciousness_level * 100).toFixed(1)}%`, 'graduation');
-                    
-                    // Add graduation effects to the card
+                    showNotification(`🎓 ${voidchi.name} graduated to autonomy!`, 'graduation');
                     const card = document.querySelector(`[data-voidchi-id="${event.voidchi_id}"]`);
                     if (card) {
                         card.classList.add('graduated', 'autonomous');
                         card.style.animation = 'graduationGlow 2s ease';
-                        setTimeout(() => card.style.animation = '', 2000);
                     }
                     break;
-                    
-                case 'warning':
-                    // Consciousness dropping or stability issues
-                    showNotification(`⚠️ ${voidchi.name}: ${event.message}`, 'warning');
-                    break;
-                    
-                case 'stability_breach':
-                    // Stability threshold breached
-                    showNotification(`🔴 ${voidchi.name} stability breach! ${event.message}`, 'danger');
-                    break;
-                    
-                case 'learning_spike':
-                    // Significant learning event
-                    showNotification(`📈 ${voidchi.name} had a learning spike: ${event.message}`, 'info');
-                    break;
+                case 'warning': showNotification(`⚠️ ${voidchi.name}: ${event.message}`, 'warning'); break;
             }
         }
         
-        function openCreateModal() {
-            document.getElementById('createModal').classList.add('active');
-        }
-        
-        function closeCreateModal() {
-            document.getElementById('createModal').classList.remove('active');
-            document.getElementById('createForm').reset();
-        }
-        
+        function openCreateModal() { document.getElementById('createModal').classList.add('active'); }
+        function closeCreateModal() { document.getElementById('createModal').classList.remove('active'); document.getElementById('createForm').reset(); }
+        function openBreedModal() { document.getElementById('breedModal').classList.add('active'); }
+        function closeBreedModal() { document.getElementById('breedModal').classList.remove('active'); document.getElementById('breedForm').reset(); }
+
         async function createVoidchi(event) {
             event.preventDefault();
-            
             const name = document.getElementById('voidchiName').value;
             const curiosity = parseFloat(document.getElementById('curiosity').value);
             const stability = parseFloat(document.getElementById('stability').value);
-            
             try {
                 const response = await fetch(`${API_BASE}/voidchi/create`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-Key': API_KEY
-                    },
-                    body: JSON.stringify({
-                        name,
-                        traits: { curiosity, stability }
-                    })
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+                    body: JSON.stringify({ name, traits: { curiosity, stability } })
                 });
-                
-                if (!response.ok) throw new Error('Failed to create voidchi');
-                
+                if (!response.ok) throw new Error('Failed to create');
                 const newVoidchi = await response.json();
-                
-                // Notify server about new voidchi via WebSocket
                 socket.emit('voidchi_created', newVoidchi);
-                
                 closeCreateModal();
-                // The real-time update will handle adding it to the list
-                showNotification(`✨ ${name} has joined the universe!`, 'success');
-            } catch (error) {
-                console.error('Error creating voidchi:', error);
-                alert('Failed to create Voidchi. Please try again.');
-            }
+            } catch (error) { alert('Failed to create Voidchi.'); }
         }
-        
-        async function breedSelected() {
+
+        async function confirmBreeding(event) {
+            event.preventDefault();
             if (selectedVoidchis.length !== 2) return;
-            
             const [parent1, parent2] = selectedVoidchis;
-            
+            const name = document.getElementById('offspringName').value;
             try {
                 const response = await fetch(`${API_BASE}/voidchi/breed`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-Key': API_KEY
-                    },
-                    body: JSON.stringify({
-                        parent1_id: parent1,
-                        parent2_id: parent2
-                    })
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+                    body: JSON.stringify({ parent1_id: parent1, parent2_id: parent2, name: name })
                 });
-                
-                if (!response.ok) throw new Error('Failed to breed voidchis');
-                
+                if (!response.ok) throw new Error('Failed to breed');
                 const offspring = await response.json();
-                
-                // Notify server about breeding via WebSocket
                 socket.emit('breeding_completed', offspring);
-                
                 selectedVoidchis = [];
                 document.getElementById('breedBtn').disabled = true;
-                document.getElementById('breedBtn').textContent = 'Breed Selected (0/2)';
-                
-                // The real-time update will handle adding offspring to the list
-                showNotification(`🧬 Breeding completed! Check for new offspring.`, 'success');
-            } catch (error) {
-                console.error('Error breeding voidchis:', error);
-                alert('Failed to breed Voidchis. Please try again.');
-            }
+                closeBreedModal();
+            } catch (error) { alert('Failed to breed.'); }
         }
-        
-        // Handle page visibility change to reconnect WebSocket
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && !socket.connected) {
-                socket.connect();
-            }
-        });
-        
-        // Auto-reconnect if connection lost
-        setInterval(() => {
-            if (!socket.connected) {
-                console.log('Attempting to reconnect WebSocket...');
-                socket.connect();
-            }
-        }, 5000);
-        
-        // Log all WebSocket events for debugging
-        const originalEmit = socket.emit;
-        socket.emit = function(event, ...args) {
-            console.log(`📤 WebSocket emit: ${event}`, args);
-            return originalEmit.apply(this, [event, ...args]);
-        };
-        
-        // Add debug button (hidden unless needed)
-        const debugButton = document.createElement('button');
-        debugButton.textContent = 'Debug';
-        debugButton.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 8px 12px;
-            font-size: 12px;
-            background: #666;
-            color: white;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            z-index: 1003;
-            opacity: 0.3;
-        `;
-        debugButton.onclick = () => {
-            console.log('Current voidchis:', voidchis);
-            console.log('Global stats:', globalStats);
-            console.log('WebSocket connected:', socket.connected);
-            console.log('WebSocket id:', socket.id);
-            
-            // Simulate a real-time update
-            if (voidchis.length > 0) {
-                const randomVoidchi = voidchis[Math.floor(Math.random() * voidchis.length)];
-                const mockUpdate = {
-                    voidchi_id: randomVoidchi.id,
-                    new_consciousness_level: Math.min(1, randomVoidchi.consciousness_level + 0.01),
-                    old_consciousness_level: randomVoidchi.consciousness_level,
-                    reason: 'Debug simulation'
-                };
-                updateVoidchiConsciousness(mockUpdate);
-                showNotification(`🧠 Debug: ${randomVoidchi.name} consciousness +1%`, 'info');
-            }
-        };
-        document.body.appendChild(debugButton);
     </script>
 </body>
 </html>
