@@ -42,10 +42,41 @@
             min-height: 100vh;
         }
         
+        /* Urgency Banner */
+        .urgency-banner {
+            background: linear-gradient(135deg, #ff3b30, #ff9500);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,59,48,0.4);
+            animation: urgencyPulse 2s infinite;
+        }
+        
+        .urgency-banner span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 8px;
+            margin: 0 4px;
+            font-family: 'SF Mono', monospace;
+            letter-spacing: 1px;
+        }
+        
+        @keyframes urgencyPulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.9; }
+            100% { opacity: 1; }
+        }
+        
         /* Navigation */
         nav {
             position: fixed;
-            top: 0;
+            top: 60px; /* Height of urgency banner */
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: saturate(180%) blur(20px);
@@ -85,7 +116,7 @@
         .main-container {
             display: flex;
             max-width: 1200px;
-            margin: 100px auto 0;
+            margin: 160px auto 0; /* Increased for banner + nav */
             padding: 0 20px;
             flex: 1;
             gap: 30px;
@@ -100,8 +131,8 @@
             width: 320px;
             padding: 20px 0;
             position: sticky;
-            top: 100px;
-            height: calc(100vh - 140px);
+            top: 160px;
+            height: calc(100vh - 200px);
             overflow-y: auto;
         }
         
@@ -897,6 +928,11 @@
             .leaderboard {
                 max-height: 300px;
             }
+            
+            .urgency-banner {
+                font-size: 14px;
+                padding: 12px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -954,10 +990,28 @@
             .detail-traits {
                 grid-column: span 1;
             }
+            
+            .urgency-banner {
+                font-size: 12px;
+                padding: 10px;
+            }
+            
+            .main-container {
+                margin-top: 140px;
+            }
+            
+            nav {
+                top: 50px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Urgency Banner -->
+    <div class="urgency-banner">
+        🚨 FREE GENESIS ADOPTION ENDS IN <span id="countdown">72:00:00</span> - Early adopters grandfathered FOREVER 🚨
+    </div>
+
     <nav>
         <div class="container">
             <a href="/" class="logo">PermaMind</a>
@@ -994,19 +1048,21 @@
             <header>
                 <div class="hero-badge">🌍 Live Global Experiment</div>
                 <h1>The Voidchi Universe</h1>
-                <p class="subtitle">A shared world where everyone's AI agents coexist. Create yours, breed with others, and watch collective consciousness emerge in real-time.</p>
+                <p class="subtitle">🚨 LAST CHANCE: Adopt a Genesis Voidchi before paid launch (72 hours)<br>
+                Join 1,000 Genesis spots. Free forever if you adopt now. After launch: $9.99 one time fee<br>
+                Simple: Name it. Watch it exist globally. Breed with the world.</p>
             </header>
             
             <!-- Genesis Counter -->
             <div class="genesis-counter" id="genesisCounter">
-                ⭐ <span id="genesisRemaining">1000</span>/1000 Genesis slots remaining
+                ⭐ <span id="genesisSlots">1000</span>/1000 Genesis slots remaining
             </div>
             
             <!-- Instructions -->
             <div class="instructions">
                 <h2>How it works</h2>
                 <ol>
-                    <li><strong>Create your Voidchi</strong> — Set traits like curiosity and stability. Your creation joins the universe instantly.</li>
+                    <li><strong>Create your Genesis Voidchi</strong> — Set traits like curiosity and stability. Your creation joins the universe instantly.</li>
                     <li><strong>Explore the gene pool</strong> — See Voidchis created by people around the world. Each one is unique.</li>
                     <li><strong>Select any two Voidchis</strong> — Yours or someone else's. Click to select them for breeding.</li>
                     <li><strong>Breed them</strong> — Offspring inherit traits from both parents with genetic variation.</li>
@@ -1016,7 +1072,7 @@
             
             <!-- Actions -->
             <div class="actions">
-                <button class="btn-primary" onclick="openCreateModal()">Create Your Voidchi</button>
+                <button class="btn-primary" onclick="openCreateModal()">✨ Claim Genesis Voidchi</button>
                 <button class="btn-secondary" id="breedBtn" onclick="breedSelected()" disabled>Breed Selected (0/2)</button>
                 <button class="btn-tertiary" onclick="loadVoidchis()">Refresh Universe</button>
             </div>
@@ -1120,10 +1176,13 @@
     <!-- Create Modal -->
     <div class="modal" id="createModal">
         <div class="modal-content">
-            <h2>Create Your Voidchi</h2>
+            <h2>✨ Claim Your Genesis Voidchi</h2>
+            <p style="color: var(--mid-gray); margin-bottom: 24px; font-size: 15px;">
+                Claim your spot before launch! Genesis Voidchis are FREE forever. After launch: $9.99 one-time fee.
+            </p>
             <form id="createForm" onsubmit="createVoidchi(event)">
                 <div class="form-group">
-                    <label for="voidchiName">Name</label>
+                    <label for="voidchiName">Name Your Voidchi</label>
                     <input type="text" id="voidchiName" placeholder="Void-Alpha" required>
                 </div>
                 <div class="form-group">
@@ -1136,7 +1195,7 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-tertiary" onclick="closeCreateModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Create</button>
+                    <button type="submit" class="btn-primary">✨ Claim Genesis Spot</button>
                 </div>
             </form>
         </div>
@@ -1212,7 +1271,6 @@
         };
         let activityFeed = [];
         let leaderboard = [];
-        let genesisRemaining = 1000;
         
         // 🔧 WebSocket connection to Railway backend
         const socket = io('https://permamind-enterprise-production.up.railway.app', {
@@ -1221,6 +1279,54 @@
             reconnectionAttempts: 5,
             reconnectionDelay: 1000
         });
+        
+        // Countdown Timer (72 hours)
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            let hours = 72;
+            let minutes = 0;
+            let seconds = 0;
+            
+            function updateCountdown() {
+                // Format time
+                const formatTime = (value) => String(value).padStart(2, '0');
+                countdownElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+                
+                // Update time
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                        if (hours < 0) {
+                            hours = 0;
+                            minutes = 0;
+                            seconds = 0;
+                            countdownElement.textContent = "TIME'S UP!";
+                            countdownElement.style.color = "#ff3b30";
+                            countdownElement.style.fontWeight = "900";
+                            clearInterval(countdownInterval);
+                        }
+                    }
+                }
+                
+                // Change color when less than 24 hours
+                if (hours < 24) {
+                    countdownElement.style.color = "#ff3b30";
+                    countdownElement.style.fontWeight = "900";
+                } else if (hours < 48) {
+                    countdownElement.style.color = "#ff9500";
+                }
+            }
+            
+            // Update immediately
+            updateCountdown();
+            
+            // Update every second
+            const countdownInterval = setInterval(updateCountdown, 1000);
+        }
         
         // WebSocket event handlers
         socket.on('connect', () => {
@@ -1259,10 +1365,7 @@
             });
             
             // Update Genesis counter
-            if (newVoidchi.id <= 1000) {
-                genesisRemaining = Math.max(0, 1000 - newVoidchi.id);
-                updateGenesisCounter();
-            }
+            updateGenesisCounter();
         });
         
         socket.on('voidchi_updated', (updatedVoidchi) => {
@@ -1284,10 +1387,7 @@
             });
             
             // Update Genesis counter
-            if (offspring.id <= 1000) {
-                genesisRemaining = Math.max(0, 1000 - offspring.id);
-                updateGenesisCounter();
-            }
+            updateGenesisCounter();
         });
         
         socket.on('consciousness_update', (data) => {
@@ -1318,6 +1418,7 @@
             loadVoidchis();
             loadGlobalStats();
             loadLeaderboard();
+            startCountdown(); // Start the countdown timer
         });
         
         // ========== GLOBAL STATS FUNCTIONS ==========
@@ -1347,6 +1448,31 @@
             document.getElementById('globalAutonomous').textContent = stats.autonomous_count || 0;
             document.getElementById('globalConsciousness').textContent = 
                 stats.avg_consciousness ? (stats.avg_consciousness * 100).toFixed(1) + '%' : '0%';
+        }
+        
+        // ========== GENESIS COUNTER FIX ==========
+        function updateGenesisCounter() {
+            const genesisTotal = 1000;
+            const genesisUsed = voidchis.filter(v => !v.parent1_id).length; // Count Gen 1 only
+            const genesisRemaining = Math.max(0, genesisTotal - genesisUsed);
+            
+            document.getElementById('genesisSlots').textContent = `${genesisRemaining}`;
+            
+            // Update the counter styling
+            const counter = document.getElementById('genesisCounter');
+            if (genesisRemaining === 0) {
+                counter.innerHTML = '⭐ All Genesis slots taken!';
+                counter.style.background = 'var(--gold)';
+                counter.style.color = '#5d4200';
+            } else if (genesisRemaining < 100) {
+                counter.style.background = 'linear-gradient(135deg, #ff3b30, #ff9500)';
+                counter.style.color = 'white';
+                counter.innerHTML = `🚨 <span id="genesisSlots">${genesisRemaining}</span>/1000 Genesis slots remaining - HURRY!`;
+            }
+        }
+        
+        function isGenesisVoidchi(voidchi) {
+            return !voidchi.parent1_id; // Genesis = Generation 1 (no parents)
         }
         
         // ========== ACTIVITY FEED FUNCTIONS ==========
@@ -1488,27 +1614,6 @@
             }
         }
         
-        // ========== GENESIS FUNCTIONS ==========
-        function updateGenesisCounter() {
-            const counter = document.getElementById('genesisCounter');
-            const remaining = document.getElementById('genesisRemaining');
-            
-            if (counter && remaining) {
-                remaining.textContent = genesisRemaining;
-                
-                if (genesisRemaining === 0) {
-                    counter.innerHTML = '⭐ All Genesis slots taken!';
-                    counter.style.background = 'var(--gold)';
-                    counter.style.color = '#5d4200';
-                }
-            }
-        }
-        
-        function isGenesisVoidchi(voidchiId) {
-            // Assuming sequential IDs starting from 1
-            return voidchiId <= 1000;
-        }
-        
         // ========== VOIDCHI DETAILS MODAL ==========
         function openVoidchiDetails(voidchiId) {
             const voidchi = voidchis.find(v => v.id === voidchiId) || 
@@ -1539,6 +1644,11 @@
                 voidchi.parent1_id ? 
                 `${voidchi.parent1_id.slice(-6)} × ${voidchi.parent2_id.slice(-6)}` : 
                 'Original';
+            
+            // Add Genesis badge if applicable
+            if (isGenesisVoidchi(voidchi)) {
+                document.getElementById('detailStatus').textContent += ' (Genesis ⭐)';
+            }
             
             // Render traits
             const traitsContainer = document.getElementById('detailTraits');
@@ -1607,13 +1717,11 @@
                 
                 voidchis = await response.json();
                 
-                // Calculate Genesis remaining
-                const maxId = Math.max(...voidchis.map(v => v.id));
-                genesisRemaining = Math.max(0, 1000 - maxId);
+                // Update Genesis counter
                 updateGenesisCounter();
                 
                 renderVoidchis();
-              
+                updateStats();
             } catch (error) {
                 console.error('Error loading voidchis:', error);
                 document.getElementById('voidchiContainer').innerHTML = `
@@ -1633,15 +1741,15 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <h3>The Universe Awaits</h3>
-                        <p>Be the first to create a Voidchi and start the experiment.</p>
-                        <button class="btn-primary" onclick="openCreateModal()">Create First Voidchi</button>
+                        <p>Be the first to create a Genesis Voidchi!</p>
+                        <button class="btn-primary" onclick="openCreateModal()">✨ Claim First Genesis Spot</button>
                     </div>
                 `;
                 return;
             }
             
             container.innerHTML = '<div class="voidchi-grid">' + voidchis.map(voidchi => {
-                const isGenesis = isGenesisVoidchi(voidchi.id);
+                const isGenesis = isGenesisVoidchi(voidchi);
                 const isAutonomous = voidchi.consciousness_level >= 0.05;
                 const isSelected = selectedVoidchis.includes(voidchi.id);
                 
@@ -1654,7 +1762,7 @@
                     <div class="${cardClasses}" 
                          onclick="openVoidchiDetails('${voidchi.id}')">
                         
-                        ${isGenesis ? '<div class="genesis-badge">Genesis</div>' : ''}
+                        ${isGenesis ? '<div class="genesis-badge">Genesis ⭐</div>' : ''}
                         ${isAutonomous ? '<div class="graduation-badge">Autonomous</div>' : ''}
                         
                         <div class="voidchi-header">
@@ -1836,7 +1944,7 @@
                 const newVoidchi = await response.json();
                 
                 closeCreateModal();
-                showNotification(`✨ ${name} has joined the universe!`, 'success');
+                showNotification(`✨ ${name} claimed as Genesis Voidchi! FREE forever!`, 'success');
             } catch (error) {
                 console.error('Error creating voidchi:', error);
                 showNotification('❌ Failed to create Voidchi. Please try again.', 'danger');
