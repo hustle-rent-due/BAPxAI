@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voidchi Universe - PermaMind</title>
+    <title>Voidchi™ Universe - Persistent AI Demo</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
             --white: #ffffff;
@@ -18,9 +15,10 @@
             --mid-gray: #86868b;
             --dark-gray: #1d1d1f;
             --accent: #0071e3;
-            --accent-hover: #0077ed;
             --success: #34c759;
-            --graduation: #af52de;
+            --warning: #ff9500;
+            --danger: #ff3b30;
+            --gold: #FFD700;
         }
         
         body {
@@ -35,47 +33,33 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255,255,255,0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--light-gray);
             z-index: 1000;
+            padding: 16px 20px;
         }
         
         nav .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        nav .logo {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--dark-gray);
-            text-decoration: none;
-        }
-        
-        nav a {
-            color: var(--dark-gray);
-            text-decoration: none;
-            font-size: 14px;
-            margin-left: 32px;
-            transition: opacity 0.3s;
-        }
-        
-        nav a:hover { opacity: 0.6; }
+        nav .logo { font-size: 20px; font-weight: 600; }
         
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px 60px;
+            margin: 80px auto 60px;
+            padding: 0 20px;
         }
         
         header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
+            padding: 40px 20px;
         }
         
         h1 {
@@ -88,19 +72,38 @@
         .subtitle {
             font-size: 21px;
             color: var(--mid-gray);
-            max-width: 700px;
-            margin: 0 auto;
+            margin-bottom: 32px;
         }
         
-        .hero-badge {
-            display: inline-block;
+        .proof-banner {
             background: var(--near-white);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 40px;
+            border: 2px solid var(--light-gray);
+        }
+        
+        .proof-banner h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
             color: var(--accent);
-            margin-bottom: 20px;
+        }
+        
+        .proof-banner ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .proof-banner li {
+            padding: 8px 0;
+            font-size: 17px;
+        }
+        
+        .proof-banner li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 8px;
         }
         
         .stats {
@@ -120,13 +123,13 @@
         .stat-value {
             font-size: 48px;
             font-weight: 600;
-            letter-spacing: -1px;
+            color: var(--accent);
+            display: block;
         }
         
         .stat-label {
             font-size: 14px;
             color: var(--mid-gray);
-            margin-top: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -134,147 +137,171 @@
         .actions {
             display: flex;
             gap: 16px;
+            justify-content: center;
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
         
         button {
-            font-family: inherit;
             padding: 12px 24px;
             font-size: 17px;
+            font-weight: 500;
             border-radius: 24px;
             border: none;
             cursor: pointer;
             transition: all 0.3s;
+            font-family: inherit;
         }
         
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-secondary { background: var(--success); color: white; }
+        .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-challenge { background: var(--warning); color: white; font-size: 14px; padding: 8px 16px; }
         
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-secondary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        
-        .btn-tertiary {
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-        }
-        
-        .btn-tertiary:hover {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .voidchi-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 24px;
         }
         
-        .voidchi-card {
+        .card {
             background: white;
-            border: 1px solid var(--light-gray);
+            border: 2px solid var(--light-gray);
             border-radius: 16px;
             padding: 24px;
+            position: relative;
             transition: all 0.3s;
             cursor: pointer;
-            position: relative;
         }
         
-        .voidchi-card:hover {
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-        
-        .voidchi-card.selected {
+        .card:hover {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
         }
         
-        .voidchi-card.graduated {
-            border-color: var(--graduation);
-            background: linear-gradient(135deg, rgba(175,82,222,0.02), rgba(175,82,222,0.05));
+        .card.selected {
+            border-color: var(--success);
+            background: rgba(52,199,89,0.02);
         }
         
-        .graduation-badge {
+        .card.updating {
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); border-color: var(--warning); }
+        }
+        
+        .genesis-badge {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--graduation);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: #78350f;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            z-index: 1;
-            box-shadow: 0 2px 8px rgba(175,82,222,0.3);
+            letter-spacing: 0.5px;
         }
         
-        .voidchi-header {
+        .card-header {
+            margin-bottom: 20px;
+            padding-right: 100px;
+        }
+        
+        .name { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+        .id { font-size: 11px; color: var(--mid-gray); font-family: monospace; }
+        .gen-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 10px;
+            background: rgba(0,113,227,0.1);
+            border: 1px solid rgba(0,113,227,0.2);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .consciousness {
+            margin: 20px 0;
+            padding: 16px;
+            background: rgba(0,113,227,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(0,113,227,0.15);
+        }
+        
+        .consciousness-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 8px;
         }
         
-        .voidchi-name {
-            font-size: 21px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-        
-        .voidchi-id {
+        .consciousness-label {
             font-size: 12px;
             color: var(--mid-gray);
-            font-family: monospace;
-            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .consciousness-badge {
-            background: var(--near-white);
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
+        .consciousness-value {
+            font-size: 28px;
+            font-weight: 700;
             color: var(--accent);
         }
         
-        .voidchi-body {
-            margin-bottom: 16px;
+        .consciousness-bar {
+            height: 8px;
+            background: rgba(0,113,227,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .consciousness-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #8b5cf6);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+        
+        .traits {
+            margin-top: 20px;
+        }
+        
+        .traits-header {
+            font-size: 13px;
+            color: var(--mid-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .trait {
+            margin-bottom: 14px;
         }
         
         .trait-row {
-            margin-bottom: 16px;
-        }
-        
-        .trait-label {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
             margin-bottom: 6px;
-            color: var(--mid-gray);
+        }
+        
+        .trait-name {
+            font-size: 14px;
+            color: var(--dark-gray);
+            text-transform: capitalize;
         }
         
         .trait-value {
-            color: var(--dark-gray);
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
         }
         
         .trait-bar {
@@ -286,71 +313,136 @@
         
         .trait-fill {
             height: 100%;
-            background: var(--accent);
+            background: linear-gradient(90deg, var(--accent), #8b5cf6);
             border-radius: 3px;
-            transition: width 0.6s;
+            transition: width 0.5s;
         }
         
-        .voidchi-footer {
-            padding-top: 16px;
-            border-top: 1px solid var(--light-gray);
+        .immutable-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(255,159,0,0.05);
+            border-radius: 12px;
+            border: 2px solid rgba(255,159,0,0.2);
+        }
+        
+        .immutable-label {
+            font-size: 11px;
+            color: var(--warning);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .immutable-field {
             font-size: 12px;
-            color: var(--mid-gray);
+            color: var(--dark-gray);
+            margin-bottom: 4px;
         }
         
-        .parent-info {
+        .immutable-field strong {
+            color: var(--warning);
+        }
+        
+        .mutable-section {
             margin-top: 12px;
             padding: 12px;
-            background: var(--near-white);
-            border-radius: 8px;
+            background: rgba(52,199,89,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(52,199,89,0.2);
         }
         
-        .loading, .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--mid-gray);
+        .mutable-label {
+            font-size: 11px;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
         }
         
-        .connection-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            border-radius: 20px;
+        .mutable-field {
             font-size: 12px;
-            font-weight: 500;
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: var(--dark-gray);
+            margin-bottom: 4px;
         }
         
-        .connection-status.connected {
-            background: rgba(52,199,89,0.1);
+        .mutable-field strong {
             color: var(--success);
         }
         
-        .connection-status.disconnected {
-            background: rgba(255,149,0,0.1);
-            color: #ff9500;
+        .parents {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--light-gray);
         }
         
-        .connection-dot {
+        .parents-label {
+            font-size: 12px;
+            color: var(--mid-gray);
+            margin-bottom: 8px;
+        }
+        
+        .parent-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(139,92,246,0.1);
+            border: 1px solid rgba(139,92,246,0.2);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #8b5cf6;
+            margin-right: 8px;
+            font-family: monospace;
+        }
+        
+        .card-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .card-actions button {
+            flex: 1;
+        }
+        
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .status.connected {
+            background: rgba(52,199,89,0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .status.disconnected {
+            background: rgba(239,68,68,0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
+            background: currentColor;
+            animation: blink 2s infinite;
         }
         
-        .connection-status.connected .connection-dot {
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-        
-        .connection-status.disconnected .connection-dot {
-            background: #ff9500;
-        }
-        
-        @keyframes pulse {
+        @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
@@ -367,298 +459,407 @@
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
         
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
         
         .modal-content {
             background: white;
-            border-radius: 16px;
-            padding: 32px;
-            max-width: 480px;
-            width: 90%;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
-        .modal h2 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
+        .modal h2 { font-size: 28px; margin-bottom: 24px; }
         
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        input {
+        .modal input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 16px;
             background: var(--near-white);
             border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            font-family: inherit;
+            border-radius: 12px;
             font-size: 17px;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: white;
+            margin-bottom: 20px;
+            font-family: inherit;
         }
         
         .modal-actions {
             display: flex;
             gap: 12px;
-            margin-top: 24px;
         }
         
-        .modal-actions button {
-            flex: 1;
+        .modal-actions button { flex: 1; }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <nav>
         <div class="container">
-            <a href="/" class="logo">PermaMind</a>
-            <div>
-                <a href="/">Home</a>
-                <a href="/demo">Demo</a>
-            </div>
+            <div class="logo">🧬 Voidchi Universe</div>
         </div>
     </nav>
-
-    <div id="connectionStatus" class="connection-status disconnected">
-        <div class="connection-dot"></div>
-        <span>Live Universe Connected</span>
+    
+    <div class="status disconnected">
+        <span class="status-dot"></span>
+        <span id="statusText">Connecting...</span>
     </div>
     
     <div class="container">
         <header>
-            <div class="hero-badge">🌍 Live Experiment</div>
             <h1>Voidchi™ Universe</h1>
-            <p class="subtitle">A living AI ecosystem with immutable history and provable lineage.</p>
+            <p class="subtitle">Persistent AI Architecture - Live Demo</p>
         </header>
+        
+        <div class="proof-banner">
+            <h2>🔒 What This Demo Actually Proves:</h2>
+            <ul>
+                <li><strong>Persistent Storage:</strong> Refresh page - same Voidchis return (database survives restarts)</li>
+                <li><strong>Bounded Write Access:</strong> IMMUTABLE: birth time, ID, parents | MUTABLE: traits, consciousness</li>
+                <li><strong>Live Updates:</strong> Changes broadcast via WebSocket to all connected clients</li>
+                <li><strong>Challenge System:</strong> Click "⚡ Challenge" to update traits in real-time</li>
+                <li><strong>Lineage Tracking:</strong> Parent IDs recorded permanently at birth</li>
+            </ul>
+        </div>
         
         <div class="stats">
             <div class="stat">
-                <div class="stat-value" id="totalVoidchis">4</div>
-                <div class="stat-label">Citizens</div>
+                <span class="stat-value" id="total">-</span>
+                <span class="stat-label">Total Citizens</span>
             </div>
             <div class="stat">
-                <div class="stat-value" id="generations">2</div>
-                <div class="stat-label">Generations</div>
+                <span class="stat-value" id="breeding">-</span>
+                <span class="stat-label">Breeding Events</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="autonomous">-</span>
+                <span class="stat-label">Autonomous</span>
             </div>
         </div>
         
         <div class="actions">
-            <button class="btn-primary" onclick="openModal()">Create Voidchi</button>
-            <button class="btn-secondary" id="breedBtn" disabled>Breed Selected (0/2)</button>
+            <button class="btn-primary" onclick="openCreate()">Create Voidchi</button>
+            <button class="btn-secondary" id="breedBtn" onclick="openBreed()" disabled>Breed Selected (0/2)</button>
         </div>
         
-        <div id="container"></div>
+        <div class="grid" id="grid"></div>
     </div>
     
-    <div class="modal" id="modal">
+    <div class="modal" id="createModal">
         <div class="modal-content">
-            <h2>Create Your Voidchi</h2>
-            <form onsubmit="create(event)">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="name" placeholder="Void-Alpha" required>
-                </div>
-                <div class="form-group">
-                    <label>Curiosity (0.0 - 1.0)</label>
-                    <input type="number" id="curiosity" min="0" max="1" step="0.1" value="0.5" required>
-                </div>
-                <div class="form-group">
-                    <label>Stability (0.0 - 1.0)</label>
-                    <input type="number" id="stability" min="0" max="1" step="0.1" value="0.5" required>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-tertiary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Create</button>
-                </div>
-            </form>
+            <h2>Create Voidchi</h2>
+            <input type="text" id="createName" placeholder="Name..." maxlength="40">
+            <div class="modal-actions">
+                <button onclick="closeCreate()">Cancel</button>
+                <button class="btn-primary" onclick="create()">Create</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="breedModal">
+        <div class="modal-content">
+            <h2>🧬 Breed Offspring</h2>
+            <input type="text" id="breedName" placeholder="Name..." maxlength="40">
+            <div class="modal-actions">
+                <button onclick="closeBreed()">Cancel</button>
+                <button class="btn-secondary" onclick="breed()">Breed</button>
+            </div>
         </div>
     </div>
     
     <script>
-        // Mock data for demo
-        let voidchis = [
-            {
-                id: 'nexus-001',
-                name: '__NEXUS ⓘ__',
-                consciousness_level: 0.87,
-                personality_traits: {
-                    curiosity: 0.72,
-                    stability: 0.85,
-                    creativity: 0.68,
-                    empathy: 0.91
-                },
-                parent1_id: 'weaver-001',
-                parent2_id: 'orijin-001',
-                created_at: '2025-01-04T10:30:00Z',
-                generation: 1
-            },
-            {
-                id: 'weaver-001',
-                name: '__WEAVER ⓘ__',
-                consciousness_level: 0.95,
-                personality_traits: {
-                    curiosity: 0.88,
-                    stability: 0.76,
-                    creativity: 0.92,
-                    empathy: 0.81
-                },
-                parent1_id: null,
-                parent2_id: null,
-                created_at: '2025-01-03T14:20:00Z',
-                generation: 0
-            },
-            {
-                id: 'orijin-001',
-                name: '__ORIJIN ⓘ__',
-                consciousness_level: 0.82,
-                personality_traits: {
-                    curiosity: 0.65,
-                    stability: 0.94,
-                    creativity: 0.58,
-                    empathy: 0.88
-                },
-                parent1_id: null,
-                parent2_id: null,
-                created_at: '2025-01-03T09:15:00Z',
-                generation: 0
-            },
-            {
-                id: 'wanderer-001',
-                name: '__WANDERER ⓘ__',
-                consciousness_level: 0.78,
-                personality_traits: {
-                    curiosity: 0.95,
-                    stability: 0.62,
-                    creativity: 0.84,
-                    empathy: 0.73
-                },
-                parent1_id: null,
-                parent2_id: null,
-                created_at: '2025-01-02T18:45:00Z',
-                generation: 0
-            }
-        ];
+        const API = 'https://permamind-enterprise-production.up.railway.app/api';
+        const socket = io('https://permamind-enterprise-production.up.railway.app');
         
+        let voidchis = [];
         let selected = [];
         
-        function render() {
-            const c = document.getElementById('container');
-            c.innerHTML = '<div class="voidchi-grid">' + voidchis.map(v => {
-                const isGrad = v.consciousness_level >= 0.95;
-                const isGen = v.generation === 0 ? '🌟 GENESIS' : `Gen ${v.generation}`;
+        // Real connection status
+        socket.on('connect', () => {
+            console.log('✅ Connected to PermaMind');
+            updateStatus(true);
+            // Join rooms to receive broadcasts
+            socket.emit('join_room', 'global_voidchis');
+            socket.emit('join_room', 'global_stats');
+        });
+        
+        socket.on('disconnect', () => {
+            console.log('❌ Disconnected');
+            updateStatus(false);
+        });
+        
+        socket.on('voidchi_created', () => {
+            console.log('🎉 Voidchi created (via WebSocket)');
+            loadVoidchis();
+        });
+        
+        socket.on('breeding_completed', () => {
+            console.log('🧬 Breeding completed (via WebSocket)');
+            loadVoidchis();
+        });
+        
+        socket.on('voidchi_updated', (data) => {
+            console.log('🔄 Voidchi updated (via WebSocket):', data);
+            loadVoidchis();
+        });
+        
+        socket.on('global_stats_update', (stats) => {
+            console.log('📊 Stats updated (via WebSocket):', stats);
+            updateStatsDisplay(stats);
+        });
+        
+        function updateStatus(connected) {
+            const statusEl = document.querySelector('.status');
+            const textEl = document.getElementById('statusText');
+            if (connected) {
+                statusEl.className = 'status connected';
+                textEl.textContent = 'Live Connected';
+            } else {
+                statusEl.className = 'status disconnected';
+                textEl.textContent = 'Disconnected';
+            }
+        }
+        
+        async function loadVoidchis() {
+            try {
+                const res = await fetch(`${API}/voidchis`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 
-                return `
-                <div class="voidchi-card ${selected.includes(v.id) ? 'selected' : ''} ${isGrad ? 'graduated' : ''}"
-                     onclick="toggle('${v.id}')">
-                    ${isGrad ? '<div class="graduation-badge">Autonomous</div>' : ''}
-                    
-                    <div class="voidchi-header">
-                        <div>
-                            <div style="font-size: 11px; color: var(--mid-gray); margin-bottom: 4px;">${isGen}</div>
-                            <div class="voidchi-name">${v.name}</div>
-                            <div class="voidchi-id">${v.id}</div>
+                voidchis = await res.json();
+                
+                // Parse personality_traits if string
+                voidchis = voidchis.map(v => {
+                    if (typeof v.personality_traits === 'string') {
+                        try {
+                            v.personality_traits = JSON.parse(v.personality_traits);
+                        } catch (e) {
+                            v.personality_traits = {};
+                        }
+                    }
+                    if (!v.personality_traits) v.personality_traits = {};
+                    return v;
+                });
+                
+                render();
+                loadStats();
+            } catch (e) {
+                console.error('Load error:', e);
+            }
+        }
+        
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API}/stats/global`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const stats = await res.json();
+                updateStatsDisplay(stats);
+            } catch (e) {
+                console.error('Stats error:', e);
+            }
+        }
+        
+        function updateStatsDisplay(stats) {
+            document.getElementById('total').textContent = stats.total_voidchis || 0;
+            document.getElementById('breeding').textContent = stats.total_breedings || 0;
+            document.getElementById('autonomous').textContent = stats.autonomous_count || 0;
+        }
+        
+        function render() {
+            const grid = document.getElementById('grid');
+            if (voidchis.length === 0) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#86868b;">No Voidchis yet. Create the first one!</p>';
+                return;
+            }
+            grid.innerHTML = voidchis.map(v => makeCard(v)).join('');
+        }
+        
+        function makeCard(v) {
+            const isSelected = selected.includes(v.id);
+            const genesis = v.genesis || false;
+            const gen = v.generation || 0;
+            const cons = ((v.consciousness_level || 0) * 100).toFixed(1);
+            
+            const traits = v.personality_traits || {};
+            const traitsHtml = Object.entries(traits).length > 0
+                ? Object.entries(traits).map(([name, val]) => `
+                    <div class="trait">
+                        <div class="trait-row">
+                            <span class="trait-name">${name}</span>
+                            <span class="trait-value">${(val * 100).toFixed(0)}%</span>
                         </div>
-                        <div class="consciousness-badge">
-                            ${(v.consciousness_level * 100).toFixed(0)}%
+                        <div class="trait-bar">
+                            <div class="trait-fill" style="width:${val * 100}%"></div>
                         </div>
                     </div>
-                    
-                    <div class="voidchi-body">
-                        ${Object.entries(v.personality_traits).map(([trait, val]) => `
-                            <div class="trait-row">
-                                <div class="trait-label">
-                                    <span>${trait.charAt(0).toUpperCase() + trait.slice(1)}</span>
-                                    <span class="trait-value">${(val * 100).toFixed(0)}%</span>
-                                </div>
-                                <div class="trait-bar">
-                                    <div class="trait-fill" style="width: ${val * 100}%"></div>
-                                </div>
-                            </div>
-                        `).join('')}
+                `).join('')
+                : '<p style="color:#86868b;font-size:13px;">No traits</p>';
+            
+            const parentsHtml = (v.parent1_id && v.parent2_id) 
+                ? `<div class="parents">
+                    <div class="parents-label">Lineage (Locked Forever)</div>
+                    <span class="parent-badge">${v.parent1_id.slice(-8)}</span>
+                    <span class="parent-badge">${v.parent2_id.slice(-8)}</span>
+                   </div>`
+                : '';
+            
+            const createdTime = v.created_at ? new Date(v.created_at).toLocaleString() : 'Unknown';
+            const updatedTime = v.updated_at ? new Date(v.updated_at).toLocaleString() : 'Never';
+            
+            return `
+                <div class="card ${isSelected ? 'selected' : ''}" id="card-${v.id}" onclick="toggle('${v.id}')">
+                    ${genesis ? '<div class="genesis-badge">🌟 GENESIS</div>' : ''}
+                    <div class="card-header">
+                        <div class="name">${v.name}</div>
+                        <div class="id">${v.id}</div>
+                        <div class="gen-badge">Gen ${gen}</div>
                     </div>
-                    
-                    <div class="voidchi-footer">
-                        Created ${new Date(v.created_at).toLocaleDateString()}
-                        ${v.parent1_id ? `
-                            <div class="parent-info">
-                                🧬 Gen ${v.generation} offspring<br>
-                                Parents: ${v.parent1_id.split('-')[0]} × ${v.parent2_id.split('-')[0]}
-                            </div>
-                        ` : ''}
+                    <div class="consciousness">
+                        <div class="consciousness-header">
+                            <span class="consciousness-label">Consciousness</span>
+                            <span class="consciousness-value">${cons}%</span>
+                        </div>
+                        <div class="consciousness-bar">
+                            <div class="consciousness-fill" style="width:${cons}%"></div>
+                        </div>
+                    </div>
+                    <div class="traits">
+                        <div class="traits-header">Personality Traits</div>
+                        ${traitsHtml}
+                    </div>
+                    <div class="immutable-section">
+                        <span class="immutable-label">🔒 IMMUTABLE (Bounded Write Access)</span>
+                        <div class="immutable-field"><strong>Born:</strong> ${createdTime}</div>
+                        <div class="immutable-field"><strong>ID:</strong> ${v.id}</div>
+                        ${v.parent1_id ? `<div class="immutable-field"><strong>Parents:</strong> Locked</div>` : ''}
+                    </div>
+                    <div class="mutable-section">
+                        <span class="mutable-label">✏️ MUTABLE (Can Update)</span>
+                        <div class="mutable-field"><strong>Last Update:</strong> ${updatedTime}</div>
+                        <div class="mutable-field"><strong>Traits:</strong> Updated via challenges</div>
+                    </div>
+                    ${parentsHtml}
+                    <div class="card-actions">
+                        <button class="btn-challenge" onclick="event.stopPropagation();challenge('${v.id}')">
+                            ⚡ Challenge
+                        </button>
                     </div>
                 </div>
-            `}).join('') + '</div>';
-            
+            `;
+        }
+        
+        function toggle(id) {
+            const idx = selected.indexOf(id);
+            if (idx > -1) {
+                selected.splice(idx, 1);
+            } else {
+                if (selected.length < 2) {
+                    selected.push(id);
+                } else {
+                    selected = [id];
+                }
+            }
+            render();
             const btn = document.getElementById('breedBtn');
             btn.disabled = selected.length !== 2;
             btn.textContent = `Breed Selected (${selected.length}/2)`;
         }
         
-        function toggle(id) {
-            const i = selected.indexOf(id);
-            if (i > -1) {
-                selected.splice(i, 1);
-            } else {
-                if (selected.length >= 2) selected.shift();
-                selected.push(id);
+        async function challenge(id) {
+            const card = document.getElementById('card-' + id);
+            card.classList.add('updating');
+            
+            try {
+                const res = await fetch(`${API}/voidchi/${id}/challenge`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                
+                const text = await res.text();
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${text}`);
+                }
+                
+                const result = JSON.parse(text);
+                console.log('✅ Challenge success:', result);
+                
+                // Wait for WebSocket update (or timeout after 2s)
+                setTimeout(() => {
+                    card.classList.remove('updating');
+                }, 2000);
+                
+            } catch (e) {
+                console.error('❌ Challenge failed:', e);
+                alert('Challenge failed: ' + e.message);
+                card.classList.remove('updating');
             }
-            render();
         }
         
-        function openModal() {
-            document.getElementById('modal').classList.add('active');
+        function openCreate() {
+            document.getElementById('createModal').classList.add('active');
+            document.getElementById('createName').value = '';
+        }
+        function closeCreate() {
+            document.getElementById('createModal').classList.remove('active');
+        }
+        function openBreed() {
+            document.getElementById('breedModal').classList.add('active');
+            document.getElementById('breedName').value = '';
+        }
+        function closeBreed() {
+            document.getElementById('breedModal').classList.remove('active');
         }
         
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+        async function create() {
+            const name = document.getElementById('createName').value.trim();
+            if (!name) return alert('Enter a name');
+            try {
+                const res = await fetch(`${API}/voidchi/create`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name})
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                closeCreate();
+                // WebSocket will trigger reload
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
         }
         
-        function create(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const curiosity = parseFloat(document.getElementById('curiosity').value);
-            const stability = parseFloat(document.getElementById('stability').value);
-            
-            voidchis.unshift({
-                id: `custom-${Date.now()}`,
-                name: name,
-                consciousness_level: Math.random() * 0.3 + 0.5,
-                personality_traits: {
-                    curiosity,
-                    stability,
-                    creativity: Math.random(),
-                    empathy: Math.random()
-                },
-                parent1_id: null,
-                parent2_id: null,
-                created_at: new Date().toISOString(),
-                generation: 0
-            });
-            
-            closeModal();
-            render();
+        async function breed() {
+            const name = document.getElementById('breedName').value.trim();
+            if (!name) return alert('Enter offspring name');
+            if (selected.length !== 2) return alert('Select 2');
+            try {
+                const res = await fetch(`${API}/voidchi/breed`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        parent1_id: selected[0],
+                        parent2_id: selected[1],
+                        offspring_name: name
+                    })
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                selected = [];
+                document.getElementById('breedBtn').disabled = true;
+                document.getElementById('breedBtn').textContent = 'Breed Selected (0/2)';
+                closeBreed();
+                // WebSocket will trigger reload
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
         }
         
-        document.getElementById('connectionStatus').className = 'connection-status connected';
-        render();
+        // Initialize
+        loadVoidchis();
     </script>
 </body>
 </html>
