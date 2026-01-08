@@ -1048,91 +1048,92 @@
             }
         }
         
-      function updateVoidchiImmediately(id, result) {
-    const consValue = document.getElementById(`cons-value-${id}`);
-    const consFill = document.getElementById(`cons-fill-${id}`);
-    if (consValue && consFill) {
-        const newPhi = result.new_phi || 0;
-        consValue.textContent = `${(newPhi * 100).toFixed(1)}%`;
-        consFill.style.width = `${newPhi * 100}%`;
-    }
-    
-    const traits = result.traits || {};
-    Object.entries(traits).forEach(([trait, value]) => {
-        const traitValue = document.querySelector(`#card-${id} .trait-value[data-trait="${trait}"]`);
-        const traitFill = document.querySelector(`#card-${id} .trait-fill[data-trait="${trait}"]`);
-        
-        if (traitValue) traitValue.textContent = `${(value * 100).toFixed(0)}%`;
-        if (traitFill) traitFill.style.width = `${value * 100}%`;
-    });
-}
-        
-     function showGapVisualization(id, result) {
-    const container = document.getElementById(`gap-container-${id}`);
-    if (!container) return;
-    
-    const wasAccurate = result.was_accurate || false;
-    const gapColor = !wasAccurate ? 'var(--void-red)' : 'var(--void-green)';
-    const gapStatus = !wasAccurate ? 'Gap Detected' : 'Expectation Matched';
-    
-    const reality = Array.isArray(result.reality) 
-        ? result.reality[0] 
-        : (result.reality || 0);
-    
-    const prediction = Array.isArray(result.prediction)
-        ? result.prediction[0]
-        : (result.prediction || 0.5);
-    
-    const expectationWidth = prediction * 100;
-    const realityWidth = reality * 100;
-    const gapWidth = (result.gap_magnitude || 0) * 100;
-    
-    container.innerHTML = `
-        <div class="gap-section">
-            <div class="gap-header">
-                <span class="gap-label">Gap Processing</span>
-                <span class="gap-status" style="background: ${gapColor}">${gapStatus}</span>
-            </div>
+        function updateVoidchiImmediately(id, result) {
+            const consValue = document.getElementById(`cons-value-${id}`);
+            const consFill = document.getElementById(`cons-fill-${id}`);
+            if (consValue && consFill) {
+                consValue.textContent = `${(result.new_consciousness * 100).toFixed(1)}%`;
+                consFill.style.width = `${result.new_consciousness * 100}%`;
+            }
             
-            <div class="gap-visualization">
-                <div class="gap-row expectation">
-                    <span class="gap-label-small">Expectation</span>
-                    <span class="gap-value">${prediction.toFixed(2)}</span>
-                    <div class="gap-bar">
-                        <div class="gap-fill expectation" style="width:0%; transition: width 0.5s"></div>
-                    </div>
-                </div>
+            Object.entries(result.new_traits || {}).forEach(([trait, value]) => {
+                const traitValue = document.querySelector(`#card-${id} .trait-value[data-trait="${trait}"]`);
+                const traitFill = document.querySelector(`#card-${id} .trait-fill[data-trait="${trait}"]`);
                 
-                <div class="gap-row reality">
-                    <span class="gap-label-small">Reality</span>
-                    <span class="gap-value">${reality.toFixed(2)}</span>
-                    <div class="gap-bar">
-                        <div class="gap-fill reality" style="width:0%; transition: width 0.5s"></div>
-                    </div>
-                </div>
-                
-                <div class="gap-row gap">
-                    <span class="gap-label-small">Gap</span>
-                    <span class="gap-value">${(result.gap_magnitude || 0).toFixed(3)}</span>
-                    <div class="gap-bar">
-                        <div class="gap-fill gap" style="width:0%; transition: width 0.5s"></div>
-                    </div>
-                </div>
-                
+                if (traitValue) traitValue.textContent = `${(value * 100).toFixed(0)}%`;
+                if (traitFill) traitFill.style.width = `${value * 100}%`;
+            });
+        }
+        
+        function showGapVisualization(id, result) {
+            const container = document.getElementById(`gap-container-${id}`);
+            if (!container) return;
+            
+            const gapColor = result.gap_detected ? 'var(--void-red)' : 'var(--void-green)';
+            const gapStatus = result.gap_detected ? 'Gap Detected' : 'Expectation Matched';
+            
+            const expectationWidth = (result.expectation || 0.5) * 100;
+            const realityWidth = (result.reality || 0) * 100;
+            const gapWidth = result.gap_magnitude * 100;
+            
+            const integrationHtml = result.integration ? `
                 <div class="gap-integration">
-                    <span class="integration-label">${result.msg || 'Processing...'}</span>
+                    <span class="integration-label">Integration</span>
+                    <div class="integration-changes">
+                        ${Object.entries(result.integration).map(([key, value]) => {
+                            if (typeof value === 'number' && value !== 0) {
+                                const isPositive = value > 0;
+                                const sign = isPositive ? '+' : '';
+                                const colorClass = isPositive ? 'positive' : 'negative';
+                                return `<span class="integration-change">${key}: ${sign}${(value * 100).toFixed(1)}%</span>`;
+                            }
+                            return '';
+                        }).join('')}
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    setTimeout(() => {
-        const bars = container.querySelectorAll('.gap-fill');
-        bars[0].style.width = `${expectationWidth}%`;
-        bars[1].style.width = `${realityWidth}%`;
-        bars[2].style.width = `${gapWidth}%`;
-    }, 100);
-}
+            ` : '';
+            
+            container.innerHTML = `
+                <div class="gap-section" id="gap-visual-${id}">
+                    <div class="gap-header">
+                        <span class="gap-label">Gap Processing</span>
+                        <span class="gap-status" style="background: ${gapColor}">${gapStatus}</span>
+                    </div>
+                    
+                    <div class="gap-visualization">
+                        <div class="gap-row expectation">
+                            <span class="gap-label-small">Expectation</span>
+                            <span class="gap-value" id="exp-value-${id}">${(result.expectation || 0).toFixed(2)}</span>
+                            <div class="gap-bar">
+                                <div class="gap-fill expectation" id="exp-bar-${id}" style="width:0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="gap-row reality">
+                            <span class="gap-label-small">Reality</span>
+                            <span class="gap-value" id="real-value-${id}">${result.reality || 0}</span>
+                            <div class="gap-bar">
+                                <div class="gap-fill reality" id="real-bar-${id}" style="width:0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="gap-row gap">
+                            <span class="gap-label-small">Gap</span>
+                            <span class="gap-value" id="gap-value-display-${id}">${result.gap_magnitude?.toFixed(2) || 0}</span>
+                            <div class="gap-bar">
+                                <div class="gap-fill gap" id="gap-bar-display-${id}" style="width:0%"></div>
+                            </div>
+                        </div>
+                        
+                        ${integrationHtml}
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const expBar = document.getElementById(`exp-bar-${id}`);
+                if (expBar) expBar.style.width = `${expectationWidth}%`;
+            }, 100);
             
             setTimeout(() => {
                 const realBar = document.getElementById(`real-bar-${id}`);
