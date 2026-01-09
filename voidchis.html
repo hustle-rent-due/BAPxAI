@@ -781,8 +781,9 @@
 
   <script>
     // ✅ SET YOUR API / SOCKET BASE
-    const API = 'https://permamind-enterprise-production.up.railway.app/api';
-    const socket = io('https://permamind-enterprise-production.up.railway.app');
+    const ORIGIN = 'https://permamind-enterprise-production.up.railway.app';
+    const API = `${ORIGIN}/api`;
+    const socket = io(ORIGIN, { transports: ['websocket', 'polling'] });
 
     let voidchis = [];
     let selected = [];          // for breeding (0..2)
@@ -803,34 +804,26 @@
       updateStatus(false);
     });
 
-    socket.on('voidchi_created', () => {
-      console.log('🎉 New Voidchi created');
-      loadVoidchis();
-    });
+    socket.on('voidchi_created', () => loadVoidchis());
+    socket.on('breeding_completed', () => loadVoidchis());
+    socket.on('voidchi_updated', () => loadVoidchis());
+    socket.on('global_stats_update', (stats) => updateStatsDisplay(stats));
 
-    socket.on('breeding_completed', () => {
-      console.log('🧬 Breeding completed');
-      loadVoidchis();
-    });
+    // backend emits: "voidchi_note_created"
+    socket.on('voidchi_note_created', (payload) => {
+      if (!payload || !payload.voidchi_id || !payload.content) return;
+      if (payload.voidchi_id !== selectedSingle) return;
 
-    socket.on('voidchi_updated', (data) => {
-      console.log('🔄 Voidchi updated:', data);
-      // This payload is "light"; we refresh list to keep consistent
-      loadVoidchis();
-    });
-
-    socket.on('global_stats_update', (stats) => {
-      updateStatsDisplay(stats);
-    });
-
-    // Optional live note updates if backend emits `voidchi_note_written`
-    socket.on('voidchi_note_written', (payload) => {
-      if (!payload || !payload.voidchi_id || !payload.note) return;
-      if (payload.voidchi_id === selectedSingle) {
-        const existing = notesCache[selectedSingle] || [];
-        notesCache[selectedSingle] = [payload.note, ...existing].slice(0, 50);
-        renderNotes(notesCache[selectedSingle]);
-      }
+      const existing = notesCache[selectedSingle] || [];
+      const note = {
+        id: payload.id,
+        voidchi_id: payload.voidchi_id,
+        author: payload.author || 'user',
+        content: payload.content,
+        created_at: payload.created_at || new Date().toISOString()
+      };
+      notesCache[selectedSingle] = [note, ...existing].slice(0, 50);
+      renderNotes(notesCache[selectedSingle]);
     });
 
     function updateStatus(connected) {
@@ -848,25 +841,21 @@
     // ---------------- LOADERS ----------------
     async function loadVoidchis() {
       try {
-        const res = await fetch(`${API}/voidchis`);
+        const res = await fetch(`${API}/voidchis`, { credentials: 'omit' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
         voidchis = await res.json();
 
         voidchis = voidchis.map(v => {
-          if (!v.personality_traits || typeof v.personality_traits !== 'object') {
-            v.personality_traits = {};
-          }
+          if (!v.personality_traits || typeof v.personality_traits !== 'object') v.personality_traits = {};
           return v;
         });
 
-        // restore last selectedSingle (notes) across refresh/redeploy
+        // restore selection
         const last = localStorage.getItem('lastSelectedVoidchi');
         if (last && voidchis.some(v => v.id === last)) {
           selected = [last];
           selectedSingle = last;
         } else {
-          // if current selection no longer exists
           if (selectedSingle && !voidchis.some(v => v.id === selectedSingle)) {
             selectedSingle = null;
             selected = [];
@@ -876,6 +865,7 @@
         render();
         loadStats();
         setNotesSelectedLabel();
+
         if (selectedSingle) reloadNotes();
         else renderNotes([]);
 
@@ -886,7 +876,7 @@
 
     async function loadStats() {
       try {
-        const res = await fetch(`${API}/stats/global`);
+        const res = await fetch(`${API}/stats/global`, { credentials: 'omit' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const stats = await res.json();
         updateStatsDisplay(stats);
@@ -899,10 +889,8 @@
       document.getElementById('total').textContent = stats.total_voidchis || 0;
       document.getElementById('gapsProcessed').textContent = stats.total_breedings || 0;
       document.getElementById('autonomous').textContent = stats.autonomous_count || 0;
-
       if (typeof stats.avg_consciousness === 'number') {
-        document.getElementById('consciousness').textContent =
-          `${(stats.avg_consciousness * 100).toFixed(1)}%`;
+        document.getElementById('consciousness').textContent = `${(stats.avg_consciousness * 100).toFixed(1)}%`;
       }
     }
 
@@ -918,9 +906,7 @@
 
       // re-apply last gap view
       voidchis.forEach(v => {
-        if (lastGapData[v.id]) {
-          showGapVisualization(v.id, lastGapData[v.id]);
-        }
+        if (lastGapData[v.id]) showGapVisualization(v.id, lastGapData[v.id]);
       });
 
       // update breed button
@@ -1008,17 +994,12 @@
     function toggle(id) {
       const idx = selected.indexOf(id);
 
-      if (idx > -1) {
-        selected.splice(idx, 1);
-      } else {
-        if (selected.length < 2) {
-          selected.push(id);
-        } else {
-          selected = [id];
-        }
+      if (idx > -1) selected.splice(idx, 1);
+      else {
+        if (selected.length < 2) selected.push(id);
+        else selected = [id];
       }
 
-      // Notes uses exactly 1 selected agent
       selectedSingle = (selected.length === 1) ? selected[0] : null;
 
       if (selectedSingle) localStorage.setItem('lastSelectedVoidchi', selectedSingle);
@@ -1038,22 +1019,20 @@
       try {
         const res = await fetch(`${API}/voidchi/${id}/challenge`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'}
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'omit'
         });
 
         const text = await res.text();
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
 
         const result = JSON.parse(text);
-        console.log('✅ Gap processed:', result);
-
         lastGapData[id] = result;
 
-        // backend returns `traits` + `new_phi`
         updateVoidchiImmediately(id, result);
         showGapVisualization(id, result);
 
-        setTimeout(() => card.classList.remove('updating'), 1200);
+        setTimeout(() => card.classList.remove('updating'), 900);
 
       } catch (e) {
         console.error('❌ Gap processing failed:', e);
@@ -1099,7 +1078,6 @@
       const count = (typeof result.challenge_count === 'number') ? result.challenge_count : null;
 
       const emerg = result.emergence_event && result.emergence_event.discovered ? result.emergence_event : null;
-
       const pill = (txt) => `<span class="pill">${escapeHtml(txt)}</span>`;
 
       container.innerHTML = `
@@ -1135,7 +1113,7 @@
       `;
     }
 
-    // ---------------- NOTES (Talk to Agent) ----------------
+    // ---------------- NOTES ----------------
     function escapeHtml(str) {
       return (str || '')
         .replaceAll('&', '&amp;')
@@ -1145,10 +1123,7 @@
         .replaceAll("'", '&#039;');
     }
 
-    function cssEscape(str) {
-      // for querySelector attribute matching
-      return (str || '').replaceAll('"', '\\"');
-    }
+    function cssEscape(str) { return (str || '').replaceAll('"', '\\"'); }
 
     function setNotesSelectedLabel() {
       const label = document.getElementById('notesSelectedLabel');
@@ -1167,7 +1142,7 @@
 
     async function loadBootInfo() {
       try {
-        const res = await fetch(`${API}/health`);
+        const res = await fetch(`${API}/health`, { credentials: 'omit' });
         if (!res.ok) return;
         const data = await res.json();
         document.getElementById('bootIdLabel').textContent =
@@ -1204,7 +1179,8 @@
       await loadBootInfo();
 
       try {
-        const res = await fetch(`${API}/voidchi/${selectedSingle}/notes/read?limit=50`);
+        // ✅ BACKEND MATCH: GET /api/voidchi/<id>/notes?limit=50
+        const res = await fetch(`${API}/voidchi/${selectedSingle}/notes?limit=50`, { credentials: 'omit' });
         const text = await res.text();
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
         const data = JSON.parse(text);
@@ -1212,7 +1188,6 @@
         notesCache[selectedSingle] = data.notes || [];
         renderNotes(notesCache[selectedSingle]);
 
-        // show boot id returned by notes read (proves persistence)
         if (data.server_boot_id) {
           document.getElementById('bootIdLabel').textContent =
             `${data.server_boot_id} (boot_time: ${data.boot_time || '-'})`;
@@ -1237,9 +1212,11 @@
       input.value = '';
 
       try {
-        const res = await fetch(`${API}/voidchi/${selectedSingle}/notes/write`, {
+        // ✅ BACKEND MATCH: POST /api/voidchi/<id>/notes
+        const res = await fetch(`${API}/voidchi/${selectedSingle}/notes`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
+          credentials: 'omit',
           body: JSON.stringify({ content, author: 'user' })
         });
 
@@ -1247,7 +1224,6 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
         const data = JSON.parse(text);
 
-        // optimistic prepend
         const existing = notesCache[selectedSingle] || [];
         notesCache[selectedSingle] = [data.note, ...existing].slice(0, 50);
         renderNotes(notesCache[selectedSingle]);
@@ -1286,6 +1262,7 @@
         const res = await fetch(`${API}/voidchi/create`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
+          credentials: 'omit',
           body: JSON.stringify({name})
         });
 
@@ -1310,6 +1287,7 @@
         const res = await fetch(`${API}/voidchi/breed`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
+          credentials: 'omit',
           body: JSON.stringify({
             parent1_id: selected[0],
             parent2_id: selected[1],
@@ -1325,10 +1303,6 @@
         selected = [];
         selectedSingle = null;
         localStorage.removeItem('lastSelectedVoidchi');
-
-        const btn = document.getElementById('breedBtn');
-        btn.disabled = true;
-        btn.textContent = 'Breed Selected (0/2)';
 
         closeBreed();
         render();
@@ -1357,4 +1331,3 @@
   </script>
 </body>
 </html>
-
