@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Persistent AI Architecture - Buy the Backend Code | BAP UI™</title>
+  <title>Persistent AI Backend - Production-Tested Code | BAP UI™</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -579,20 +579,35 @@
       padding: 2rem;
     }
     
-    /* Content fade-in animations */
-    .fade-in {
-      animation: fadeInUp 0.8s ease-out;
+    /* Scroll reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
     }
     
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Mobile menu */
+    #mobile-menu {
+      display: none;
+    }
+    
+    #mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+      z-index: 40;
+      border-bottom: 1px solid rgba(108, 99, 255, 0.2);
     }
   </style>
 </head>
@@ -621,7 +636,7 @@
   <div class="glow-connection"></div>
 
   <!-- NAV -->
-  <nav class="fixed top-0 inset-x-0 z-50 nav-glass py-4 fade-in">
+  <nav class="fixed top-0 inset-x-0 z-50 nav-glass py-4">
     <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
       <div class="brand-container">
         <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" 
@@ -633,6 +648,7 @@
         <a href="#what-you-get" class="hover:text-purple-300 font-medium">Files Included</a>
         <a href="#demo" class="hover:text-blue-300 font-medium">Live Demo</a>
         <a href="#purchase" class="hover:text-green-300 font-medium">Buy Code</a>
+        <a href="#faq" class="hover:text-accent font-medium">FAQ</a>
         <a href="#contact" class="hover:text-accent font-medium">Contact</a>
       </div>
       <div class="md:hidden">
@@ -643,21 +659,32 @@
     </div>
   </nav>
 
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden">
+    <div class="flex flex-col space-y-4">
+      <a href="#what-you-get" class="hover:text-purple-300 font-medium py-2 border-b border-white/10">Files Included</a>
+      <a href="#demo" class="hover:text-blue-300 font-medium py-2 border-b border-white/10">Live Demo</a>
+      <a href="#purchase" class="hover:text-green-300 font-medium py-2 border-b border-white/10">Buy Code</a>
+      <a href="#faq" class="hover:text-accent font-medium py-2 border-b border-white/10">FAQ</a>
+      <a href="#contact" class="hover:text-accent font-medium py-2">Contact</a>
+    </div>
+  </div>
+
   <!-- HERO -->
-  <section class="pt-32 pb-16 fade-in">
+  <section class="pt-32 pb-16 reveal">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-8">
         <div class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-accent/10 px-4 py-2 rounded-full mb-6 backdrop-blur-sm">
           <span class="w-2 h-2 bg-green-500 rounded-full live-badge"></span>
-          <span class="text-sm font-medium gradient-text">Live & running since Jan 2, 2026</span>
+          <span class="text-sm font-medium gradient-text">Live since Jan 2, 2026</span>
         </div>
         <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-          The First <span class="gradient-text">Persistent AI Architecture</span><br>
-          <span class="text-3xl md:text-4xl">Buy the Backend Code</span>
+          The <span class="gradient-text">Persistent AI Backend</span><br>
+          <span class="text-3xl md:text-4xl">Production-Tested Code</span>
         </h1>
         <p class="text-xl opacity-90 max-w-3xl mx-auto mb-8">
-          Your AI agents maintain state across sessions with <strong>PostgreSQL-backed persistence</strong>.
-          No meta-learning. No frontend files. Just the clean backend architecture that powers live AI agents.
+          A production-tested persistence layer for AI agents. Your agents maintain state across sessions with 
+          <strong>PostgreSQL-backed persistence</strong>. No prompt injection tricks. No meta-learning. Just clean backend architecture.
         </p>
         
         <div class="flex flex-wrap gap-4 justify-center mb-12">
@@ -673,7 +700,7 @@
   </section>
 
   <!-- WHAT YOU GET -->
-  <section id="what-you-get" class="section fade-in">
+  <section id="what-you-get" class="section reveal">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">What You're Actually Buying</h2>
       
@@ -783,7 +810,7 @@
   </section>
 
   <!-- ARCHITECTURE DIAGRAM -->
-  <section class="section fade-in">
+  <section class="section reveal">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">Simple Architecture</h2>
       
@@ -825,7 +852,7 @@
   </section>
 
   <!-- DEMO -->
-  <section id="demo" class="section fade-in">
+  <section id="demo" class="section reveal">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">See the Backend in Action</h2>
       
@@ -835,7 +862,7 @@
             <h3 class="text-2xl font-bold mb-4">Live Demo Frontend</h3>
             <p class="mb-6 opacity-90">
               The <a href="https://bapxai.com/voidchis.html" target="_blank" class="gradient-text font-bold hover:opacity-80 transition-opacity">public demo</a> 
-              shows this persistence architecture working. It's been live since January 2, 2026.
+              shows this persistence architecture working. One of the first production demos you can test live.
             </p>
             <ul class="space-y-3 mb-6">
               <li class="flex items-start">
@@ -885,7 +912,7 @@
   </section>
 
   <!-- LICENSE & PRICING -->
-  <section id="purchase" class="section fade-in">
+  <section id="purchase" class="section reveal">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold mb-4 gradient-text">One-Time Payment. Own It Forever.</h2>
@@ -925,6 +952,12 @@
               </div>
             </li>
           </ul>
+          
+          <div class="mt-6 p-4 bg-white/5 rounded-lg">
+            <p class="text-sm opacity-80">
+              <strong>Includes a commercial license for your company.</strong> Redistribution or resale of the code as a standalone product is not allowed.
+            </p>
+          </div>
         </div>
         
         <div class="card-modern p-8">
@@ -939,16 +972,17 @@
               Buy Now with Stripe
             </a>
             
+            <div class="text-sm opacity-80 mt-4 p-4 bg-white/5 rounded-lg">
+              <i class="fa-solid fa-download mr-2 text-accent"></i>
+              After purchase: you'll receive an email with a download link (ZIP) + license file.
+            </div>
+            
             <div class="guarantee-badge mx-auto mb-6">
               <i class="fa-solid fa-shield-check"></i>
               <span>30-Day Money Back Guarantee</span>
             </div>
             
             <div class="text-sm opacity-70 space-y-2">
-              <div class="flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download"></i>
-                <span>Instant download after purchase</span>
-              </div>
               <div class="flex items-center justify-center gap-2">
                 <i class="fa-solid fa-code"></i>
                 <span>Clean, documented Python code</span>
@@ -957,6 +991,10 @@
                 <i class="fa-solid fa-envelope"></i>
                 <span>Email support for 30 days</span>
               </div>
+              <div class="flex items-center justify-center gap-2">
+                <i class="fa-solid fa-server"></i>
+                <span>Deploy on Render/Fly/EC2/etc.</span>
+              </div>
             </div>
           </div>
         </div>
@@ -964,8 +1002,42 @@
     </div>
   </section>
 
+  <!-- FAQ SECTION -->
+  <section id="faq" class="section reveal">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12 gradient-text">Frequently Asked Questions</h2>
+      
+      <div class="space-y-4">
+        <div class="card-modern p-6">
+          <h3 class="font-bold text-lg mb-2">Does this include the frontend demo?</h3>
+          <p class="text-sm opacity-80">No. You're buying the backend code only (app.py, requirements.txt, schema.sql, README.md). The live demo is separate.</p>
+        </div>
+        
+        <div class="card-modern p-6">
+          <h3 class="font-bold text-lg mb-2">Does it include OpenAI keys or model code?</h3>
+          <p class="text-sm opacity-80">No. This is a persistence layer only. You add your own AI model/inference layer that calls our persistence API.</p>
+        </div>
+        
+        <div class="card-modern p-6">
+          <h3 class="font-bold text-lg mb-2">Does it work with any AI model?</h3>
+          <p class="text-sm opacity-80">Yes. The persistence layer is model-agnostic. Works with OpenAI, Anthropic, local models, etc.</p>
+        </div>
+        
+        <div class="card-modern p-6">
+          <h3 class="font-bold text-lg mb-2">What tech stack is this?</h3>
+          <p class="text-sm opacity-80">Flask/FastAPI + PostgreSQL + SQLAlchemy. Standard Python backend stack that's easy to deploy anywhere.</p>
+        </div>
+        
+        <div class="card-modern p-6">
+          <h3 class="font-bold text-lg mb-2">Can I deploy on Render/Fly/EC2?</h3>
+          <p class="text-sm opacity-80">Yes. It's a standard Python backend that works on any platform with PostgreSQL support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CREDIBILITY -->
-  <section class="section fade-in">
+  <section class="section reveal">
     <div class="max-w-6xl mx-auto px-4">
       <div class="card-modern p-8 text-center">
         <div class="flex items-center justify-center gap-3 mb-6">
@@ -984,7 +1056,7 @@
           <div class="p-4">
             <div class="text-3xl font-bold gradient-text mb-2">Live</div>
             <div class="text-sm opacity-80">Since Jan 2, 2026</div>
-            <div class="text-xs opacity-60 mt-1">Months of uptime</div>
+            <div class="text-xs opacity-60 mt-1">Production uptime</div>
           </div>
           
           <div class="p-4">
@@ -1002,7 +1074,7 @@
         
         <p class="text-lg mb-6 max-w-2xl mx-auto">
           This isn't theoretical. You're buying production-tested backend code that's been running 
-          the live demo for months. The architecture is simple, reliable, and ready to deploy.
+          the live demo. The architecture is simple, reliable, and ready to deploy.
         </p>
         
         <div class="flex flex-wrap gap-4 justify-center">
@@ -1018,7 +1090,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section id="contact" class="section fade-in">
+  <section id="contact" class="section reveal">
     <div class="max-w-4xl mx-auto px-4">
       <div class="card-modern p-8 text-center">
         <h3 class="text-2xl font-bold mb-6 gradient-text">Questions Before Buying?</h3>
@@ -1056,7 +1128,7 @@
   </section>
 
   <!-- FINAL CTA -->
-  <section class="pb-20 fade-in">
+  <section class="pb-20 reveal">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <div class="card-modern p-10 bg-gradient-to-br from-purple-500/10 to-accent/10 border-purple-500/20">
         <h2 class="text-3xl font-bold mb-4 gradient-text">Ready to Add Persistence to Your AI?</h2>
@@ -1082,14 +1154,14 @@
     </div>
   </section>
 
-  <footer class="py-8 text-center text-sm opacity-70 border-t border-white/10 fade-in">
+  <footer class="py-8 text-center text-sm opacity-70 border-t border-white/10 reveal">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3">
           <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" 
                alt="BAP UI™ Logo" 
                class="h-6 w-auto rounded">
-          <div>© 2025 BAP UI™ • Persistent AI Backend Architecture</div>
+          <div>© 2026 BAP UI™ • Persistent AI Backend Architecture</div>
         </div>
         
         <div class="flex items-center gap-4">
@@ -1116,6 +1188,12 @@
           
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu.classList.contains('active')) {
+              mobileMenu.classList.remove('active');
+            }
+            
             window.scrollTo({
               top: targetElement.offsetTop - 100,
               behavior: 'smooth'
@@ -1126,18 +1204,35 @@
       
       // Mobile menu toggle
       const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
       if (menuToggle) {
         menuToggle.addEventListener('click', function() {
-          const nav = document.querySelector('nav .hidden.md\\:flex');
-          if (nav.classList.contains('hidden')) {
-            nav.classList.remove('hidden');
-            nav.classList.add('absolute', 'top-full', 'left-0', 'right-0', 'bg-gray-900', 'p-4', 'flex-col', 'space-y-4', 'border-t', 'border-white/10');
+          mobileMenu.classList.toggle('active');
+          // Toggle menu icon
+          if (mobileMenu.classList.contains('active')) {
+            menuToggle.innerHTML = '<i class="fa-solid fa-times"></i>';
           } else {
-            nav.classList.add('hidden');
-            nav.classList.remove('absolute', 'top-full', 'left-0', 'right-0', 'bg-gray-900', 'p-4', 'flex-col', 'space-y-4', 'border-t', 'border-white/10');
+            menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
           }
         });
       }
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('#mobile-menu') && !event.target.closest('#menu-toggle') && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+      });
+      
+      // Close mobile menu on window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+      });
       
       // Track outbound Stripe link clicks
       document.querySelectorAll('a[href*="stripe.com"]').forEach(link => {
@@ -1147,7 +1242,7 @@
         });
       });
       
-      // Add subtle scroll animations
+      // Scroll reveal animations
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -1156,18 +1251,26 @@
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in');
+            entry.target.classList.add('show');
           }
         });
       }, observerOptions);
       
-      // Observe all sections for fade-in animations
-      document.querySelectorAll('section').forEach(section => {
-        observer.observe(section);
+      // Observe all sections for reveal animations
+      document.querySelectorAll('section, footer').forEach(element => {
+        element.classList.add('reveal');
+        observer.observe(element);
       });
+      
+      // Initial reveal for first section
+      const firstSection = document.querySelector('section');
+      if (firstSection) {
+        firstSection.classList.add('show');
+      }
     });
   </script>
 </body>
 </html>
+
 
 
