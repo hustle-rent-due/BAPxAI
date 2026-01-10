@@ -14,40 +14,313 @@
       --primary: #6C63FF; 
       --secondary: #4F46E5; 
       --accent: #00D4AA;
-      --dark-bg: #0A0F1E;
-      --card-bg: rgba(18, 24, 45, 0.8);
+      --glow-primary: #8B5CF6;
+      --glow-secondary: #10B981;
+      --glow-accent: #3B82F6;
+      --dark-bg: #000000;
+      --card-bg: rgba(15, 15, 25, 0.9);
       --glass-bg: rgba(255, 255, 255, 0.05);
       --glass-border: rgba(255, 255, 255, 0.08);
     }
     
     body { 
-      background: var(--dark-bg) url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%23182347" fill-opacity="0.4" fill-rule="evenodd"/%3E%3C/svg%3E') repeat;
+      background: var(--dark-bg);
       color: #E2E8F0; 
       font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       position: relative;
+      overflow-x: hidden;
     }
     
-    body::before {
-      content: '';
+    /* Black Base with Glow Effect */
+    .glow-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: -3;
       background: 
-        radial-gradient(circle at 15% 20%, rgba(108, 99, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(0, 212, 170, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 50% 80%, rgba(79, 70, 229, 0.08) 0%, transparent 40%);
-      z-index: -1;
+        radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.02) 0%, transparent 50%),
+        #000000;
     }
     
+    /* Animated Glow Rings */
+    .glow-ring {
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid;
+      filter: blur(20px);
+      z-index: -2;
+      animation: ringPulse 15s ease-in-out infinite;
+      opacity: 0.15;
+    }
+    
+    .glow-ring:nth-child(1) {
+      width: 600px;
+      height: 600px;
+      top: -300px;
+      left: -300px;
+      border-color: var(--glow-primary);
+      animation-delay: 0s;
+    }
+    
+    .glow-ring:nth-child(2) {
+      width: 800px;
+      height: 800px;
+      bottom: -400px;
+      right: -400px;
+      border-color: var(--glow-secondary);
+      animation-delay: -5s;
+      animation-direction: reverse;
+    }
+    
+    .glow-ring:nth-child(3) {
+      width: 400px;
+      height: 400px;
+      top: 50%;
+      left: 80%;
+      border-color: var(--glow-accent);
+      animation-delay: -7s;
+    }
+    
+    @keyframes ringPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.2;
+      }
+    }
+    
+    /* Glowing Particles */
+    .glow-particle {
+      position: fixed;
+      background: radial-gradient(circle at center, 
+        rgba(108, 99, 255, 0.3), 
+        rgba(108, 99, 255, 0.1) 30%, 
+        transparent 70%);
+      border-radius: 50%;
+      filter: blur(15px);
+      z-index: -1;
+      animation: floatGlow 25s infinite linear;
+      opacity: 0.3;
+    }
+    
+    .glow-particle:nth-child(1) {
+      width: 150px;
+      height: 150px;
+      top: 20%;
+      left: 10%;
+      background: radial-gradient(circle at center, 
+        rgba(139, 92, 246, 0.4), 
+        rgba(139, 92, 246, 0.1) 40%, 
+        transparent 70%);
+      animation-duration: 30s;
+      box-shadow: 0 0 60px rgba(139, 92, 246, 0.3);
+    }
+    
+    .glow-particle:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      bottom: 30%;
+      right: 15%;
+      background: radial-gradient(circle at center, 
+        rgba(16, 185, 129, 0.3), 
+        rgba(16, 185, 129, 0.1) 40%, 
+        transparent 70%);
+      animation-duration: 35s;
+      animation-delay: -10s;
+      box-shadow: 0 0 80px rgba(16, 185, 129, 0.2);
+    }
+    
+    .glow-particle:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 60%;
+      left: 20%;
+      background: radial-gradient(circle at center, 
+        rgba(59, 130, 246, 0.3), 
+        rgba(59, 130, 246, 0.1) 40%, 
+        transparent 70%);
+      animation-duration: 25s;
+      animation-delay: -5s;
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+    }
+    
+    @keyframes floatGlow {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.3;
+      }
+      25% {
+        transform: translate(100px, 80px) rotate(90deg);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translate(50px, 150px) rotate(180deg);
+        opacity: 0.5;
+      }
+      75% {
+        transform: translate(-80px, 100px) rotate(270deg);
+        opacity: 0.4;
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+        opacity: 0.3;
+      }
+    }
+    
+    /* Glowing Grid */
+    .glow-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.05;
+      background-image: 
+        linear-gradient(rgba(108, 99, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108, 99, 255, 0.1) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridFlow 40s linear infinite;
+      filter: blur(0.5px);
+    }
+    
+    @keyframes gridFlow {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 60px 60px;
+      }
+    }
+    
+    /* Neon Scan Line */
+    .neon-scan {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(0, 212, 170, 0.8), 
+        rgba(108, 99, 255, 0.8), 
+        rgba(139, 92, 246, 0.8), 
+        transparent);
+      z-index: -1;
+      animation: neonScan 10s linear infinite;
+      filter: blur(1px);
+      box-shadow: 
+        0 0 10px rgba(0, 212, 170, 0.5),
+        0 0 20px rgba(108, 99, 255, 0.3),
+        0 0 30px rgba(139, 92, 246, 0.2);
+    }
+    
+    @keyframes neonScan {
+      0% {
+        top: 0;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
+    }
+    
+    /* Glowing Connection Dots */
+    .glow-dot {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: var(--glow-primary);
+      border-radius: 50%;
+      filter: blur(2px);
+      z-index: -1;
+      animation: dotPulse 3s infinite;
+      box-shadow: 0 0 10px var(--glow-primary);
+    }
+    
+    .glow-dot:nth-child(1) { top: 30%; left: 15%; animation-delay: 0s; }
+    .glow-dot:nth-child(2) { top: 60%; right: 20%; animation-delay: -1s; background: var(--glow-secondary); box-shadow: 0 0 10px var(--glow-secondary); }
+    .glow-dot:nth-child(3) { bottom: 40%; left: 25%; animation-delay: -2s; background: var(--glow-accent); box-shadow: 0 0 10px var(--glow-accent); }
+    .glow-dot:nth-child(4) { top: 25%; right: 30%; animation-delay: -3s; }
+    .glow-dot:nth-child(5) { bottom: 25%; left: 40%; animation-delay: -4s; background: var(--glow-secondary); box-shadow: 0 0 10px var(--glow-secondary); }
+    
+    @keyframes dotPulse {
+      0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.5);
+      }
+    }
+    
+    /* Glowing Connections */
+    .glow-connection {
+      position: fixed;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glow-primary), transparent);
+      z-index: -2;
+      opacity: 0.15;
+      transform-origin: left;
+      animation: connectGlow 8s linear infinite;
+      filter: blur(1px);
+    }
+    
+    .glow-connection:nth-child(1) {
+      top: 30%;
+      left: 15%;
+      width: 200px;
+      animation-delay: 0s;
+    }
+    
+    .glow-connection:nth-child(2) {
+      top: 60%;
+      right: 20%;
+      width: 150px;
+      animation-delay: -4s;
+      animation-direction: reverse;
+      background: linear-gradient(90deg, transparent, var(--glow-secondary), transparent);
+    }
+    
+    @keyframes connectGlow {
+      0% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scaleX(1);
+        opacity: 0.3;
+        box-shadow: 0 0 20px var(--glow-primary);
+      }
+      100% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+    }
+    
+    /* Enhanced Cards with Glow */
     .card-modern {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(108, 99, 255, 0.15);
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
     }
@@ -59,13 +332,26 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      background: linear-gradient(90deg, transparent, var(--glow-primary), var(--glow-accent), transparent);
+      animation: cardGlow 3s ease-in-out infinite;
     }
     
     .card-modern:hover {
-      transform: translateY(-4px);
-      border-color: rgba(108, 99, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(108, 99, 255, 0.1);
+      transform: translateY(-6px);
+      border-color: rgba(108, 99, 255, 0.4);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(108, 99, 255, 0.2),
+        0 0 30px rgba(108, 99, 255, 0.1);
+    }
+    
+    @keyframes cardGlow {
+      0%, 100% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 1;
+      }
     }
     
     .btn-primary { 
@@ -77,16 +363,38 @@
       font-size: 1.1rem;
       border: none;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
     
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+      box-shadow: 
+        0 10px 25px rgba(108, 99, 255, 0.3),
+        0 0 20px rgba(108, 99, 255, 0.2);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+    
+    .btn-primary:hover::after {
+      opacity: 1;
+      transform: rotate(45deg) translate(50%, 50%);
     }
     
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(108, 99, 255, 0.2);
       color: white;
       padding: 0.75rem 1.5rem;
       border-radius: 10px;
@@ -95,14 +403,17 @@
     }
     
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(108, 99, 255, 0.1);
+      border-color: rgba(108, 99, 255, 0.4);
       transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 99, 255, 0.1);
     }
     
     .nav-glass {
-      background: rgba(10, 15, 30, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
     
     .section { 
@@ -120,25 +431,30 @@
       width: auto;
       border-radius: 6px;
       transition: all 0.3s ease;
+      filter: drop-shadow(0 0 5px rgba(108, 99, 255, 0.3));
     }
     
     .brand-logo:hover {
       transform: scale(1.05);
+      filter: drop-shadow(0 0 10px rgba(108, 99, 255, 0.5));
     }
     
     .brand-text {
       font-weight: 800;
       font-size: 1.4rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--glow-primary), var(--glow-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 20px rgba(108, 99, 255, 0.2);
     }
     
     .gradient-text {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--glow-primary), var(--glow-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px rgba(108, 99, 255, 0.2);
     }
     
     .feature-icon {
@@ -152,15 +468,17 @@
       font-size: 1.5rem;
       color: var(--primary);
       margin-bottom: 1.5rem;
+      box-shadow: 0 0 20px rgba(108, 99, 255, 0.1);
     }
     
     .price-tag {
       font-size: 3.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--glow-primary), var(--glow-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1;
+      text-shadow: 0 0 30px rgba(108, 99, 255, 0.3);
     }
     
     .guarantee-badge {
@@ -173,19 +491,26 @@
       border-radius: 50px;
       font-size: 0.9rem;
       color: var(--primary);
+      backdrop-filter: blur(10px);
     }
     
     .live-badge {
-      animation: pulse 2s infinite;
+      animation: pulseGlow 2s infinite;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+    @keyframes pulseGlow {
+      0%, 100% { 
+        opacity: 1;
+        box-shadow: 0 0 5px #10B981;
+      }
+      50% { 
+        opacity: 0.7;
+        box-shadow: 0 0 15px #10B981;
+      }
     }
     
     .file-badge {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(20, 20, 30, 0.8);
       border: 1px solid rgba(108, 99, 255, 0.3);
       padding: 0.75rem 1rem;
       border-radius: 10px;
@@ -194,6 +519,12 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .file-badge:hover {
+      border-color: rgba(108, 99, 255, 0.6);
+      box-shadow: 0 0 20px rgba(108, 99, 255, 0.1);
     }
     
     .file-icon {
@@ -220,18 +551,25 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
     }
     
     .stripe-button:hover {
       background: linear-gradient(135deg, #8a85ff, #635bff);
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99, 91, 255, 0.3);
+      box-shadow: 
+        0 10px 25px rgba(99, 91, 255, 0.3),
+        0 0 20px rgba(99, 91, 255, 0.2);
     }
     
     @media (max-width: 768px) {
       .section { padding: 3rem 0; }
       .price-tag { font-size: 2.5rem; }
       .brand-logo { height: 32px; }
+      .glow-particle, .glow-ring {
+        opacity: 0.1; /* Reduce glow intensity on mobile */
+      }
     }
     
     .architecture-diagram {
@@ -240,12 +578,50 @@
       border-radius: 16px;
       padding: 2rem;
     }
+    
+    /* Content fade-in animations */
+    .fade-in {
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body class="antialiased">
 
+  <!-- Glowing Background Elements -->
+  <div class="glow-bg"></div>
+  <div class="glow-grid"></div>
+  <div class="neon-scan"></div>
+  
+  <div class="glow-ring"></div>
+  <div class="glow-ring"></div>
+  <div class="glow-ring"></div>
+  
+  <div class="glow-particle"></div>
+  <div class="glow-particle"></div>
+  <div class="glow-particle"></div>
+  
+  <div class="glow-dot"></div>
+  <div class="glow-dot"></div>
+  <div class="glow-dot"></div>
+  <div class="glow-dot"></div>
+  <div class="glow-dot"></div>
+  
+  <div class="glow-connection"></div>
+  <div class="glow-connection"></div>
+
   <!-- NAV -->
-  <nav class="fixed top-0 inset-x-0 z-50 nav-glass py-4">
+  <nav class="fixed top-0 inset-x-0 z-50 nav-glass py-4 fade-in">
     <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
       <div class="brand-container">
         <img src="https://github.com/hustle-rent-due/BAPxAI/blob/main/ChatGPT%20Image%20Sep%2013,%202025%20at%2007_02_09%20PM.png?raw=true" 
@@ -268,10 +644,10 @@
   </nav>
 
   <!-- HERO -->
-  <section class="pt-32 pb-16">
+  <section class="pt-32 pb-16 fade-in">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-8">
-        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-accent/10 px-4 py-2 rounded-full mb-6">
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-accent/10 px-4 py-2 rounded-full mb-6 backdrop-blur-sm">
           <span class="w-2 h-2 bg-green-500 rounded-full live-badge"></span>
           <span class="text-sm font-medium gradient-text">Live & running since Jan 2, 2026</span>
         </div>
@@ -297,7 +673,7 @@
   </section>
 
   <!-- WHAT YOU GET -->
-  <section id="what-you-get" class="section">
+  <section id="what-you-get" class="section fade-in">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">What You're Actually Buying</h2>
       
@@ -407,7 +783,7 @@
   </section>
 
   <!-- ARCHITECTURE DIAGRAM -->
-  <section class="section bg-gradient-to-b from-slate-900/50 to-transparent">
+  <section class="section fade-in">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">Simple Architecture</h2>
       
@@ -439,7 +815,7 @@
         </div>
         
         <div class="mt-8 text-center">
-          <div class="inline-flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full">
+          <div class="inline-flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm">
             <i class="fa-solid fa-arrow-right-arrow-left text-accent"></i>
             <span class="text-sm">Simple REST API between each layer</span>
           </div>
@@ -449,7 +825,7 @@
   </section>
 
   <!-- DEMO -->
-  <section id="demo" class="section">
+  <section id="demo" class="section fade-in">
     <div class="max-w-7xl mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12 gradient-text">See the Backend in Action</h2>
       
@@ -458,7 +834,7 @@
           <div>
             <h3 class="text-2xl font-bold mb-4">Live Demo Frontend</h3>
             <p class="mb-6 opacity-90">
-              The <a href="https://bapxai.com/voidchis.html" target="_blank" class="gradient-text font-bold">public demo</a> 
+              The <a href="https://bapxai.com/voidchis.html" target="_blank" class="gradient-text font-bold hover:opacity-80 transition-opacity">public demo</a> 
               shows this persistence architecture working. It's been live since January 2, 2026.
             </p>
             <ul class="space-y-3 mb-6">
@@ -489,7 +865,7 @@
             </a>
           </div>
           
-          <div class="p-6 border border-white/10 rounded-xl bg-black/20">
+          <div class="p-6 border border-white/10 rounded-xl bg-black/30 backdrop-blur-sm">
             <div class="font-mono text-sm">
               <div class="text-green-400 mb-2"># API Endpoint Example</div>
               <div class="text-gray-400">POST /api/ai-state</div>
@@ -509,7 +885,7 @@
   </section>
 
   <!-- LICENSE & PRICING -->
-  <section id="purchase" class="section bg-gradient-to-b from-slate-900/50 to-transparent">
+  <section id="purchase" class="section fade-in">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold mb-4 gradient-text">One-Time Payment. Own It Forever.</h2>
@@ -589,7 +965,7 @@
   </section>
 
   <!-- CREDIBILITY -->
-  <section class="section">
+  <section class="section fade-in">
     <div class="max-w-6xl mx-auto px-4">
       <div class="card-modern p-8 text-center">
         <div class="flex items-center justify-center gap-3 mb-6">
@@ -642,25 +1018,25 @@
   </section>
 
   <!-- CONTACT -->
-  <section id="contact" class="section">
+  <section id="contact" class="section fade-in">
     <div class="max-w-4xl mx-auto px-4">
       <div class="card-modern p-8 text-center">
         <h3 class="text-2xl font-bold mb-6 gradient-text">Questions Before Buying?</h3>
         
         <div class="grid md:grid-cols-3 gap-6 mb-8">
-          <a href="mailto:nile@bapxai.com" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all">
+          <a href="mailto:nile@bapxai.com" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all hover:bg-white/5">
             <i class="fa-solid fa-envelope text-2xl mb-3 gradient-text"></i>
             <div class="font-bold">Email</div>
             <div class="text-sm opacity-80">nile@bapxai.com</div>
           </a>
           
-          <a href="https://x.com/BAPxAI" target="_blank" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all">
+          <a href="https://x.com/BAPxAI" target="_blank" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all hover:bg-white/5">
             <i class="fa-brands fa-x-twitter text-2xl mb-3 gradient-text"></i>
             <div class="font-bold">X (Twitter)</div>
             <div class="text-sm opacity-80">@BAPxAI</div>
           </a>
           
-          <a href="https://www.linkedin.com/in/nile-green-8a66a2379" target="_blank" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all">
+          <a href="https://www.linkedin.com/in/nile-green-8a66a2379" target="_blank" class="p-4 border border-white/10 rounded-xl hover:border-accent/50 transition-all hover:bg-white/5">
             <i class="fa-brands fa-linkedin text-2xl mb-3 gradient-text"></i>
             <div class="font-bold">LinkedIn</div>
             <div class="text-sm opacity-80">Nile Green</div>
@@ -680,7 +1056,7 @@
   </section>
 
   <!-- FINAL CTA -->
-  <section class="pb-20">
+  <section class="pb-20 fade-in">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <div class="card-modern p-10 bg-gradient-to-br from-purple-500/10 to-accent/10 border-purple-500/20">
         <h2 class="text-3xl font-bold mb-4 gradient-text">Ready to Add Persistence to Your AI?</h2>
@@ -706,7 +1082,7 @@
     </div>
   </section>
 
-  <footer class="py-8 text-center text-sm opacity-70 border-t border-white/10">
+  <footer class="py-8 text-center text-sm opacity-70 border-t border-white/10 fade-in">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3">
@@ -770,8 +1146,28 @@
           console.log('Stripe purchase link clicked');
         });
       });
+      
+      // Add subtle scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+          }
+        });
+      }, observerOptions);
+      
+      // Observe all sections for fade-in animations
+      document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+      });
     });
   </script>
 </body>
 </html>
+
 
