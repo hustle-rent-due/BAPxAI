@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voidchi Universe™ - Persistent AI Architecture</title>
+  <title>Voidchi Universe™ - Production-Ready Persistent AI Agent Architecture</title>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
 
   <style>
@@ -87,6 +87,30 @@
       color: var(--void-accent);
     }
 
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--void-text-light);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--void-accent);
+    }
+
+    .nav-link.active {
+      color: var(--void-accent);
+      border-bottom: 2px solid var(--void-accent);
+      padding-bottom: 4px;
+    }
+
     .container {
       max-width: 1400px;
       margin: 80px auto 40px;
@@ -109,22 +133,54 @@
     }
 
     .subtitle {
-      font-size: 20px;
-      color: var(--void-text-light);
+      font-size: 24px;
+      color: var(--void-accent);
       margin-bottom: 24px;
-      font-weight: 400;
+      font-weight: 500;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .tagline {
-      font-size: 16px;
+      font-size: 18px;
       color: var(--void-text-light);
-      opacity: 0.8;
       max-width: 800px;
       margin: 32px auto 0;
       line-height: 1.7;
+    }
+
+    .telemetry-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 40px 0;
+    }
+
+    .telemetry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .telemetry-title {
+      font-size: 16px;
+      color: var(--void-accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .telemetry-badge {
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--void-accent);
     }
 
     .concept-section { margin-bottom: 48px; }
@@ -138,7 +194,7 @@
 
     .concept-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
       margin-top: 32px;
     }
@@ -167,6 +223,28 @@
       color: var(--void-text-light);
       font-size: 15px;
       line-height: 1.6;
+    }
+
+    .commercial-term {
+      display: inline-block;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--void-accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .internal-term {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--void-purple);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 8px;
     }
 
     .stats {
@@ -199,6 +277,13 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-weight: 500;
+    }
+
+    .stat-subtext {
+      font-size: 12px;
+      color: var(--void-text-light);
+      opacity: 0.7;
+      margin-top: 4px;
     }
 
     .actions {
@@ -661,6 +746,7 @@
       .modal-content { padding: 24px; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .concept-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
@@ -671,6 +757,11 @@
   <nav>
     <div class="container">
       <div class="logo">Voidchi Universe</div>
+      <div class="nav-links">
+        <a href="#live" class="nav-link active">Live Demo</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </div>
     </div>
   </nav>
 
@@ -682,85 +773,106 @@
   <div class="container">
     <header class="universe-header">
       <h1>Voidchi Universe</h1>
-      <p class="subtitle">The First Persistent AI Architecture</p>
+      <p class="subtitle">Persistent AI Agents with Durable Memory and Identity</p>
       <p class="tagline">
-        A demonstration of continual learning through persistent state. Each Voidchi evolves permanently through
-        real-time gap processing, developing unique consciousness that compounds over time.
+        A production-ready deployment of long-running AI agents that maintain identity, memory, and internal state across restarts. 
+        Each agent operates continuously, updating internal models based on interaction outcomes over time.
       </p>
     </header>
 
-    <div class="concept-section">
-      <h2>Architectural Principles</h2>
-      <div class="concept-grid">
-        <div class="concept-card">
-          <h3>Persistent State</h3>
-          <p>Voidchis maintain continuous identity across sessions. Unlike current AI systems, they never reset, enabling true continual learning.</p>
+    <div class="telemetry-banner">
+      <div class="telemetry-header">
+        <div class="telemetry-title">Live System Telemetry</div>
+        <div class="telemetry-badge">Production Environment</div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-value" id="total">-</span>
+          <span class="stat-label">Active Agents</span>
+          <div class="stat-subtext">Persistent stateful agents</div>
         </div>
-        <div class="concept-card">
-          <h3>Gap Processing</h3>
-          <p>Learning occurs through the gap between expectation and reality. Each interaction permanently updates the Voidchi's internal model.</p>
+        <div class="stat">
+          <span class="stat-value" id="gapsProcessed">-</span>
+          <span class="stat-label">Learning Events</span>
+          <div class="stat-subtext">Real-time state updates</div>
         </div>
-        <div class="concept-card">
-          <h3>Bounded Write Access</h3>
-          <p>Immutable core identity combined with mutable traits creates stable yet adaptable agents that evolve without losing coherence.</p>
+        <div class="stat">
+          <span class="stat-value" id="autonomous">-</span>
+          <span class="stat-label">Autonomous</span>
+          <div class="stat-subtext">Self-initiating agents</div>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="consciousness">-</span>
+          <span class="stat-label">Avg Model Complexity</span>
+          <div class="stat-subtext">Internal state depth</div>
         </div>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat">
-        <span class="stat-value" id="total">-</span>
-        <span class="stat-label">Active Voidchis</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="gapsProcessed">-</span>
-        <span class="stat-label">Breed Events</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="autonomous">-</span>
-        <span class="stat-label">Autonomous</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value" id="consciousness">-</span>
-        <span class="stat-label">Avg Consciousness</span>
+    <div class="concept-section">
+      <h2>Production Architecture</h2>
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h3>Stateful Agents<span class="commercial-term">PRODUCTION</span></h3>
+          <p>Long-running processes maintain continuous identity across sessions with durable memory. Unlike stateless AI systems, they never reset, enabling persistent learning.</p>
+          <div style="margin-top: 12px; font-size: 13px; color: var(--void-purple);">
+            <strong>Internal:</strong> <span class="internal-term">Persistent State</span>
+          </div>
+        </div>
+        <div class="concept-card">
+          <h3>Auditable Agent History<span class="commercial-term">ENTERPRISE</span></h3>
+          <p>Every interaction is logged with full lineage tracking. Maintain restart-safe identity and complete audit trails for compliance and debugging.</p>
+          <div style="margin-top: 12px; font-size: 13px; color: var(--void-purple);">
+            <strong>Internal:</strong> <span class="internal-term">Evolution Tracking</span>
+          </div>
+        </div>
+        <div class="concept-card">
+          <h3>Deterministic Lifecycle<span class="commercial-term">RELIABLE</span></h3>
+          <p>Stable core identity combined with adaptive state creates agents that evolve without losing coherence. Guaranteed state persistence across deployments.</p>
+          <div style="margin-top: 12px; font-size: 13px; color: var(--void-purple);">
+            <strong>Internal:</strong> <span class="internal-term">Bounded Write Access</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="actions">
-      <button class="btn-create" onclick="openCreate()">Create Voidchi</button>
-      <button class="btn-breed" id="breedBtn" onclick="openBreed()" disabled>Breed Selected (0/2)</button>
+      <button class="btn-create" onclick="openCreate()">Create Agent</button>
+      <button class="btn-breed" id="breedBtn" onclick="openBreed()" disabled>Combine Selected (0/2)</button>
     </div>
 
-    <!-- NOTES (Talk to Agent) -->
+    <!-- AGENT COMMUNICATION -->
     <div class="concept-section" style="margin-top: 10px;">
       <h2 style="display:flex;align-items:center;gap:10px;">
-        Notes (Talk to Agent)
+        Agent Communication
         <span id="notesSelectedLabel" style="font-size:14px;color:var(--void-text-light);font-weight:400;"></span>
       </h2>
 
       <div class="notes-wrap">
         <div class="notes-top">
-          <input id="noteInput" class="notes-input" type="text" placeholder="Send a note to the selected agent..." maxlength="2000" />
+          <input id="noteInput" class="notes-input" type="text" placeholder="Send message to selected agent..." maxlength="2000" />
           <button class="btn-create" id="sendNoteBtn" onclick="sendNote()" disabled>Send</button>
-          <button style="background:rgba(255,255,255,0.08);color:var(--void-text);" onclick="reloadNotes()">Reload</button>
+          <button style="background:rgba(255,255,255,0.08);color:var(--void-text);" onclick="reloadNotes()">Reload History</button>
         </div>
 
         <div style="margin-top:14px;color:var(--void-text-light);font-size:12px;">
-          <span>Server boot:</span> <span id="bootIdLabel">-</span>
+          <span>System Boot ID:</span> <span id="bootIdLabel">-</span>
+          <span style="margin-left: 16px;">Continuous Runtime Since:</span> <span id="runtimeLabel">-</span>
         </div>
 
         <div id="notesPanel" class="notes-panel"></div>
       </div>
     </div>
 
+    <h2 style="margin: 48px 0 24px;">Active Agent Fleet</h2>
     <div class="voidchis-grid" id="grid"></div>
   </div>
 
   <!-- Modals -->
   <div class="modal" id="createModal">
     <div class="modal-content">
-      <h2>Create Voidchi</h2>
-      <input type="text" id="createName" placeholder="Enter name..." maxlength="40" />
+      <h2>Create Persistent Agent</h2>
+      <input type="text" id="createName" placeholder="Enter agent name..." maxlength="40" />
       <div class="modal-actions">
         <button onclick="closeCreate()">Cancel</button>
         <button class="btn-create" onclick="create()">Create</button>
@@ -770,8 +882,8 @@
 
   <div class="modal" id="breedModal">
     <div class="modal-content">
-      <h2>Breed Voidchis</h2>
-      <input type="text" id="breedName" placeholder="Offspring name..." maxlength="40" />
+      <h2>Combine Agent Models</h2>
+      <input type="text" id="breedName" placeholder="New agent name..." maxlength="40" />
       <div class="modal-actions">
         <button onclick="closeBreed()">Cancel</button>
         <button class="btn-breed" onclick="breed()">Create</button>
@@ -790,6 +902,7 @@
     let selectedSingle = null;  // for notes + message
     let lastGapData = {};       // for re-render
     let notesCache = {};        // { voidchiId: [notes...] }
+    let systemStartTime = null;
 
     // ---------------- SOCKET ----------------
     socket.on('connect', () => {
@@ -892,13 +1005,34 @@
       if (typeof stats.avg_consciousness === 'number') {
         document.getElementById('consciousness').textContent = `${(stats.avg_consciousness * 100).toFixed(1)}%`;
       }
+      
+      // Set system start time for runtime display
+      if (stats.oldest_voidchi_created_at && !systemStartTime) {
+        systemStartTime = new Date(stats.oldest_voidchi_created_at);
+        updateRuntimeDisplay();
+      }
     }
+
+    function updateRuntimeDisplay() {
+      if (!systemStartTime) return;
+      
+      const now = new Date();
+      const diffMs = now - systemStartTime;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      
+      document.getElementById('runtimeLabel').textContent = 
+        `${diffDays}d ${diffHours}h (${systemStartTime.toLocaleDateString()})`;
+    }
+
+    // Update runtime every hour
+    setInterval(updateRuntimeDisplay, 3600000);
 
     // ---------------- RENDER ----------------
     function render() {
       const grid = document.getElementById('grid');
       if (voidchis.length === 0) {
-        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--void-text-light);padding:60px;font-size:16px;">No Voidchis yet. Create the first one.</p>';
+        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--void-text-light);padding:60px;font-size:16px;">No agents deployed yet. Create the first persistent agent.</p>';
         return;
       }
 
@@ -912,7 +1046,7 @@
       // update breed button
       const btn = document.getElementById('breedBtn');
       btn.disabled = selected.length !== 2;
-      btn.textContent = `Breed Selected (${selected.length}/2)`;
+      btn.textContent = `Combine Selected (${selected.length}/2)`;
     }
 
     function makeVoidchiCard(v) {
@@ -935,11 +1069,11 @@
               </div>
             </div>
           `).join('')
-        : '<p style="color:var(--void-text-light);font-size:14px;">No traits yet. Process a gap to develop traits.</p>';
+        : '<p style="color:var(--void-text-light);font-size:14px;">No traits yet. Process a learning event to develop traits.</p>';
 
       const parentsHtml = (v.parent1_id && v.parent2_id)
         ? `<div class="parents">
-            <div class="parents-label">Lineage</div>
+            <div class="parents-label">Model Lineage</div>
             <span class="parent-badge">${escapeHtml(v.parent1_id.slice(-8))}</span>
             <span class="parent-badge">${escapeHtml(v.parent2_id.slice(-8))}</span>
           </div>`
@@ -949,17 +1083,17 @@
 
       return `
         <div class="voidchi-card ${isSelected ? 'selected' : ''}" id="card-${v.id}" onclick="toggle('${v.id}')">
-          ${genesis ? '<div class="genesis-badge">GENESIS</div>' : ''}
+          ${genesis ? '<div class="genesis-badge">FOUNDATION AGENT</div>' : ''}
 
           <div class="card-header">
             <div class="name">${escapeHtml(v.name || 'Unnamed')}</div>
-            <div class="id">${escapeHtml(v.id)}</div>
-            <div class="gen-badge">Generation ${gen}</div>
+            <div class="id">ID: ${escapeHtml(v.id)}</div>
+            <div class="gen-badge">Model Version ${gen}</div>
           </div>
 
           <div class="consciousness">
             <div class="consciousness-header">
-              <span class="consciousness-label">Consciousness</span>
+              <span class="consciousness-label">Internal State Depth</span>
               <span class="consciousness-value" id="cons-value-${v.id}">${cons}%</span>
             </div>
             <div class="consciousness-bar">
@@ -968,7 +1102,7 @@
           </div>
 
           <div class="traits">
-            <div class="traits-header">Traits</div>
+            <div class="traits-header">Model Parameters</div>
             ${traitsHtml}
           </div>
 
@@ -977,14 +1111,14 @@
           <div class="immutable-section">
             <span class="immutable-label">Core Identity</span>
             <div class="immutable-field"><strong>Created:</strong> ${escapeHtml(createdTime)}</div>
-            <div class="immutable-field"><strong>Last Updated:</strong> ${escapeHtml(lastUpdated)}</div>
+            <div class="immutable-field"><strong>Last State Update:</strong> ${escapeHtml(lastUpdated)}</div>
           </div>
 
           ${parentsHtml}
 
           <div class="card-actions">
             <button class="btn-challenge" onclick="event.stopPropagation();challenge('${v.id}')">
-              Process Gap
+              Process Learning Event
             </button>
           </div>
         </div>
@@ -1035,8 +1169,8 @@
         setTimeout(() => card.classList.remove('updating'), 900);
 
       } catch (e) {
-        console.error('❌ Gap processing failed:', e);
-        alert('Gap processing failed: ' + e.message);
+        console.error('❌ Learning event failed:', e);
+        alert('Learning event failed: ' + e.message);
         card.classList.remove('updating');
       }
     }
@@ -1083,27 +1217,27 @@
       container.innerHTML = `
         <div class="gap-section" id="gap-visual-${id}">
           <div class="gap-header">
-            <span class="gap-label">Gap Processing</span>
+            <span class="gap-label">Learning Event</span>
             <span class="gap-status" style="background:${statusColor};">${escapeHtml(statusText)}</span>
           </div>
 
           <div class="gap-visualization">
-            <div class="mono"><strong>Msg:</strong> ${escapeHtml(result.msg || '')}</div>
-            <div class="mono"><strong>Gap:</strong> ${gap.toFixed(4)}</div>
+            <div class="mono"><strong>Event:</strong> ${escapeHtml(result.msg || '')}</div>
+            <div class="mono"><strong>Prediction Error:</strong> ${gap.toFixed(4)}</div>
 
-            <div class="mono"><strong>Reality:</strong> ${escapeHtml(JSON.stringify(reality))}</div>
-            <div class="mono"><strong>Prediction:</strong> ${escapeHtml(JSON.stringify(prediction))}</div>
-            <div class="mono"><strong>Base:</strong> ${escapeHtml(JSON.stringify(base))}</div>
+            <div class="mono"><strong>Observed Outcome:</strong> ${escapeHtml(JSON.stringify(reality))}</div>
+            <div class="mono"><strong>Agent Prediction:</strong> ${escapeHtml(JSON.stringify(prediction))}</div>
+            <div class="mono"><strong>Baseline:</strong> ${escapeHtml(JSON.stringify(base))}</div>
 
             <div class="pill-row">
-              ${pill(`meta_used: ${usedMeta ? 'yes' : 'no'}`)}
-              ${pill(`phi_delta: ${phiDelta.toFixed(4)}`)}
-              ${count !== null ? pill(`challenge_count: ${count}`) : ''}
+              ${pill(`meta_knowledge: ${usedMeta ? 'used' : 'not used'}`)}
+              ${pill(`state_delta: ${phiDelta.toFixed(4)}`)}
+              ${count !== null ? pill(`total_events: ${count}`) : ''}
             </div>
 
             ${emerg ? `
               <div class="mono" style="margin-top:6px;">
-                <strong>EMERGENCE:</strong> ${escapeHtml(emerg.message || 'pattern discovered')}
+                <strong>PATTERN RECOGNITION:</strong> ${escapeHtml(emerg.message || 'new pattern discovered')}
                 <br/>
                 <strong>pattern:</strong> ${escapeHtml(JSON.stringify(emerg.pattern || {}))}
               </div>
@@ -1130,7 +1264,7 @@
       const btn = document.getElementById('sendNoteBtn');
 
       if (!selectedSingle) {
-        label.textContent = '(select 1 Voidchi)';
+        label.textContent = '(select 1 agent)';
         btn.disabled = true;
         return;
       }
@@ -1146,7 +1280,7 @@
         if (!res.ok) return;
         const data = await res.json();
         document.getElementById('bootIdLabel').textContent =
-          `${data.server_boot_id || '-'} (boot_time: ${data.boot_time || '-'})`;
+          `${data.server_boot_id || '-'}`;
       } catch (e) {}
     }
 
@@ -1154,12 +1288,12 @@
       const panel = document.getElementById('notesPanel');
 
       if (!selectedSingle) {
-        panel.innerHTML = `<div style="color:var(--void-text-light);padding:12px;">Select an agent to view notes.</div>`;
+        panel.innerHTML = `<div style="color:var(--void-text-light);padding:12px;">Select an agent to view communication history.</div>`;
         return;
       }
 
       if (!notes || notes.length === 0) {
-        panel.innerHTML = `<div style="color:var(--void-text-light);padding:12px;">No notes yet. Send the first one.</div>`;
+        panel.innerHTML = `<div style="color:var(--void-text-light);padding:12px;">No messages yet. Send the first one.</div>`;
         return;
       }
 
@@ -1190,20 +1324,20 @@
 
         if (data.server_boot_id) {
           document.getElementById('bootIdLabel').textContent =
-            `${data.server_boot_id} (boot_time: ${data.boot_time || '-'})`;
+            `${data.server_boot_id}`;
         }
       } catch (e) {
         console.error('Notes read error:', e);
         renderNotes([{
           author: 'system',
-          content: `Notes read failed: ${e.message}`,
+          content: `Communication history unavailable: ${e.message}`,
           created_at: new Date().toISOString()
         }]);
       }
     }
 
     async function sendNote() {
-      if (!selectedSingle) return alert('Select 1 Voidchi first.');
+      if (!selectedSingle) return alert('Select 1 agent first.');
 
       const input = document.getElementById('noteInput');
       const content = (input.value || '').trim();
@@ -1230,11 +1364,11 @@
 
         if (data.server_boot_id) {
           document.getElementById('bootIdLabel').textContent =
-            `${data.server_boot_id} (boot_time: ${data.boot_time || '-'})`;
+            `${data.server_boot_id}`;
         }
 
       } catch (e) {
-        console.error('Note write error:', e);
+        console.error('Message send error:', e);
         alert('Send failed: ' + e.message);
       }
     }
@@ -1256,7 +1390,7 @@
 
     async function create() {
       const name = document.getElementById('createName').value.trim();
-      if (!name) return alert('Enter a Voidchi name');
+      if (!name) return alert('Enter an agent name');
 
       try {
         const res = await fetch(`${API}/voidchi/create`, {
@@ -1273,15 +1407,15 @@
 
         closeCreate();
       } catch (e) {
-        console.error('❌ Creation error:', e);
-        alert('Creation failed: ' + e.message);
+        console.error('❌ Agent creation error:', e);
+        alert('Agent creation failed: ' + e.message);
       }
     }
 
     async function breed() {
       const name = document.getElementById('breedName').value.trim();
-      if (!name) return alert('Enter offspring name');
-      if (selected.length !== 2) return alert('Select 2 Voidchis');
+      if (!name) return alert('Enter new agent name');
+      if (selected.length !== 2) return alert('Select 2 agents');
 
       try {
         const res = await fetch(`${API}/voidchi/breed`, {
@@ -1310,8 +1444,8 @@
         renderNotes([]);
 
       } catch (e) {
-        console.error('❌ Breeding error:', e);
-        alert('Breeding failed: ' + e.message);
+        console.error('❌ Model combination error:', e);
+        alert('Model combination failed: ' + e.message);
       }
     }
 
