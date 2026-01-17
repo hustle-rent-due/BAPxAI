@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -902,6 +901,9 @@
 
     const API = `${ORIGIN}/api`;
 
+    // Public safety: hide internal vectors unless you explicitly enable dev mode
+    const DEV_MODE = new URLSearchParams(window.location.search).get('dev') === '1';
+
     // IMPORTANT: Railway + Werkzeug often breaks the websocket upgrade path for Socket.IO.
     // Force long-polling to keep the live feed stable.
     const socket = io(ORIGIN, {
@@ -1222,6 +1224,11 @@
       const container = document.getElementById(`gap-container-${id}`);
       if (!container) return;
 
+      const pill = (txt) => `<span class="pill">${escapeHtml(txt)}</span>`;
+
+      // ✅ Preferred: IP-safe empirical summary from backend
+      const le = (result && typeof result === 'object') ? (result.learning_event || null) : null;
+
       const wasAccurate = !!result.was_accurate;
 
       // Some backends return gap_magnitude=0 while still returning prediction/reality vectors.
@@ -1251,6 +1258,76 @@
         : (typeof result.gap === 'number') ? result.gap
         : 0;
       if (gap === 0 && computedGap > 0) gap = computedGap;
+      // If learning_event exists, render the new empirical panel and exit early.
+      if (le) {
+        const statusText = String(le.status || 'Learning');
+        const statusColor = (statusText.toLowerCase().includes('integrat') || statusText.toLowerCase().includes('accur'))
+          ? 'var(--void-green)'
+          : 'var(--void-red)';
+
+        const acc = (typeof le.prediction_accuracy === 'number') ? le.prediction_accuracy
+          : (typeof gap === 'number') ? ((1 - gap) * 100)
+          : 0;
+
+        const stateEv = (typeof le.state_evolution === 'number') ? le.state_evolution
+          : (typeof result.phi_delta === 'number') ? result.phi_delta
+          : 0;
+
+        const total = (typeof le.total_events === 'number') ? le.total_events
+          : (typeof result.challenge_count === 'number') ? result.challenge_count
+          : null;
+
+        const meta = (le.meta_learning && typeof le.meta_learning === 'object') ? le.meta_learning : {};
+        const metaLabel = meta.label || 'Developing';
+        const metaCount = (typeof meta.count === 'number') ? meta.count : 0;
+        const metaReq   = (typeof meta.required === 'number') ? meta.required : 15;
+
+        const trend = (le.trend && typeof le.trend === 'object') ? le.trend : {};
+        const gapTrend = Array.isArray(trend.gap) ? trend.gap : [];
+        const accTrend = Array.isArray(trend.accuracy) ? trend.accuracy : [];
+
+        const fmtGapArr = gapTrend.slice(-5).map(v => {
+          const n = Number(v);
+          return Number.isFinite(n) ? n.toFixed(2) : '0.00';
+        });
+        const fmtAccArr = accTrend.slice(-5).map(v => {
+          const n = Number(v);
+          return Number.isFinite(n) ? `${Math.round(n)}%` : '0%';
+        });
+
+        const sign = stateEv >= 0 ? '+' : '';
+
+        container.innerHTML = `
+          <div class="gap-section" id="gap-visual-${id}">
+            <div class="gap-header">
+              <span class="gap-label">Learning Event</span>
+              <span class="gap-status" style="background:${statusColor};">${escapeHtml(statusText)}${statusText.toLowerCase().includes('learn') ? ' ⚠️' : ''}</span>
+            </div>
+
+            <div class="gap-visualization">
+              <div class="mono"><strong>Performance Metrics:</strong></div>
+              <div class="mono">&nbsp;&nbsp;Prediction Accuracy: ${acc.toFixed(1)}%</div>
+              <div class="mono">&nbsp;&nbsp;State Evolution: ${sign}${Number(stateEv).toFixed(4)}</div>
+
+              <div class="mono" style="margin-top:10px;"><strong>Progress:</strong></div>
+              <div class="mono">&nbsp;&nbsp;Total Experience: ${total !== null ? escapeHtml(String(total)) : '—'} events</div>
+              <div class="mono">&nbsp;&nbsp;Meta-Learning: ${escapeHtml(String(metaLabel))} (${escapeHtml(String(metaCount))}/${escapeHtml(String(metaReq))} needed)</div>
+
+              <div class="mono" style="margin-top:10px;"><strong>Trend (Last 5 Events):</strong></div>
+              <div class="mono">&nbsp;&nbsp;Gap: [${escapeHtml(fmtGapArr.join(', '))}]</div>
+              <div class="mono">&nbsp;&nbsp;Accuracy: [${escapeHtml(fmtAccArr.join(', '))}]</div>
+
+              <div class="pill-row" style="margin-top:10px;">
+                ${pill(`prediction_error: ${gap.toFixed(4)}`)}
+                ${pill(`state_delta: ${Number(stateEv).toFixed(4)}`)}
+                ${total !== null ? pill(`total_events: ${total}`) : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       const statusColor = wasAccurate ? 'var(--void-green)' : 'var(--void-red)';
       const statusText  = wasAccurate ? 'Accurate' : 'Learning';
 
@@ -1259,7 +1336,6 @@
       const count = (typeof result.challenge_count === 'number') ? result.challenge_count : null;
 
       const emerg = result.emergence_event && result.emergence_event.discovered ? result.emergence_event : null;
-      const pill = (txt) => `<span class="pill">${escapeHtml(txt)}</span>`;
 
       container.innerHTML = `
         <div class="gap-section" id="gap-visual-${id}">
@@ -1272,9 +1348,15 @@
             <div class="mono"><strong>Event:</strong> ${escapeHtml(result.msg || '')}</div>
             <div class="mono"><strong>Prediction Error:</strong> ${gap.toFixed(4)}</div>
 
-            <div class="mono"><strong>Observed Outcome:</strong> ${escapeHtml(JSON.stringify(reality))}</div>
-            <div class="mono"><strong>Agent Prediction:</strong> ${escapeHtml(JSON.stringify(prediction))}</div>
-            <div class="mono"><strong>Baseline:</strong> ${escapeHtml(JSON.stringify(base))}</div>
+            ${DEV_MODE ? `
+              <div class="mono"><strong>Observed Outcome:</strong> ${escapeHtml(JSON.stringify(reality))}</div>
+              <div class="mono"><strong>Agent Prediction:</strong> ${escapeHtml(JSON.stringify(prediction))}</div>
+              <div class="mono"><strong>Baseline:</strong> ${escapeHtml(JSON.stringify(base))}</div>
+            ` : `
+              <div class="mono"><strong>Observed Outcome:</strong> [hidden]</div>
+              <div class="mono"><strong>Agent Prediction:</strong> [hidden]</div>
+              <div class="mono"><strong>Baseline:</strong> [hidden]</div>
+            `}
 
             <div class="pill-row">
               ${pill(`meta_knowledge: ${usedMeta ? 'used' : 'not used'}`)}
