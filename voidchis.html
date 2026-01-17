@@ -1,4 +1,5 @@
- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1199,13 +1200,16 @@
       const consValue = document.getElementById(`cons-value-${id}`);
       const consFill = document.getElementById(`cons-fill-${id}`);
 
-      const phi = (typeof result.new_phi === 'number') ? result.new_phi : (result.new_consciousness ?? 0);
+      const phi = (typeof result.new_phi === 'number') ? result.new_phi
+        : (typeof result.phi === 'number') ? result.phi
+        : (typeof result.consciousness_level === 'number') ? result.consciousness_level
+        : (result.new_consciousness ?? 0);
       if (consValue && consFill) {
         consValue.textContent = `${(phi * 100).toFixed(1)}%`;
         consFill.style.width = `${phi * 100}%`;
       }
 
-      const traitObj = result.traits || result.new_traits || {};
+      const traitObj = result.traits || result.personality_traits || result.new_traits || {};
       Object.entries(traitObj).forEach(([trait, value]) => {
         const traitValue = document.querySelector(`#card-${id} .trait-value[data-trait="${cssEscape(trait)}"]`);
         const traitFill  = document.querySelector(`#card-${id} .trait-fill[data-trait="${cssEscape(trait)}"]`);
@@ -1224,7 +1228,9 @@
       // Compute a fallback "prediction error" so the UI always reflects learning.
       const reality = Array.isArray(result.reality) ? result.reality : [];
       const prediction = Array.isArray(result.prediction) ? result.prediction : [];
-      const base = Array.isArray(result.base_prediction) ? result.base_prediction : [];
+      const base = Array.isArray(result.base_prediction) ? result.base_prediction
+        : Array.isArray(result.base) ? result.base
+        : [];
 
       const computedGap = (() => {
         if (!Array.isArray(reality) || !Array.isArray(prediction)) return 0;
@@ -1241,12 +1247,14 @@
         return Math.sqrt(sum);
       })();
 
-      let gap = (typeof result.gap_magnitude === 'number') ? result.gap_magnitude : 0;
+      let gap = (typeof result.gap_magnitude === 'number') ? result.gap_magnitude
+        : (typeof result.gap === 'number') ? result.gap
+        : 0;
       if (gap === 0 && computedGap > 0) gap = computedGap;
       const statusColor = wasAccurate ? 'var(--void-green)' : 'var(--void-red)';
       const statusText  = wasAccurate ? 'Accurate' : 'Learning';
 
-      const usedMeta = !!result.used_meta_knowledge;
+      const usedMeta = !!(result.used_meta_knowledge ?? result.used_meta);
       const phiDelta = (typeof result.phi_delta === 'number') ? result.phi_delta : 0;
       const count = (typeof result.challenge_count === 'number') ? result.challenge_count : null;
 
