@@ -904,11 +904,43 @@
     // ✅ API / SOCKET BASE
     // If this page is served from Railway (preview), use same-origin.
     // Otherwise, use the production backend origin.
-    const ORIGIN = window.location.hostname.includes('railway.app')
-      ? window.location.origin
-      : 'https://permamind-enterprise-production.up.railway.app';
+    // ✅ API BASE autodetect (fixes “not connected” when frontend + backend are on different domains)
+    // You can also hard-set a backend by adding ?backend=https://your-backend.com
+    const qs = new URLSearchParams(window.location.search);
+    const forcedBackend = qs.get('backend');
 
-    const API = `${ORIGIN}/api`;
+    const CANDIDATE_ORIGINS = [
+      window.location.origin,
+      'https://bapxai.com',
+      'https://www.bapxai.com',
+      'https://permamind-enterprise-production.up.railway.app',
+    ];
+
+    let ORIGIN = forcedBackend || null;
+    let API = null;
+
+    async function pickBackendOrigin() {
+      const candidates = forcedBackend ? [forcedBackend] : CANDIDATE_ORIGINS;
+      for (const origin of candidates) {
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), 2500);
+          const res = await fetch(`${origin}/api/health`, { credentials: 'omit', signal: ctrl.signal });
+          clearTimeout(t);
+          if (res.ok) {
+            ORIGIN = origin;
+            API = `${ORIGIN}/api`;
+            return true;
+          }
+        } catch (e) {
+          // try next origin
+        }
+      }
+      // fallback (keeps API non-null to avoid crashes)
+      ORIGIN = window.location.origin;
+      API = `${ORIGIN}/api`;
+      return false;
+    }
 
     // Public safety: hide internal vectors unless you explicitly enable dev mode
     const DEV_MODE = new URLSearchParams(window.location.search).get('dev') === '1';
@@ -1697,21 +1729,19 @@
         alert('Model combination failed: ' + e.message);
       }
     }
-
     // ---------------- STARTUP ----------------
-    loadVoidchis();
-    loadBootInfo();
+    (async () => {
+      const ok = await pickBackendOrigin();
+      updateStatus(ok);
+      await loadBootInfo();
+      await loadVoidchis();
+      await loadStats();
 
-
-    // ---------------- POLLING LOOP ----------------
-    // Refresh fleet + global stats periodically so the demo stays live without websockets.
-    setInterval(() => {
-      loadVoidchis();
-    }, 5000);
-
-    setInterval(() => {
-      loadStats();
-    }, 5000);
+      // ---------------- POLLING LOOP ----------------
+      // Refresh fleet + global stats periodically so the demo stays live without websockets.
+      setInterval(() => { loadVoidchis(); }, 5000);
+      setInterval(() => { loadStats(); }, 5000);
+    })();
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -1722,6 +1752,7 @@
         sendNote();
       }
     });
+
   </script>
 </body>
 </html>
