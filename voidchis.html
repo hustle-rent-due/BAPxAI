@@ -775,7 +775,7 @@
       <h1>Voidchi Universe</h1>
       <p class="subtitle">Persistent AI Agents with Durable Memory and Identity</p>
       <p class="tagline">
-        A production-ready deployment of long-running AI agents that maintain identity, memory, and internal state across restarts. 
+        A production-ready deployment of long-running AI agents that maintain identity, memory, and internal state across restarts.
         Each agent operates continuously, updating internal models based on interaction outcomes over time.
       </p>
     </header>
@@ -892,10 +892,27 @@
   </div>
 
   <script>
-    // ✅ SET YOUR API / SOCKET BASE
-    const ORIGIN = 'https://permamind-enterprise-production.up.railway.app';
+    // ✅ BASE URL
+    // If this HTML is hosted on the same domain as your backend, it will auto-detect.
+    // Otherwise it falls back to your Railway domain.
+    const DEFAULT_ORIGIN = 'https://permamind-enterprise-production.up.railway.app';
+    const ORIGIN =
+      (location.hostname.includes('railway.app') || location.hostname.includes('bapxai.com'))
+        ? location.origin
+        : DEFAULT_ORIGIN;
+
     const API = `${ORIGIN}/api`;
-    const socket = io(ORIGIN, { transports: ['websocket', 'polling'] });
+
+    // Railway / proxies: start with polling, then upgrade to websocket
+    const socket = io(ORIGIN, {
+      path: '/socket.io',
+      transports: ['polling', 'websocket'],
+      upgrade: true,
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 800,
+      timeout: 20000
+    });
 
     let voidchis = [];
     let selected = [];          // for breeding (0..2)
@@ -914,6 +931,11 @@
 
     socket.on('disconnect', () => {
       console.log('❌ Disconnected');
+      updateStatus(false);
+    });
+
+    socket.on('connect_error', (err) => {
+      console.warn('Socket connect_error:', err?.message || err);
       updateStatus(false);
     });
 
@@ -949,6 +971,33 @@
         statusEl.className = 'status disconnected';
         textEl.textContent = 'Disconnected';
       }
+    }
+
+    // ---------------- HELPERS ----------------
+    function nOr(x, fallback = 0) {
+      return (typeof x === 'number' && Number.isFinite(x)) ? x : fallback;
+    }
+
+    function firstNumber(...vals) {
+      for (const v of vals) {
+        if (typeof v === 'number' && Number.isFinite(v)) return v;
+      }
+      return null;
+    }
+
+    function computeVectorError(a, b) {
+      // L2 norm of (a-b)
+      if (!Array.isArray(a) || !Array.isArray(b) || a.length === 0 || b.length === 0) return null;
+      const m = Math.min(a.length, b.length);
+      let s = 0;
+      for (let i = 0; i < m; i++) {
+        const da = Number(a[i]);
+        const db = Number(b[i]);
+        if (!Number.isFinite(da) || !Number.isFinite(db)) continue;
+        const d = da - db;
+        s += d * d;
+      }
+      return Math.sqrt(s);
     }
 
     // ---------------- LOADERS ----------------
@@ -999,30 +1048,68 @@
     }
 
     function updateStatsDisplay(stats) {
-      document.getElementById('total').textContent = stats.total_voidchis || 0;
-      document.getElementById('gapsProcessed').textContent = stats.total_breedings || 0;
-      document.getElementById('autonomous').textContent = stats.autonomous_count || 0;
-      if (typeof stats.avg_consciousness === 'number') {
-        document.getElementById('consciousness').textContent = `${(stats.avg_consciousness * 100).toFixed(1)}%`;
+      // Agents
+      const totalAgents =
+        stats.total_voidchis ?? stats.total_agents ?? stats.active_agents ?? 0;
+      document.getElementById('total').textContent = totalAgents;
+
+      // ✅ Learning events (NOT breedings)
+      const learningEvents =
+        stats.total_learning_events ??
+        stats.learning_events ??
+        stats.total_events ??
+        stats.events_total ??
+        stats.total_challenges ??
+        0;
+      document.getElementById('gapsProcessed').textContent = learningEvents;
+
+      // Autonomous count (fallbacks)
+      const autoCount =
+        stats.autonomous_count ??
+        stats.autonomous_voidchis ??
+        stats.autonomous ??
+        '-';
+      document.getElementById('autonomous').textContent = (autoCount === null || autoCount === undefined) ? '-' : autoCount;
+
+      // Avg complexity / depth (fallbacks)
+      const avgDepth =
+        firstNumber(
+          stats.avg_model_complexity,
+          stats.avg_internal_state_depth,
+          stats.avg_consciousness
+        );
+
+      if (avgDepth !== null) {
+        // If it’s 0..1, show %
+        const isRatio = avgDepth >= 0 && avgDepth <= 1;
+        document.getElementById('consciousness').textContent = isRatio ? `${(avgDepth * 100).toFixed(1)}%` : `${avgDepth.toFixed(2)}`;
+      } else {
+        document.getElementById('consciousness').textContent = '-';
       }
-      
-      // Set system start time for runtime display
-      if (stats.oldest_voidchi_created_at && !systemStartTime) {
-        systemStartTime = new Date(stats.oldest_voidchi_created_at);
+
+      // Runtime / boot
+      const since =
+        stats.oldest_voidchi_created_at ??
+        stats.runtime_since ??
+        stats.started_at ??
+        null;
+
+      if (since) {
+        systemStartTime = new Date(since);
         updateRuntimeDisplay();
       }
     }
 
     function updateRuntimeDisplay() {
-      if (!systemStartTime) return;
-      
+      if (!systemStartTime || isNaN(systemStartTime.getTime())) return;
+
       const now = new Date();
       const diffMs = now - systemStartTime;
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      
-      document.getElementById('runtimeLabel').textContent = 
-        `${diffDays}d ${diffHours}h (${systemStartTime.toLocaleDateString()})`;
+
+      document.getElementById('runtimeLabel').textContent =
+        `${diffDays}d ${diffHours}h (since ${systemStartTime.toLocaleString()})`;
     }
 
     // Update runtime every hour
@@ -1166,6 +1253,9 @@
         updateVoidchiImmediately(id, result);
         showGapVisualization(id, result);
 
+        // refresh global stats (since learning events increment)
+        loadStats();
+
         setTimeout(() => card.classList.remove('updating'), 900);
 
       } catch (e) {
@@ -1179,7 +1269,10 @@
       const consValue = document.getElementById(`cons-value-${id}`);
       const consFill = document.getElementById(`cons-fill-${id}`);
 
-      const phi = (typeof result.new_phi === 'number') ? result.new_phi : (result.new_consciousness ?? 0);
+      // Prefer backend "new_phi" / "new_consciousness" but fallback to existing
+      const phi =
+        firstNumber(result.new_phi, result.new_consciousness, result.phi, result.consciousness_level, 0) ?? 0;
+
       if (consValue && consFill) {
         consValue.textContent = `${(phi * 100).toFixed(1)}%`;
         consFill.style.width = `${phi * 100}%`;
@@ -1199,17 +1292,38 @@
       if (!container) return;
 
       const wasAccurate = !!result.was_accurate;
-      const gap = (typeof result.gap_magnitude === 'number') ? result.gap_magnitude : 0;
+
+      const reality =
+        Array.isArray(result.reality) ? result.reality :
+        Array.isArray(result.observed) ? result.observed :
+        Array.isArray(result.observed_outcome) ? result.observed_outcome :
+        [];
+
+      const prediction =
+        Array.isArray(result.prediction) ? result.prediction :
+        Array.isArray(result.agent_prediction) ? result.agent_prediction :
+        [];
+
+      const base =
+        Array.isArray(result.base_prediction) ? result.base_prediction :
+        Array.isArray(result.baseline) ? result.baseline :
+        [];
+
+      // ✅ Prediction error: use backend if available, otherwise compute from arrays
+      const backendErr = firstNumber(result.prediction_error, result.gap_magnitude, result.error, result.loss);
+      let gap = backendErr;
+      if (!gap || gap === 0) {
+        const computed = computeVectorError(reality, prediction);
+        if (computed !== null) gap = computed;
+      }
+      gap = nOr(gap, 0);
+
       const statusColor = wasAccurate ? 'var(--void-green)' : 'var(--void-red)';
       const statusText  = wasAccurate ? 'Accurate' : 'Learning';
 
-      const reality = Array.isArray(result.reality) ? result.reality : [];
-      const prediction = Array.isArray(result.prediction) ? result.prediction : [];
-      const base = Array.isArray(result.base_prediction) ? result.base_prediction : [];
-
-      const usedMeta = !!result.used_meta_knowledge;
-      const phiDelta = (typeof result.phi_delta === 'number') ? result.phi_delta : 0;
-      const count = (typeof result.challenge_count === 'number') ? result.challenge_count : null;
+      const usedMeta = !!(result.used_meta_knowledge || result.meta_used);
+      const phiDelta = firstNumber(result.phi_delta, result.state_delta, result.delta_phi, 0) ?? 0;
+      const count = firstNumber(result.challenge_count, result.total_events, result.event_count, null);
 
       const emerg = result.emergence_event && result.emergence_event.discovered ? result.emergence_event : null;
       const pill = (txt) => `<span class="pill">${escapeHtml(txt)}</span>`;
@@ -1222,7 +1336,7 @@
           </div>
 
           <div class="gap-visualization">
-            <div class="mono"><strong>Event:</strong> ${escapeHtml(result.msg || '')}</div>
+            <div class="mono"><strong>Event:</strong> ${escapeHtml(result.msg || result.event || 'updating state')}</div>
             <div class="mono"><strong>Prediction Error:</strong> ${gap.toFixed(4)}</div>
 
             <div class="mono"><strong>Observed Outcome:</strong> ${escapeHtml(JSON.stringify(reality))}</div>
@@ -1231,7 +1345,7 @@
 
             <div class="pill-row">
               ${pill(`meta_knowledge: ${usedMeta ? 'used' : 'not used'}`)}
-              ${pill(`state_delta: ${phiDelta.toFixed(4)}`)}
+              ${pill(`state_delta: ${Number(phiDelta).toFixed(4)}`)}
               ${count !== null ? pill(`total_events: ${count}`) : ''}
             </div>
 
@@ -1313,7 +1427,6 @@
       await loadBootInfo();
 
       try {
-        // ✅ BACKEND MATCH: GET /api/voidchi/<id>/notes?limit=50
         const res = await fetch(`${API}/voidchi/${selectedSingle}/notes?limit=50`, { credentials: 'omit' });
         const text = await res.text();
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
@@ -1346,7 +1459,6 @@
       input.value = '';
 
       try {
-        // ✅ BACKEND MATCH: POST /api/voidchi/<id>/notes
         const res = await fetch(`${API}/voidchi/${selectedSingle}/notes`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -1443,6 +1555,9 @@
         setNotesSelectedLabel();
         renderNotes([]);
 
+        // refresh stats too
+        loadStats();
+
       } catch (e) {
         console.error('❌ Model combination error:', e);
         alert('Model combination failed: ' + e.message);
@@ -1465,3 +1580,4 @@
   </script>
 </body>
 </html>
+
