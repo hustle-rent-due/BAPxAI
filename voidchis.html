@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -839,7 +840,16 @@
     <div class="actions">
       <button class="btn-create" onclick="openCreate()">Create Agent</button>
       <button class="btn-breed" id="breedBtn" onclick="openBreed()" disabled>Combine Selected (0/2)</button>
+      <button class="btn-create" id="ablationBtn" onclick="runAblation()" disabled>Run Ablation (Meta ON vs OFF)</button>
     </div>
+
+    <div id="ablationPanel" class="concept-section" style="margin-top: 14px; display:none;">
+      <h2 style="display:flex;align-items:center;gap:10px;">Ablation Report <span style="font-size:14px;color:var(--void-text-light);font-weight:400;">(same world stream, same gap, meta ON vs OFF)</span></h2>
+      <div class="notes-wrap">
+        <pre id="ablationOutput" class="mono" style="white-space:pre-wrap;line-height:1.35;margin:0;color:var(--void-text);"></pre>
+      </div>
+    </div>
+
 
     <!-- AGENT COMMUNICATION -->
     <div class="concept-section" style="margin-top: 10px;">
@@ -1159,6 +1169,10 @@
 
       selectedSingle = (selected.length === 1) ? selected[0] : null;
 
+      // enable/disable ablation button
+      const abBtn = document.getElementById('ablationBtn');
+      if (abBtn) abBtn.disabled = !selectedSingle;
+
       if (selectedSingle) localStorage.setItem('lastSelectedVoidchi', selectedSingle);
       else localStorage.removeItem('lastSelectedVoidchi');
 
@@ -1195,6 +1209,125 @@
         console.error('❌ Learning event failed:', e);
         alert('Learning event failed: ' + e.message);
         card.classList.remove('updating');
+      }
+    }
+
+    // ---------------- ABLATION (META ON vs OFF) ----------------
+    async function runAblation() {
+      if (!selectedSingle) {
+        alert('Select one agent first (click a card).');
+        return;
+      }
+      const panel = document.getElementById('ablationPanel');
+      const out = document.getElementById('ablationOutput');
+      if (panel) panel.style.display = 'block';
+      if (out) out.textContent = 'Running ablation...';
+
+      const payload = {
+        steps: 200,
+        seed: 1337,
+        scenario: 'alpha',
+        thresholds: [0.10, 0.15, 0.25]
+      };
+
+      try {
+        const res = await fetch(`${API}/voidchi/${selectedSingle}/run_ablation`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          if (out) out.textContent = `Error: ${data.error || res.status}`;
+          return;
+        }
+
+        const fmtNum = (x, n=2) => {
+          const v = Number(x);
+          return Number.isFinite(v) ? v.toFixed(n) : '—';
+        };
+        const fmtPct = (x) => {
+          const v = Number(x);
+          return Number.isFinite(v) ? `${v.toFixed(1)}%` : '—';
+        };
+
+        // Render in an empirical, skeptic-proof format
+        const lines = [];
+        lines.push('ABLATION REPORT');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push(`Scenario: ${data.scenario} | Seed: ${data.seed} | Steps: ${data.steps}`);
+        lines.push('');
+
+        (data.results || []).forEach(block => {
+          lines.push(`THRESHOLD: ${(Number(block.threshold) * 100).toFixed(0)}%`);
+          lines.push('--------------------------');
+
+          const showConfig = (label, obj) => {
+            obj = obj || {};
+            lines.push(label);
+            lines.push(`  Final Rolling Accuracy: ${fmtPct(obj.final_rolling_accuracy)}`);
+            lines.push(`  Avg Gap (last 50): ${fmtNum(obj.avg_gap_last_50, 4)}`);
+            lines.push(`  Anchor Accuracy: ${fmtPct(obj.anchor_accuracy)} | Forgetting: ${fmtNum(obj.forgetting, 2)}`);
+            if (Number.isFinite(Number(obj.baseline_avg_gap_last_50)) || Number.isFinite(Number(obj.learned_avg_gap_last_50))) {
+              lines.push(`  Baseline Avg Gap (last 50): ${fmtNum(obj.baseline_avg_gap_last_50, 4)} | Learned Avg Gap (last 50): ${fmtNum(obj.learned_avg_gap_last_50, 4)}`);
+              lines.push(`  Learned < Baseline (last 50): ${fmtNum(obj.learned_minus_baseline_gap_last_50, 4)}`);
+            }
+            if (obj.p_values && typeof obj.p_values === 'object') {
+              const pv = obj.p_values;
+              const p1 = pv.learned_early_vs_late;
+              const p2 = pv.baseline_early_vs_late;
+              lines.push(`  Significance (t-test p): learned=${fmtNum(p1, 6)} | baseline=${fmtNum(p2, 6)} (${pv.method || 'auto'})`);
+            }
+            if (Number.isFinite(Number(obj.emergence_step))) {
+              lines.push(`  Emergence Step: ${obj.emergence_step} (rolling gap below threshold)`);
+            } else {
+              lines.push(`  Emergence Step: —`);
+            }
+            lines.push(`  Trait Saturations: ${obj.trait_saturation_count ?? 0}`);
+            lines.push(`  Trend (Last 5) Gap: [${(obj.trend_gap||[]).join(', ')}]`);
+            lines.push(`  Trend (Last 5) Acc: [${(obj.trend_accuracy||[]).map(x=>x+'%').join(', ')}]`);
+            if ((obj.baseline_trend_gap||[]).length) {
+              lines.push(`  Baseline Trend Gap: [${(obj.baseline_trend_gap||[]).join(', ')}]`);
+            }
+            if ((obj.learned_trend_gap||[]).length) {
+              lines.push(`  Learned Trend Gap: [${(obj.learned_trend_gap||[]).join(', ')}]`);
+            }
+            lines.push('');
+          };
+
+          showConfig('META ON', block.meta_on);
+          showConfig('META OFF', block.meta_off);
+
+          // Extra ablations (optional)
+          if (block.extra_ablations && Array.isArray(block.extra_ablations) && block.extra_ablations.length) {
+            lines.push('EXTRA ABLATIONS');
+            lines.push('--------------------------');
+            block.extra_ablations.forEach(ab => {
+              const name = ab && ab.name ? ab.name : 'variant';
+              showConfig(name.toUpperCase(), ab);
+            });
+          }
+
+          const delta = block.delta || {};
+          lines.push('DELTA (ON - OFF)');
+          lines.push(`  Rolling Accuracy: ${fmtNum(delta.rolling_accuracy, 2)} pts`);
+          lines.push(`  Anchor Accuracy: ${fmtNum(delta.anchor_accuracy, 2)} pts`);
+          if (Number.isFinite(Number(delta.learned_minus_baseline_gap_last_50))) {
+            lines.push(`  Learned<Baseline Gap: ${fmtNum(delta.learned_minus_baseline_gap_last_50, 4)}`);
+          }
+          if (Number.isFinite(Number(delta.emergence_step))) {
+            lines.push(`  Emergence Step Shift: ${fmtNum(delta.emergence_step, 0)}`);
+          }
+          lines.push(`  Saturations: ${delta.trait_saturation_count ?? 0}`);
+          lines.push('');
+        });
+
+        if (out) out.textContent = lines.join('
+');
+
+      } catch (e) {
+        console.error('❌ Ablation failed:', e);
+        if (out) out.textContent = 'Ablation failed: ' + e.message;
       }
     }
 
@@ -1306,7 +1439,7 @@
 
             <div class="gap-visualization">
               <div class="mono"><strong>Performance Metrics:</strong></div>
-              <div class="mono">&nbsp;&nbsp;Prediction Accuracy: ${acc.toFixed(1)}%</div>
+              <div class="mono">&nbsp;&nbsp;Prediction Accuracy: ${acc.toFixed(1)}% ← (1 - ${Number(gap).toFixed(4)}) * 100</div>
               <div class="mono">&nbsp;&nbsp;State Evolution: ${sign}${Number(stateEv).toFixed(4)}</div>
 
               <div class="mono" style="margin-top:10px;"><strong>Progress:</strong></div>
@@ -1314,11 +1447,42 @@
               <div class="mono">&nbsp;&nbsp;Meta-Learning: ${escapeHtml(String(metaLabel))} (${escapeHtml(String(metaCount))}/${escapeHtml(String(metaReq))} needed)</div>
 
               <div class="mono" style="margin-top:10px;"><strong>Trend (Last 5 Events):</strong></div>
-              <div class="mono">&nbsp;&nbsp;Gap: [${escapeHtml(fmtGapArr.join(', '))}]</div>
+              <div class="mono">&nbsp;&nbsp;Gap: [${escapeHtml(fmtGapArr.join(', '))}] ← shows it's improving</div>
               <div class="mono">&nbsp;&nbsp;Accuracy: [${escapeHtml(fmtAccArr.join(', '))}]</div>
 
+              ${(() => {
+                const probe = (le.evaluation && typeof le.evaluation === 'object' && le.evaluation.probe) ? le.evaluation.probe : null;
+                if (!probe) return '';
+                const pAcc = Number(probe.latest_accuracy ?? probe.accuracy ?? 0);
+                const pGap = Number(probe.latest_gap ?? probe.gap ?? 0);
+                const tg = Array.isArray(probe.trend_gap) ? probe.trend_gap.slice(-5).map(x => Number(x).toFixed(2)).join(', ') : '';
+                const ta = Array.isArray(probe.trend_accuracy) ? probe.trend_accuracy.slice(-5).map(x => `${Math.round(Number(x))}%`).join(', ') : '';
+                return `
+                  <div class="mono" style="margin-top:10px;"><strong>EVALUATION (no update):</strong></div>
+                  <div class="mono">&nbsp;&nbsp;Probe Accuracy: ${pAcc.toFixed(1)}%</div>
+                  <div class="mono">&nbsp;&nbsp;Probe Gap: ${pGap.toFixed(4)}</div>
+                  ${tg ? `<div class="mono">&nbsp;&nbsp;Probe Gap Trend: [${escapeHtml(tg)}]</div>` : ''}
+                  ${ta ? `<div class="mono">&nbsp;&nbsp;Probe Accuracy Trend: [${escapeHtml(ta)}]</div>` : ''}
+                `;
+              })()}
+
+              ${(() => {
+                const anchor = (le.evaluation && typeof le.evaluation === 'object' && le.evaluation.anchor) ? le.evaluation.anchor : null;
+                if (!anchor) return '';
+                const aAcc = Number(anchor.latest_accuracy ?? anchor.accuracy ?? 0);
+                const aGap = Number(anchor.latest_gap ?? anchor.gap ?? 0);
+                const fg = (anchor.forgetting != null) ? Number(anchor.forgetting) : null;
+                const fgStr = (fg == null) ? '' : `${fg >= 0 ? '+' : ''}${fg.toFixed(1)}%`;
+                return `
+                  <div class="mono" style="margin-top:10px;"><strong>MEMORY STABILITY:</strong></div>
+                  <div class="mono">&nbsp;&nbsp;Anchor Accuracy: ${aAcc.toFixed(1)}%</div>
+                  <div class="mono">&nbsp;&nbsp;Anchor Gap: ${aGap.toFixed(4)}</div>
+                  ${fgStr ? `<div class="mono">&nbsp;&nbsp;Forgetting: ${escapeHtml(fgStr)} over last window</div>` : ''}
+                `;
+              })()}
+
               <div class="pill-row" style="margin-top:10px;">
-                ${pill(`prediction_error: ${gap.toFixed(4)}`)}
+                ${pill(`prediction_error: ${Number(gap).toFixed(4)}`)}
                 ${pill(`state_delta: ${Number(stateEv).toFixed(4)}`)}
                 ${total !== null ? pill(`total_events: ${total}`) : ''}
               </div>
