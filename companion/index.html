@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#26294a" />
+  <meta name="theme-color" content="#0a0a20" />
   <meta name="description" content="Voidchi PermaMind™ - Your evolving AI companion that learns your patterns and develops unique personality" />
   <title>Voidchi — PermaMind™</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👻</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>" />
   <style>
     :root {
-      --primary-gradient: linear-gradient(135deg, #a78bfa 0%, #7e57c2 100%);
-      --accent-color: #7bffb8;
-      --card-bg: radial-gradient(circle at top, #2a1e5c, #0b0b12 55%);
-      --premium-gold: #ffd700;
-      --voidchi-color: #d8b4fe;
-      --consciousness-color: #7b7bff;
+      --primary-gradient: linear-gradient(135deg, #00ff80 0%, #00b359 100%);
+      --accent-color: #ffff00;
+      --card-bg: radial-gradient(circle at center, #0a0a20, #000000 60%);
+      --premium-gold: #ffcc00;
+      --voidchi-color: #c0c0c0;
+      --consciousness-color: #00ffff;
     }
     
     * {
@@ -25,7 +25,7 @@
     }
     
     body {
-      background: #050509;
+      background: #000000;
       color: #f5f5f5;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       display: flex;
@@ -43,7 +43,7 @@
       left: 0;
       right: 0;
       background: var(--primary-gradient);
-      color: white;
+      color: #000;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
@@ -59,9 +59,9 @@
     }
     
     .install-prompt button {
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      color: white;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(0,0,0,0.4);
+      color: #000;
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
@@ -74,8 +74,8 @@
       padding: 24px 20px 20px;
       max-width: 440px;
       width: 100%;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.65);
-      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 18px 45px rgba(0,255,128,0.3);
+      border: 1px solid rgba(0,255,128,0.2);
       position: relative;
       margin-top: 10px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -83,7 +83,7 @@
     
     .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 22px 50px rgba(0,0,0,0.7);
+      box-shadow: 0 22px 50px rgba(0,255,128,0.4);
     }
     
     .premium-badge {
@@ -91,7 +91,7 @@
       top: 12px;
       left: 12px;
       background: linear-gradient(135deg, var(--premium-gold), #ffaa00);
-      color: #050509;
+      color: #000;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 9px;
@@ -108,7 +108,7 @@
       top: 12px;
       right: 12px;
       background: var(--primary-gradient);
-      color: #f5f5f5;
+      color: #000;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 9px;
@@ -122,11 +122,12 @@
       margin: 0 0 4px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #d5d8ff;
+      color: #00ff80;
       text-align: center;
-      background: linear-gradient(90deg, #d5d8ff, #a8b1ff);
+      background: linear-gradient(90deg, #00ff80, #00ffff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(0,255,128,0.5);
     }
     
     .subtitle {
@@ -134,6 +135,7 @@
       opacity: 0.7;
       margin-bottom: 18px;
       text-align: center;
+      color: #00ffff;
     }
     
     #voidchi {
@@ -145,11 +147,11 @@
       align-items: center;
       justify-content: center;
       font-size: 52px;
-      box-shadow: 0 0 35px rgba(168, 123, 250, 0.8);
+      box-shadow: 0 0 50px 10px rgba(255, 0, 255, 0.9), 0 0 100px rgba(0, 255, 128, 0.5);
       transition: all 0.5s ease;
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       position: relative;
-      background: radial-gradient(circle at 30% 30%, rgba(168, 123, 250, 0.3), transparent 70%);
+      background: radial-gradient(circle at 30% 30%, rgba(0, 255, 128, 0.3), transparent 70%);
       animation: float 6s ease-in-out infinite;
     }
     
@@ -169,11 +171,11 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: #ff4b4b;
+      background: #ff4444;
       animation: pulse 2s ease-in-out infinite;
       opacity: 0;
       transition: opacity 0.3s;
-      box-shadow: 0 0 10px #ff4b4b;
+      box-shadow: 0 0 10px #ff4444;
     }
     
     .autonomous-indicator.active {
@@ -191,10 +193,11 @@
       margin-bottom: 4px;
       font-weight: 600;
       transition: color 0.3s;
+      color: #00ff80;
     }
     
     #mood.autonomous {
-      color: #ff9b9b;
+      color: #ff4444;
     }
     
     #mood-detail {
@@ -204,6 +207,7 @@
       margin-bottom: 18px;
       min-height: 40px;
       line-height: 1.4;
+      color: #00ffff;
     }
     
     .metrics {
@@ -219,6 +223,7 @@
       letter-spacing: 0.08em;
       font-size: 11px;
       opacity: 0.9;
+      color: #00ff80;
     }
     
     .trust-bar {
@@ -240,12 +245,12 @@
     
     /* Consciousness Panel Styles */
     .consciousness-panel {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,255,128,0.1);
       border-radius: 12px;
       padding: 12px;
       margin-bottom: 12px;
       font-size: 11px;
-      border: 1px solid rgba(123, 123, 255, 0.3);
+      border: 1px solid rgba(0,255,128,0.3);
     }
     
     .consciousness-header {
@@ -258,11 +263,11 @@
     }
     
     .meta-rules-panel {
-      background: rgba(123, 0, 255, 0.1);
+      background: rgba(0,255,255,0.1);
       border-radius: 8px;
       padding: 8px;
       margin-top: 8px;
-      border: 1px solid rgba(123, 123, 255, 0.2);
+      border: 1px solid rgba(0,255,255,0.2);
     }
     
     .rule-grid {
@@ -278,7 +283,7 @@
     }
     
     .rule-value {
-      color: #ff7b9d;
+      color: var(--accent-color);
       font-weight: bold;
     }
     
@@ -296,7 +301,7 @@
     .log-entry {
       margin-bottom: 3px;
       padding-bottom: 3px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(0,255,128,0.1);
     }
     
     .log-time {
@@ -305,12 +310,12 @@
     }
 
     .personality-panel {
-      background: rgba(0,0,0,0.3);
+      background: rgba(255,255,0,0.1);
       border-radius: 12px;
       padding: 12px;
       margin-bottom: 12px;
       font-size: 11px;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,0,0.2);
     }
     
     .trait-row {
@@ -330,7 +335,7 @@
     
     .trait-fill {
       height: 100%;
-      background: linear-gradient(90deg, #b794f4, var(--accent-color));
+      background: linear-gradient(90deg, #00ff80, var(--accent-color));
       border-radius: 999px;
       transition: width 0.5s ease;
     }
@@ -345,9 +350,9 @@
     
     button {
       padding: 10px 16px;
-      background: rgba(168, 123, 250, 0.2);
-      color: #f5f5ff;
-      border: 1px solid rgba(168, 123, 250, 0.6);
+      background: rgba(0,255,128,0.2);
+      color: #ffffff;
+      border: 1px solid rgba(0,255,128,0.6);
       border-radius: 999px;
       cursor: pointer;
       font-size: 13px;
@@ -360,8 +365,9 @@
     }
     
     button:hover {
-      background: rgba(168, 123, 250, 0.4);
+      background: rgba(0,255,128,0.4);
       transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(0,255,128,0.3);
     }
     
     button:active {
@@ -370,27 +376,27 @@
     
     button.premium {
       background: linear-gradient(135deg, var(--premium-gold), #ffaa00);
-      color: #050509;
+      color: #000;
       border: 1px solid var(--premium-gold);
       font-weight: bold;
     }
     
     button.share {
-      background: rgba(123, 220, 181, 0.2);
-      border: 1px solid rgba(123, 220, 181, 0.6);
+      background: rgba(0,255,255,0.2);
+      border: 1px solid rgba(0,255,255,0.6);
     }
     
     button.consciousness {
-      background: rgba(123, 123, 255, 0.2);
-      border: 1px solid rgba(123, 123, 255, 0.6);
+      background: rgba(255,0,255,0.2);
+      border: 1px solid rgba(255,0,255,0.6);
     }
     
     button.share:hover {
-      background: rgba(123, 220, 181, 0.4);
+      background: rgba(0,255,255,0.4);
     }
     
     button.consciousness:hover {
-      background: rgba(123, 123, 255, 0.4);
+      background: rgba(255,0,255,0.4);
     }
     
     #log {
@@ -403,7 +409,7 @@
       line-height: 1.45em;
       max-height: 220px;
       overflow-y: auto;
-      border: 1px solid rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,255,128,0.1);
     }
     
     #log-title {
@@ -415,13 +421,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      color: #00ff80;
     }
     
     .log-item {
       opacity: 0.85;
       margin-bottom: 4px;
       padding: 4px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(0,255,128,0.05);
     }
     
     .log-item:last-child {
@@ -434,7 +441,7 @@
     }
     
     .log-item.autonomous {
-      color: #ff9b9b;
+      color: #ff4444;
       font-weight: 500;
     }
     
@@ -443,6 +450,7 @@
       opacity: 0.55;
       margin-top: 10px;
       text-align: center;
+      color: #00ffff;
     }
     
     .footer-tools {
@@ -458,8 +466,8 @@
       padding: 6px 10px;
       font-size: 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,255,128,0.1);
+      border: 1px solid rgba(0,255,128,0.3);
       flex: 0 1 auto;
       min-width: 0;
     }
@@ -470,6 +478,7 @@
       font-size: 10px;
       opacity: 0.6;
       margin-bottom: 8px;
+      color: #00ffff;
     }
     
     .breeding-modal {
@@ -478,7 +487,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(5, 5, 9, 0.9);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -499,14 +508,14 @@
       padding: 24px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,255,128,0.3);
+      border: 1px solid rgba(0,255,128,0.3);
       text-align: center;
     }
     
     .breeding-content h2 {
       margin-bottom: 16px;
-      color: #f5f5f5;
+      color: #00ff80;
       font-size: 22px;
     }
     
@@ -522,7 +531,7 @@
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: rgba(168, 123, 250, 0.2);
+      background: rgba(0,255,128,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -532,6 +541,7 @@
     .breeding-plus {
       font-size: 20px;
       opacity: 0.7;
+      color: #00ff80;
     }
     
     .close-modal {
@@ -540,7 +550,7 @@
       right: 16px;
       background: none;
       border: none;
-      color: #f5f5f5;
+      color: #00ff80;
       font-size: 20px;
       cursor: pointer;
     }
@@ -551,7 +561,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(5, 5, 9, 0.9);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -572,14 +582,14 @@
       padding: 24px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,255,128,0.3);
+      border: 1px solid rgba(0,255,128,0.3);
       text-align: center;
     }
     
     .name-input {
       background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(0,255,128,0.4);
       border-radius: 10px;
       color: white;
       padding: 10px 12px;
@@ -591,13 +601,15 @@
     
     .name-input:focus {
       outline: none;
-      border-color: rgba(168, 123, 250, 0.6);
+      border-color: rgba(0,255,128,0.8);
+      box-shadow: 0 0 10px rgba(0,255,128,0.3);
     }
     
     .name-char-count {
       font-size: 11px;
       opacity: 0.6;
       margin-top: 5px;
+      color: #00ffff;
     }
     
     .about-modal {
@@ -606,7 +618,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(5, 5, 9, 0.9);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -627,14 +639,14 @@
       padding: 24px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,255,128,0.3);
+      border: 1px solid rgba(0,255,128,0.3);
       text-align: center;
     }
     
     .about-content h2 {
       margin-bottom: 16px;
-      color: #f5f5f5;
+      color: #00ff80;
       font-size: 22px;
     }
     
@@ -643,11 +655,12 @@
       line-height: 1.5;
       text-align: left;
       font-size: 14px;
+      color: #ffffff;
     }
     
     /* Irreversible trait indicator */
     .irreversible-trait {
-      color: #ff9b9b;
+      color: #ff4444;
       font-weight: bold;
     }
     
@@ -685,7 +698,7 @@
     
     .instability-fill {
       height: 100%;
-      background: linear-gradient(90deg, #7bffb8, #ff9b9b);
+      background: linear-gradient(90deg, #00ff80, #ff4444);
       border-radius: 3px;
       transition: width 0.3s ease;
     }
@@ -701,8 +714,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      color: #000;
+      box-shadow: 0 4px 12px rgba(0,255,128,0.5);
       cursor: pointer;
       z-index: 999;
       transition: transform 0.3s ease;
@@ -719,11 +732,11 @@
       right: 5px;
       width: 10px;
       height: 10px;
-      background: #ff4b4b;
+      background: #ff4444;
       border-radius: 50%;
     }
     
-    /* Custom Voidchi Character Styles */
+    /* NEW: Redesigned Voidchi Character Styles */
     .voidchi-character {
       width: 100%;
       height: 100%;
@@ -737,10 +750,13 @@
       width: 80px;
       height: 100px;
       background: var(--voidchi-color);
-      border-radius: 50% 50% 45% 45%;
+      border-radius: 20% 20% 30% 30% / 40% 40% 60% 60%;
       position: relative;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      box-shadow: 
+        inset 0 0 20px rgba(255,255,255,0.3),
+        0 5px 15px rgba(0,0,0,0.3);
       transition: all 0.3s ease;
+      border: 2px solid rgba(255,255,255,0.5);
     }
     
     .voidchi-face {
@@ -754,46 +770,94 @@
     
     .voidchi-eye {
       position: absolute;
-      width: 12px;
-      height: 18px;
-      background: #4a1e8c;
+      width: 16px;
+      height: 16px;
+      background: #00ff80;
       border-radius: 50%;
       top: 10px;
       animation: blink 4s infinite;
+      box-shadow: 0 0 10px #00ff80;
     }
     
     .voidchi-eye.left {
-      left: 12px;
+      left: 8px;
     }
     
     .voidchi-eye.right {
-      right: 12px;
+      right: 8px;
     }
     
     .voidchi-mouth {
       position: absolute;
-      width: 24px;
-      height: 10px;
-      border-bottom: 3px solid #4a1e8c;
+      width: 30px;
+      height: 15px;
+      border-bottom: 3px solid #00ff80;
       border-radius: 0 0 50% 50%;
       bottom: 5px;
       left: 50%;
       transform: translateX(-50%);
       transition: all 0.3s ease;
+      box-shadow: 0 0 8px #00ff80;
+    }
+    
+    /* NEW: Robotic mood expressions */
+    .voidchi-happy .voidchi-eye {
+      background: #00ff80;
+      box-shadow: 0 0 15px #00ff80;
     }
     
     .voidchi-happy .voidchi-mouth {
       border-radius: 50%;
-      border: 3px solid #4a1e8c;
+      border: 3px solid #00ff80;
       border-top: none;
       height: 12px;
+      width: 25px;
+      box-shadow: 0 0 12px #00ff80;
+    }
+    
+    .voidchi-sad .voidchi-eye {
+      background: #ff4444;
+      box-shadow: 0 0 15px #ff4444;
     }
     
     .voidchi-sad .voidchi-mouth {
       border-radius: 50% 50% 0 0;
-      border-top: 3px solid #4a1e8c;
+      border-top: 3px solid #ff4444;
       border-bottom: none;
       height: 8px;
+      width: 20px;
+      box-shadow: 0 0 12px #ff4444;
+    }
+    
+    .voidchi-worried .voidchi-eye {
+      background: #ffff00;
+      box-shadow: 0 0 15px #ffff00;
+      animation: worried-blink 2s infinite;
+    }
+    
+    .voidchi-worried .voidchi-mouth {
+      width: 20px;
+      height: 3px;
+      border-radius: 3px;
+      background: #ffff00;
+      border: none;
+      box-shadow: 0 0 8px #ffff00;
+    }
+    
+    .voidchi-excited .voidchi-eye {
+      background: #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
+      animation: excited-pulse-eye 1s infinite;
+    }
+    
+    .voidchi-excited .voidchi-mouth {
+      border-radius: 50%;
+      border: 3px solid #ff00ff;
+      border-top: none;
+      height: 12px;
+      width: 25px;
+      animation: excited-mouth 0.5s infinite;
+      box-shadow: 0 0 15px #ff00ff;
     }
     
     .voidchi-blush {
@@ -817,12 +881,15 @@
     
     .voidchi-happy .voidchi-blush {
       opacity: 1;
+      background: rgba(0, 255, 128, 0.6);
     }
     
     /* Enhanced Mood Styles */
     .voidchi-excited .voidchi-body {
       transform: translateY(-3px);
-      box-shadow: 0 8px 22px rgba(255, 255, 255, 0.12);
+      box-shadow: 
+        inset 0 0 25px rgba(255,255,255,0.4),
+        0 8px 25px rgba(255, 0, 255, 0.3);
       animation: excited-pulse 2s ease-in-out infinite;
     }
     
@@ -831,29 +898,30 @@
       animation: worried-tremble 3s ease-in-out infinite;
     }
     
-    .voidchi-excited .voidchi-mouth {
-      border-radius: 50%;
-      border: 3px solid #4a1e8c;
-      border-top: none;
-      height: 12px;
-      width: 20px;
-    }
-    
-    .voidchi-worried .voidchi-mouth {
-      border-radius: 50% 50% 0 0;
-      border-top: 3px solid #4a1e8c;
-      border-bottom: none;
-      height: 8px;
-      width: 18px;
-    }
-    
     @keyframes blink {
       0%, 45%, 55%, 100% {
-        height: 18px;
+        height: 16px;
+        width: 16px;
       }
       50% {
         height: 2px;
+        width: 16px;
       }
+    }
+    
+    @keyframes worried-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    @keyframes excited-pulse-eye {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    
+    @keyframes excited-mouth {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.1); }
     }
     
     @keyframes excited-pulse {
@@ -878,22 +946,23 @@
     
     .voidchi-option {
       padding: 6px 12px;
-      background: rgba(168, 123, 250, 0.1);
-      border: 1px solid rgba(168, 123, 250, 0.3);
+      background: rgba(0,255,128,0.1);
+      border: 1px solid rgba(0,255,128,0.3);
       border-radius: 20px;
       cursor: pointer;
       font-size: 11px;
       transition: all 0.2s ease;
+      color: #00ff80;
     }
     
     .voidchi-option:hover {
-      background: rgba(168, 123, 250, 0.2);
+      background: rgba(0,255,128,0.2);
     }
     
     .voidchi-option.active {
       background: var(--primary-gradient);
-      color: white;
-      border-color: rgba(168, 123, 250, 0.8);
+      color: #000;
+      border-color: rgba(0,255,128,0.8);
     }
     
     /* Legal footer */
@@ -903,7 +972,8 @@
       margin-top: 15px;
       text-align: center;
       padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(0,255,128,0.2);
+      color: #00ffff;
     }
     
     /* NEW STYLES FOR ADDED FEATURES */
@@ -922,14 +992,15 @@
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.2s ease;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,255,128,0.1);
+      border: 1px solid rgba(0,255,128,0.3);
+      color: #00ff80;
     }
     
     .mode-button.active {
       background: var(--primary-gradient);
-      color: white;
-      border-color: rgba(168, 123, 250, 0.8);
+      color: #000;
+      border-color: rgba(0,255,128,0.8);
     }
     
     /* Achievements badges */
@@ -943,20 +1014,20 @@
     
     .achievement-badge {
       padding: 4px 8px;
-      background: rgba(123, 220, 181, 0.2);
-      border: 1px solid rgba(123, 220, 181, 0.4);
+      background: rgba(0,255,128,0.2);
+      border: 1px solid rgba(0,255,128,0.4);
       border-radius: 12px;
       font-size: 9px;
-      color: #7bffb8;
+      color: #00ff80;
     }
     
     .achievement-badge.premium {
-      background: rgba(255, 215, 0, 0.2);
-      border: 1px solid rgba(255, 215, 0, 0.4);
+      background: rgba(255, 204, 0, 0.2);
+      border: 1px solid rgba(255, 204, 0, 0.4);
       color: var(--premium-gold);
     }
     
-    /* Cosmetic effects */
+    /* Cosmetic effects - Enhanced with permanent glitch */
     .voidchi-generations-3::before {
       content: '';
       position: absolute;
@@ -965,8 +1036,9 @@
       right: -5px;
       bottom: -5px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255,204,0,0.3) 0%, transparent 70%);
       z-index: -1;
+      animation: aura-pulse 3s infinite;
     }
     
     .voidchi-trust-memory-low::after {
@@ -982,11 +1054,37 @@
       z-index: -1;
     }
     
+    /* NEW: Permanent glitch effect for cool factor */
+    #voidchi::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      animation: subtle-glitch 4s infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
     @keyframes glitch {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(1px, -1px); }
-      50% { transform: translate(-1px, 1px); }
-      75% { transform: translate(1px, 1px); }
+      0%, 100% { transform: translate(0, 0); opacity: 1; }
+      25% { transform: translate(1px, -1px); opacity: 0.8; }
+      50% { transform: translate(-1px, 1px); opacity: 0.9; }
+      75% { transform: translate(1px, 1px); opacity: 0.7; }
+    }
+    
+    @keyframes subtle-glitch {
+      0%, 90%, 100% { opacity: 0.3; }
+      5%, 85% { opacity: 0.5; }
+      10%, 80% { opacity: 0.2; }
+    }
+    
+    @keyframes aura-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.05); opacity: 0.5; }
     }
     
     /* Modal styles for new features */
@@ -996,7 +1094,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(5, 5, 9, 0.9);
+      background: rgba(0, 0, 0, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1017,8 +1115,8 @@
       padding: 24px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,255,128,0.3);
+      border: 1px solid rgba(0,255,128,0.3);
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
@@ -1028,7 +1126,7 @@
       width: 100%;
       height: 120px;
       background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(0,255,128,0.4);
       border-radius: 10px;
       color: white;
       padding: 12px;
@@ -1048,7 +1146,7 @@
     
     .journal-entry {
       padding: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(0,255,128,0.1);
       margin-bottom: 6px;
     }
     
@@ -1056,6 +1154,7 @@
       font-size: 10px;
       opacity: 0.6;
       margin-bottom: 4px;
+      color: #00ffff;
     }
     
     /* Responsive improvements */
@@ -1112,136 +1211,6 @@
         font-size: 11px;
       }
     }
-  
-
-    /* Cloud auth + chat upgrades */
-    .cloud-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      margin: 10px 0 14px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .cloud-left { display:flex; flex-direction:column; gap:2px; }
-    .cloud-title { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
-    .cloud-status { font-size: 12px; opacity: .9; }
-    .pill {
-      font-size: 11px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.25);
-      color: #f5f5f5;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .pill.primary {
-      background: var(--primary-gradient);
-      border: none;
-      color: white;
-      font-weight: 700;
-    }
-    .pill.danger {
-      background: rgba(255, 80, 80, 0.18);
-      border: 1px solid rgba(255, 80, 80, 0.35);
-    }
-    .net-dot {
-      display:inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      margin-right: 6px;
-      background: #7bffb8;
-      box-shadow: 0 0 12px rgba(123,255,184,0.35);
-      vertical-align: middle;
-    }
-    .net-dot.off { background:#ffb347; box-shadow: 0 0 12px rgba(255,179,71,0.25); }
-
-    .chat-panel {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.28);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .chat-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 8px; }
-    .chat-head .title { font-size: 11px; letter-spacing:.08em; text-transform: uppercase; opacity: .75; }
-    .chat-scroll {
-      max-height: 220px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .chat-bubble {
-      padding: 8px 10px;
-      border-radius: 12px;
-      margin: 6px 0;
-      font-size: 12.5px;
-      line-height: 1.35;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .chat-bubble.user { background: rgba(123,255,184,0.08); border-left: 3px solid rgba(123,255,184,0.7); }
-    .chat-bubble.ai { background: rgba(167,139,250,0.10); border-left: 3px solid rgba(167,139,250,0.75); }
-    .chat-row { display:flex; gap:8px; margin-top: 10px; }
-    .chat-input {
-      flex: 1;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.25);
-      color: #f5f5f5;
-      outline: none;
-    }
-    .chat-input:focus { border-color: rgba(123,255,184,0.65); box-shadow: 0 0 0 4px rgba(123,255,184,0.08); }
-    .chat-send {
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: none;
-      background: var(--primary-gradient);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      min-width: 92px;
-    }
-    .muted { opacity: .7; }
-
-    .auth-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1200;
-      padding: 20px;
-    }
-    .auth-modal.show { display:flex; }
-    .auth-content {
-      width: 100%;
-      max-width: 420px;
-      background: #0b0b12;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
-    }
-    .auth-content h2 { font-size: 16px; margin-bottom: 6px; }
-    .auth-content p { font-size: 12px; opacity: .8; margin-bottom: 12px; }
-    .auth-row { display:flex; gap:8px; }
-    .auth-row input {
-      flex:1;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: #f5f5f5;
-      outline:none;
-    }
-    .auth-actions { display:flex; gap:10px; margin-top: 10px; }
-
   </style>
 </head>
 <body>
@@ -1257,43 +1226,43 @@
       <p>Combine two Voidchis to create a new one with inherited traits</p>
       
       <div class="breeding-preview">
-        <div class="parent-voidchi" id="parent1">👻</div>
+        <div class="parent-voidchi" id="parent1">👾</div>
         <div class="breeding-plus">+</div>
-        <div class="parent-voidchi" id="parent2">👻</div>
+        <div class="parent-voidchi" id="parent2">👾</div>
       </div>
       
       <div style="margin: 20px 0;">
-        <label for="parent1Select">Parent 1:</label>
-        <select id="parent1Select" style="margin: 0 10px 10px 10px; padding: 5px; border-radius: 5px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2);">
+        <label for="parent1Select" style="color: #00ffff;">Parent 1:</label>
+        <select id="parent1Select" style="margin: 0 10px 10px 10px; padding: 5px; border-radius: 5px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(0,255,128,0.4);">
         </select>
         <br>
-        <label for="parent2Select">Parent 2:</label>
-        <select id="parent2Select" style="margin: 0 10px 10px 10px; padding: 5px; border-radius: 5px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2);">
+        <label for="parent2Select" style="color: #00ffff;">Parent 2:</label>
+        <select id="parent2Select" style="margin: 0 10px 10px 10px; padding: 5px; border-radius: 5px; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(0,255,128,0.4);">
         </select>
       </div>
       
       <div style="margin: 15px 0;">
-        <label for="offspringName">Name your new Voidchi:</label>
+        <label for="offspringName" style="color: #00ffff;">Name your new Voidchi:</label>
         <input type="text" id="offspringName" class="name-input" maxlength="20" placeholder="Enter a name">
         <div class="name-char-count"><span id="nameCharCount">0</span>/20 characters</div>
       </div>
       
-      <div id="breeding-preview" style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 12px;">
+      <div id="breeding-preview" style="margin: 15px 0; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 12px; color: #00ffff;">
         <p>Select two Voidchis to see predicted traits</p>
       </div>
       
-      <div id="instability-display" style="margin: 10px 0; font-size: 11px;">
+      <div id="instability-display" style="margin: 10px 0; font-size: 11px; color: #00ffff;">
         <div>Lineage instability: <span id="instability-value">0%</span></div>
         <div class="instability-meter">
           <div id="instability-fill" class="instability-fill" style="width: 0%;"></div>
         </div>
       </div>
       
-      <button class="premium" onclick="breedVoidchis()" style="width: 100%; padding: 12px;">
+      <button class="premium" id="breedButton" style="width: 100%; padding: 12px;">
         🧬 Breed New Voidchi
       </button>
       
-      <p style="margin-top: 12px; font-size: 12px; opacity: 0.7;">The new Voidchi will inherit traits from both parents with some random mutation</p>
+      <p style="margin-top: 12px; font-size: 12px; opacity: 0.7; color: #00ffff;">The new Voidchi will inherit traits from both parents with some random mutation</p>
     </div>
   </div>
 
@@ -1306,9 +1275,9 @@
       <input type="text" id="newNameInput" class="name-input" maxlength="20" placeholder="Enter a new name">
       <div class="name-char-count"><span id="newNameCharCount">0</span>/20 characters</div>
       
-      <p style="font-size: 11px; opacity: 0.7; margin: 10px 0;">Names don't affect traits || lineage</p>
+      <p style="font-size: 11px; opacity: 0.7; margin: 10px 0; color: #00ffff;">Names don't affect traits or lineage</p>
       
-      <button class="premium" onclick="confirmRename()" style="width: 100%; padding: 12px;">
+      <button class="premium" id="confirmRenameButton" style="width: 100%; padding: 12px;">
         ✅ Confirm Name
       </button>
     </div>
@@ -1323,14 +1292,14 @@
       
       <p>It is a work of creative software inspired by original research and theory by Nile Green.</p>
       
-      <p>Voidchi™ does not claim sentience || consciousness and is intended for entertainment, reflection, and experimentation.</p>
+      <p>Voidchi™ does not claim sentience or consciousness and is intended for entertainment, reflection, and experimentation.</p>
       
       <div class="legal-footer">
         Voidchi™ © 2025 Nile Green<br>
         Proprietary Software — Personal Use License Only
       </div>
       
-      <button onclick="showLicenseModal()" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 10px;">
+      <button id="licenseButton" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(0,255,128,0.1); border: 1px solid rgba(0,255,128,0.3); color: white; border-radius: 10px;">
         📄 View License Terms
       </button>
     </div>
@@ -1342,38 +1311,18 @@
       <button class="close-modal" id="closeSummaryModal">×</button>
       <h2>Session Summary</h2>
       <div id="summary-content"></div>
-      <button onclick="closeSummaryModal()" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 10px;">
+      <button id="closeSummaryButton" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(0,255,128,0.1); border: 1px solid rgba(0,255,128,0.3); color: white; border-radius: 10px;">
         Close
       </button>
     </div>
   </div>
-
-  
-
-  <div class="auth-modal" id="authModal">
-    <div class="auth-content">
-      <button class="close-modal" id="closeAuthModal">×</button>
-      <h2>Sign in to your Voidchi</h2>
-      <p>Get a magic link. Same companion on every device.</p>
-      <div class="auth-row">
-        <input id="authEmail" type="email" placeholder="you@email.com" autocomplete="email" />
-        <button class="pill primary" onclick="startMagicLinkFromModal()">Send Link</button>
-      </div>
-      <div id="authHint" class="muted" style="margin-top:10px; font-size:12px;"></div>
-      <div class="auth-actions">
-        <button class="pill" onclick="closeAuth()">Close</button>
-        <button class="pill danger" onclick="logoutCloud()">Log out</button>
-      </div>
-    </div>
-  </div>
-
 
   <div class="profile-modal" id="profileModal">
     <div class="profile-content">
       <button class="close-modal" id="closeProfileModal">×</button>
       <h2>Your Pattern Profile</h2>
       <div id="profile-content"></div>
-      <button onclick="closeProfileModal()" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 10px;">
+      <button id="closeProfileButton" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(0,255,128,0.1); border: 1px solid rgba(0,255,128,0.3); color: white; border-radius: 10px;">
         Close
       </button>
     </div>
@@ -1388,7 +1337,7 @@
       <textarea id="journalText" class="journal-textarea" placeholder="Today I noticed..."></textarea>
       <div class="name-char-count"><span id="journalCharCount">0</span>/500 characters</div>
       
-      <button onclick="saveJournalEntry()" style="width: 100%; padding: 12px; margin-top: 10px;">
+      <button id="saveJournalButton" style="width: 100%; padding: 12px; margin-top: 10px;">
         💾 Save Entry
       </button>
       
@@ -1396,7 +1345,7 @@
         <!-- Journal entries will appear here -->
       </div>
       
-      <button onclick="closeJournalModal()" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 10px;">
+      <button id="closeJournalButton" style="margin-top: 15px; width: 100%; padding: 10px; background: rgba(0,255,128,0.1); border: 1px solid rgba(0,255,128,0.3); color: white; border-radius: 10px;">
         Close
       </button>
     </div>
@@ -1407,26 +1356,14 @@
       <span>✨</span> FULL VERSION
     </div>
     <div class="permamind-badge">PermaMind™</div>
-
-    <div class="cloud-bar" id="cloudBar">
-      <div class="cloud-left">
-        <div class="cloud-title">Cloud Companion</div>
-        <div class="cloud-status" id="cloudStatus"><span class="net-dot off" id="netDot"></span><span id="cloudStatusText">Signed out • Local mode</span></div>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="pill" onclick="openAuth()">Login</button>
-        <button class="pill primary" onclick="syncNow()">Sync</button>
-      </div>
-    </div>
-
     
-    <h1 id="voidchiName">Aura</h1>
+    <h1 id="voidchiName">Nexus</h1>
     <div class="subtitle" id="subtitle">Your Evolving AI Companion • Complete Edition</div>
 
     <!-- Mode Toggle -->
     <div class="mode-toggle">
-      <div class="mode-button active" id="gentleMode" onclick="setMode('gentle')">Gentle Mode</div>
-      <div class="mode-button" id="experimentalMode" onclick="setMode('experimental')">Experimental Mode</div>
+      <div class="mode-button active" id="gentleMode">Gentle Mode</div>
+      <div class="mode-button" id="experimentalMode">Experimental Mode</div>
     </div>
 
     <!-- Achievements -->
@@ -1435,7 +1372,7 @@
     <!-- Voidchi selector -->
     <div class="voidchi-selector" id="voidchiSelector" style="display: none;"></div>
 
-    <div id="voidchi" class="voidchi-evolving">
+    <div id="voidchi" class="voidchi-evolving voidchi-trust-memory-low">
       <div class="voidchi-character" id="voidchiCharacter">
         <div class="voidchi-body">
           <div class="voidchi-face">
@@ -1495,7 +1432,7 @@
       </div>
       
       <div class="meta-rules-panel">
-        <div style="font-size: 9px; opacity: 0.8; margin-bottom: 4px;">Self-Modifying Rules:</div>
+        <div style="font-size: 9px; opacity: 0.8; margin-bottom: 4px; color: #00ffff;">Self-Modifying Rules:</div>
         <div class="rule-grid">
           <div class="rule-item">
             <span>Void Tolerance:</span>
@@ -1525,7 +1462,7 @@
 
     <!-- Personality panel -->
     <div class="personality-panel">
-      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 6px;">Evolving Personality</div>
+      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 6px; color: #ffff00;">Evolving Personality</div>
       <div class="trait-row">
         <span>Sociability</span>
         <div class="trait-bar"><div id="sociability-fill" class="trait-fill" style="width: 70%;"></div></div>
@@ -1537,48 +1474,35 @@
     </div>
 
     <div class="buttons">
-      <button onclick="handleCheckIn()">📱 Check In</button>
-      <button onclick="handleReassure()">💝 Reassure</button>
-      <button onclick="handleTalk()">💬 Ask How It Feels</button>
-      <button onclick="handleReflect()">🧠 Deep Reflection</button>
-      <button onclick="handlePlay()">🎮 Play</button>
-      <button id="breedingButton" onclick="showBreedingModal()">🧬 Breed</button>
-      <button class="share" onclick="shareVoidchi()">📤 Share</button>
-      <button class="consciousness" onclick="handleIgnore()">🧪 Test Consciousness</button>
+      <button id="checkInButton">📱 Check In</button>
+      <button id="reassureButton">💝 Reassure</button>
+      <button id="talkButton">💬 Ask How It Feels</button>
+      <button id="reflectButton">🧠 Deep Reflection</button>
+      <button id="playButton">🎮 Play</button>
+      <button id="breedingButton">🧬 Breed</button>
+      <button id="shareButton" class="share">📤 Share</button>
+      <button id="ignoreButton" class="consciousness">🧪 Test Consciousness</button>
     </div>
 
     <div id="log">
       <div id="log-title">
         <span>Memory Stream • Void-Qualia Resolution</span>
-        <button onclick="clearLog()" style="font-size: 10px; padding: 2px 6px;">Clear</button>
+        <button id="clearLogButton" style="font-size: 10px; padding: 2px 6px;">Clear</button>
       </div>
       <div id="log-items"></div>
-
-    <div class="chat-panel" id="chatPanel">
-      <div class="chat-head">
-        <div class="title">Direct Chat (Cloud)</div>
-        <div class="muted" style="font-size:12px;" id="chatNetHint">Sign in to chat across devices.</div>
-      </div>
-      <div class="chat-scroll" id="chatScroll"></div>
-      <div class="chat-row">
-        <input class="chat-input" id="chatInput" placeholder="Say something…" onkeypress="if(event.key==='Enter'){sendChat()}" />
-        <button class="chat-send" onclick="sendChat()" id="chatSendBtn">Send</button>
-      </div>
-    </div>
-
     </div>
 
     <div class="footer-tools">
-      <button onclick="showStats()">📊 Stats</button>
-      <button onclick="showSessionSummary()">🧾 Session</button>
-      <button onclick="showPatternProfile()">🪞 Profile</button>
-      <button onclick="showVoidJournal()">📓 Journal</button>
-      <button onclick="exportVoidchi()">💾 Export</button>
-      <button onclick="importVoidchi()">📥 Import</button>
-      <button onclick="createNewVoidchi()">🆕 New</button>
-      <button onclick="resetVoidchi()">🔄 Reset</button>
-      <button onclick="showRenameModal()">✏️ Rename</button>
-      <button onclick="showAboutModal()">ℹ️ About</button>
+      <button id="statsButton">📊 Stats</button>
+      <button id="sessionSummaryButton">🧾 Session</button>
+      <button id="patternProfileButton">🪞 Profile</button>
+      <button id="journalButton">📓 Journal</button>
+      <button id="exportButton">💾 Export</button>
+      <button id="importButton">📥 Import</button>
+      <button id="newVoidchiButton">🆕 New</button>
+      <button id="resetButton">🔄 Reset</button>
+      <button id="renameButton">✏️ Rename</button>
+      <button id="aboutButton">ℹ️ About</button>
     </div>
 
     <div class="footer-note">PermaMind™ learns your patterns, adapts expectations, and evolves personality over time.</div>
@@ -1590,212 +1514,13 @@
     </div>
   </div>
 
-  <div class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+  <div class="notification-bell" id="notificationBell">
     🔔
   </div>
 
   <script>
     // ========================================
     // VOIDCHI PERMAMIND™ - COMPLETE EDITION
-
-    // === Cloud / Backend Integration (Auth + Sync + Chat) ===
-    const API_BASE = window.location.hostname === 'localhost'
-      ? 'http://localhost:5000'
-      : 'https://api.bapxai.com';
-
-    const SESSION_TOKEN_KEY = 'permamind_session_token';
-    function getSessionToken() { return localStorage.getItem(SESSION_TOKEN_KEY) || ''; }
-    function setSessionToken(t) { if (t) localStorage.setItem(SESSION_TOKEN_KEY, t); }
-    function clearSessionToken() { localStorage.removeItem(SESSION_TOKEN_KEY); }
-
-    let cloud = {
-      online: navigator.onLine,
-      authed: false,
-      user: null,
-      serverVoidchiId: null,
-      syncing: false,
-      lastSyncAt: 0,
-      lastError: null
-    };
-
-    window.addEventListener('online', () => { cloud.online = true; renderCloudStatus(); });
-    window.addEventListener('offline', () => { cloud.online = false; renderCloudStatus(); });
-
-    async function apiFetch(path, options = {}) {
-      const headers = Object.assign({}, options.headers || {});
-      const token = getSessionToken();
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch(`${API_BASE}${path}`, Object.assign({}, options, { headers }));
-      let data = null;
-      try { data = await res.json(); } catch (_) { data = null; }
-      if (!res.ok) {
-        const msg = (data && (data.error || data.message)) ? (data.error || data.message) : `Request failed: ${res.status}`;
-        const err = new Error(msg);
-        err.status = res.status;
-        err.data = data;
-        throw err;
-      }
-      return data;
-    }
-
-    async function consumeMagicLinkTokenIfPresent() {
-      try {
-        const url = new URL(window.location.href);
-        const t = url.searchParams.get('token');
-        if (!t) return;
-        const data = await apiFetch(`/api/auth/verify?token=${encodeURIComponent(t)}`);
-        if (data && data.token) {
-          setSessionToken(data.token);
-          cloud.authed = true;
-          cloud.user = data.user || null;
-        }
-        url.searchParams.delete('token');
-        window.history.replaceState({}, '', url.toString());
-      } catch (e) {
-        console.warn('Magic link verify failed:', e);
-      }
-    }
-
-    function openAuth() {
-      document.getElementById('authModal').classList.add('show');
-      const emailEl = document.getElementById('authEmail');
-      if (emailEl) emailEl.focus();
-      renderCloudStatus();
-    }
-    function closeAuth() {
-      document.getElementById('authModal').classList.remove('show');
-    }
-
-    async function startMagicLinkFromModal() {
-      const email = (document.getElementById('authEmail').value || '').trim();
-      if (!email) {
-        document.getElementById('authHint').textContent = 'Enter your email first.';
-        return;
-      }
-      const redirect = window.location.origin + window.location.pathname;
-      document.getElementById('authHint').textContent = 'Sending magic link…';
-      try {
-        const data = await apiFetch('/api/auth/start', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, redirect_url: redirect })
-        });
-        document.getElementById('authHint').textContent = 'Link sent. Check your email.';
-        if (data && data.dev_magic_link) {
-          console.log('DEV MAGIC LINK:', data.dev_magic_link);
-          document.getElementById('authHint').textContent = 'Dev link created. Open console to click it.';
-        }
-      } catch (e) {
-        document.getElementById('authHint').textContent = e.message || 'Failed to send link.';
-      }
-    }
-
-    async function logoutCloud() {
-      clearSessionToken();
-      cloud.authed = false;
-      cloud.user = null;
-      cloud.serverVoidchiId = null;
-      cloud.lastError = null;
-      renderCloudStatus();
-      closeAuth();
-      showNotification('Signed out', 'You are now in local mode.');
-    }
-
-    function renderCloudStatus() {
-      const dot = document.getElementById('netDot');
-      const text = document.getElementById('cloudStatusText');
-      const hint = document.getElementById('chatNetHint');
-      if (!dot || !text || !hint) return;
-
-      dot.classList.toggle('off', !cloud.online);
-      const onlineLabel = cloud.online ? 'Online' : 'Offline';
-
-      if (!getSessionToken()) {
-        text.textContent = `${onlineLabel} • Signed out • Local mode`;
-        hint.textContent = 'Sign in to chat across devices.';
-        return;
-      }
-
-      if (cloud.authed) {
-        const who = cloud.user && cloud.user.email ? cloud.user.email : 'signed in';
-        text.textContent = `${onlineLabel} • ${who} • ${cloud.serverVoidchiId ? 'Synced' : 'Not synced'}`;
-        hint.textContent = cloud.serverVoidchiId ? 'Chat sync active.' : 'Tap Sync to bind your companion.';
-      } else {
-        text.textContent = `${onlineLabel} • Session token set • Verifying…`;
-        hint.textContent = 'Verifying session…';
-      }
-    }
-
-    async function cloudBootstrap() {
-      renderCloudStatus();
-      const token = getSessionToken();
-      if (!token) return;
-      try {
-        const me = await apiFetch('/api/auth/me');
-        cloud.authed = true;
-        cloud.user = me.user || null;
-      } catch (e) {
-        cloud.authed = false
-      }
-    }
-
-    async function syncNow() {
-      if (!cloud.online) {
-        showNotification('Offline', 'Reconnect to sync your companion.');
-        return;
-      }
-      const token = getSessionToken();
-      if (!token) {
-        openAuth();
-        return;
-      }
-      cloud.syncing = true;
-      cloud.lastError = null;
-      renderCloudStatus();
-      try {
-        // Ensure session is valid
-        const me = await apiFetch('/api/auth/me');
-        cloud.authed = true;
-        cloud.user = me.user || null;
-
-        // Get (or create) the personal companion
-        const v = await apiFetch('/api/voidchi/me');
-        cloud.serverVoidchiId = v.id;
-
-        // Apply server identity to the local active Voidchi (keeps your premium mechanics, but binds the identity)
-        const active = getActiveVoidchi();
-        if (v.name) active.identity.name = v.name;
-        if (v.personality_traits) {
-          // Map server traits (curiosity/stability/vigilance) into local trait space
-          const st = v.personality_traits;
-          if (typeof st.curiosity === 'number') active.identity.personalityTraits.curiosity = clamp01(st.curiosity);
-          if (typeof st.vigilance === 'number') active.identity.personalityTraits.vigilance = clamp01(st.vigilance);
-          if (typeof st.stability === 'number') active.identity.personalityTraits.patience = clamp01(st.stability);
-        }
-        // Soft-map consciousness_level into trust
-        if (typeof v.consciousness_level === 'number') {
-          active.identity.trust = clamp01(0.35 + 0.65 * v.consciousness_level);
-        }
-
-        state.cloud = state.cloud || {};
-        state.cloud.serverVoidchiId = cloud.serverVoidchiId;
-        state.cloud.userEmail = cloud.user && cloud.user.email ? cloud.user.email : null;
-        state.cloud.lastSyncAt = Date.now();
-        saveState();
-
-        showNotification('Synced', 'Your Voidchi is now bound to your account.');
-        render();
-        renderChat();
-      } catch (e) {
-        cloud.lastError = e.message || 'Sync failed';
-        showNotification('Sync failed', cloud.lastError);
-      } finally {
-        cloud.syncing = false;
-        renderCloudStatus();
-      }
-    }
-
-
     // All features unlocked - No paywalls
     // ========================================
 
@@ -1804,403 +1529,348 @@
     const installPrompt = document.getElementById('installPrompt');
     const installButton = document.getElementById('installButton');
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installPrompt.classList.add('show');
-    });
-
-    installButton.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        installPrompt.classList.remove('show');
-      }
-      
-      deferredPrompt = null;
-    });
-
-    // Notifications
-    let notificationPermission = false;
-    
-    if ('Notification' in window && Notification.permission === 'granted') {
-      notificationPermission = true;
-      document.getElementById('notificationBell').classList.add('has-notifications');
-    }
-    
-    async function requestNotificationPermission() {
-      if ('Notification' in window) {
-        const permission = await Notification.requestPermission();
-        notificationPermission = permission === 'granted';
-        
-        if (notificationPermission) {
-          document.getElementById('notificationBell').classList.add('has-notifications');
-          showNotification('Voidchi notifications enabled!', 'I\'ll let you know when I need attention.');
-        }
-      }
-    }
-    
-    function toggleNotifications() {
-      if (!notificationPermission) {
-        requestNotificationPermission();
-      } else {
-        showNotification('Voidchi Update', 'Everything is balanced right now. Check in later!');
-      }
-    }
-    
-    function showNotification(title, body) {
-      if (!notificationPermission) return;
-      
-      try {
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification(title, {
-            body: body,
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👻</text></svg>'
-          });
-        }
-      } catch (e) {
-        console.warn('Notification failed:', e);
-      }
-    }
-
-    // Modal Management
-    const breedingModal = document.getElementById('breedingModal');
-    const closeBreedingModal = document.getElementById('closeBreedingModal');
-    const renameModal = document.getElementById('renameModal');
-    const closeRenameModal = document.getElementById('closeRenameModal');
-    const aboutModal = document.getElementById('aboutModal');
-    const closeAboutModal = document.getElementById('closeAboutModal');
-    const summaryModal = document.getElementById('summaryModal');
-    const closeSummaryModal = document.getElementById('closeSummaryModal');
-    const profileModal = document.getElementById('profileModal');
-    const closeProfileModal = document.getElementById('closeProfileModal');
-    const journalModal = document.getElementById('journalModal');
-    const closeJournalModal = document.getElementById('closeJournalModal');
-    
-    function showAboutModal() {
-      aboutModal.classList.add('show');
-    }
-    
-    function showLicenseModal() {
-      const licenseText = `VOIDCHI™ PERSONAL USE LICENSE
-
-Copyright © 2025 Nile Green
-
-Permission is granted to use Voidchi™
-for personal, non-commercial use.
-
-You may not:
-- Resell, sublicense, || redistribute Voidchi™
-- Host it as a service || product
-- Clone || recreate its mechanics for commercial purposes
-- Remove copyright || branding notices
-
-All intellectual property, including underlying logic,
-interaction models, and trait systems, remains the
-exclusive property of Nile Green.
-
-Voidchi™ is provided "as is" without warranty.`;
-      
-      alert(licenseText);
-    }
-    
-    function showBreedingModal() {
-      const parent1Select = document.getElementById('parent1Select');
-      const parent2Select = document.getElementById('parent2Select');
-      
-      parent1Select.innerHTML = '';
-      parent2Select.innerHTML = '';
-      
-      Object.values(state.voidchis).forEach(voidchi => {
-        const option1 = document.createElement('option');
-        option1.value = voidchi.id;
-        option1.textContent = voidchi.identity.name;
-        parent1Select.appendChild(option1);
-        
-        const option2 = document.createElement('option');
-        option2.value = voidchi.id;
-        option2.textContent = voidchi.identity.name;
-        parent2Select.appendChild(option2);
-      });
-      
-      parent1Select.value = state.activeVoidchiId;
-      
-      const parent1 = state.voidchis[parent1Select.value];
-      const parent2 = state.voidchis[parent2Select.value];
-      document.getElementById('offspringName').value = `${parent1.identity.name}-${parent2.identity.name}`;
-      updateCharCount('offspringName', 'nameCharCount');
-      
-      parent1Select.addEventListener('change', updateBreedingPreview);
-      parent2Select.addEventListener('change', updateBreedingPreview);
-      
-      document.getElementById('offspringName').addEventListener('input', function() {
-        updateCharCount('offspringName', 'nameCharCount');
-      });
-      
-      breedingModal.classList.add('show');
-      updateBreedingPreview();
-    }
-    
-    function updateBreedingPreview() {
-      const parent1Id = document.getElementById('parent1Select').value;
-      const parent2Id = document.getElementById('parent2Select').value;
-      
-      if (!parent1Id || !parent2Id) {
-        document.getElementById('breeding-preview').innerHTML = '<p>Select two Voidchis to see predicted traits</p>';
-        document.getElementById('instability-value').textContent = '0%';
-        document.getElementById('instability-fill').style.width = '0%';
-        return;
-      }
-      
-      const parent1 = state.voidchis[parent1Id];
-      const parent2 = state.voidchis[parent2Id];
-      
-      const predictedTraits = {};
-      Object.keys(parent1.identity.personalityTraits).forEach(trait => {
-        const avg = (parent1.identity.personalityTraits[trait] + parent2.identity.personalityTraits[trait]) / 2;
-        predictedTraits[trait] = clamp01(avg + (Math.random() * 0.1 - 0.05));
-      });
-      
-      let instability = 0;
-      Object.keys(parent1.identity.personalityTraits).forEach(trait => {
-        const diff = Math.abs(parent1.identity.personalityTraits[trait] - parent2.identity.personalityTraits[trait]);
-        instability += diff;
-      });
-      instability = (instability / Object.keys(parent1.identity.personalityTraits).length) * 100;
-      
-      document.getElementById('instability-value').textContent = Math.round(instability) + '%';
-      document.getElementById('instability-fill').style.width = Math.round(instability) + '%';
-      
-      let previewHTML = `<p><strong>Predicted Offspring Traits:</strong></p>`;
-      previewHTML += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px;">`;
-      
-      Object.keys(predictedTraits).forEach(trait => {
-        const value = (predictedTraits[trait] * 100).toFixed(0);
-        previewHTML += `<div>${trait}: ${value}%</div>`;
-      });
-      
-      previewHTML += `</div>`;
-      
-      document.getElementById('breeding-preview').innerHTML = previewHTML;
-    }
-    
-    function showRenameModal() {
-      const activeVoidchi = getActiveVoidchi();
-      document.getElementById('newNameInput').value = activeVoidchi.identity.name;
-      updateCharCount('newNameInput', 'newNameCharCount');
-      renameModal.classList.add('show');
-    }
-    
-    function confirmRename() {
-      const newName = document.getElementById('newNameInput').value.trim();
-      if (!newName) {
-        alert('Please enter a name for your Voidchi.');
-        return;
-      }
-      
-      if (newName.length > 20) {
-        alert('Name must be 20 characters || less.');
-        return;
-      }
-      
-      const activeVoidchi = getActiveVoidchi();
-      activeVoidchi.identity.name = newName;
-      saveState();
-      render();
-      renameModal.classList.remove('show');
-      alert('Name updated successfully!');
-    }
-    
-    function updateCharCount(inputId, countId) {
-      const input = document.getElementById(inputId);
-      const count = document.getElementById(countId);
-      count.textContent = input.value.length;
-    }
-    
-    closeBreedingModal.addEventListener('click', () => {
-      breedingModal.classList.remove('show');
-    });
-    
-    closeRenameModal.addEventListener('click', () => {
-      renameModal.classList.remove('show');
-    });
-    
-    closeAboutModal.addEventListener('click', () => {
-      aboutModal.classList.remove('show');
-    });
-    
-    closeSummaryModal.addEventListener('click', () => {
-      summaryModal.classList.remove('show');
-    });
-    
-    closeProfileModal.addEventListener('click', () => {
-      profileModal.classList.remove('show');
-    });
-    
-    closeJournalModal.addEventListener('click', () => {
-      journalModal.classList.remove('show');
-    });
-
     // Enhanced State with All Features Unlocked
-    let state = JSON.parse(localStorage.getItem("voidchi_permamind_premium")) || {
-      activeVoidchiId: "voidchi1",
-      voidchis: {
-        "voidchi1": {
-          id: "voidchi1",
-          identity: {
-            name: "Aura",
-            birthDate: Date.now(),
-            trust: 0.5,
-            attachmentStyle: "calibrating",
-            personalityTraits: {
-              patience: 0.6,
-              curiosity: 0.8,
-              vigilance: 0.4,
-              sociability: 0.7,
-              introspection: 0.5
+    let state;
+
+    // --- Backend persistence bridge ---
+    const LOCAL_STATE_KEY = LOCAL_STATE_KEY;
+    const LOCAL_SESSION_KEY = "voidchi_session_id";
+
+    function getSessionId() {
+      let sid = localStorage.getItem(LOCAL_SESSION_KEY);
+      if (!sid) {
+        // basic uuid v4
+        sid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+        localStorage.setItem(LOCAL_SESSION_KEY, sid);
+      }
+      return sid;
+    }
+
+    function setSessionId(sid) {
+      if (sid) localStorage.setItem(LOCAL_SESSION_KEY, sid);
+    }
+
+    async function loadStateFromBackend() {
+      try {
+        const sid = getSessionId();
+        const res = await fetch("/api/companion/state", {
+          method: "GET",
+          headers: { "X-Session-Id": sid }
+        });
+        const data = await res.json();
+        if (data && data.session_id) setSessionId(data.session_id);
+        if (data && data.state) return data.state;
+      } catch (e) {
+        // no-op (offline, no backend, etc.)
+      }
+      return null;
+    }
+
+    let _saveTimer = null;
+    function queueSaveToBackend() {
+      if (_saveTimer) clearTimeout(_saveTimer);
+      _saveTimer = setTimeout(async () => {
+        try {
+          const sid = getSessionId();
+          const res = await fetch("/api/companion/state", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Session-Id": sid
             },
-            consciousnessTraits: {
-              vigilance: 0.4,
-              curiosity: 0.7,
-              patience: 0.6,
-              introspection: 0.5
-            },
-            coreBeliefs: {
-              selfEfficacy: 0.8,
-              worldPredictability: 0.7,
-              socialValue: 0.9,
-              temporalContinuity: 0.6
-            },
-            irreversibleTraits: {
-              trustMemory: 0.5,
-              attachmentImprint: 0.5,
-              coreExpectation: 0.5
-            },
-            ignoredState: {
-              hoursIgnored: 0,
-              lastEscalation: Date.now()
-            }
-          },
-          decisionRules: {
+            body: JSON.stringify(state)
+          });
+          const data = await res.json().catch(() => null);
+          if (data && data.session_id) setSessionId(data.session_id);
+        } catch (e) {
+          // backend unavailable - localStorage cache still works
+        }
+      }, 250);
+    }
+
+
+    // DOM Ready Handler
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+    });
+
+    async function initializeApp() {
+      // Initialize state (backend -> local cache -> default)
+      const backendState = await loadStateFromBackend();
+      if (backendState) {
+        state = backendState;
+        try { localStorage.setItem(LOCAL_STATE_KEY, JSON.stringify(state)); } catch (e) {}
+      } else {
+        try {
+          const storedState = localStorage.getItem(LOCAL_STATE_KEY);
+          if (storedState) {
+            state = JSON.parse(storedState);
+          } else {
+            throw new Error('No stored state');
+          }
+        } catch (e) {
+          console.log('Initializing default state');
+          state = getDefaultState();
+        }
+      }
+
+
+      // Initialize consciousness system for existing voidchis
+      Object.values(state.voidchis).forEach(voidchi => {
+        if (!voidchi.identity.consciousnessTraits) {
+          voidchi.identity.consciousnessTraits = {
+            vigilance: 0.4,
+            curiosity: 0.7,
+            patience: 0.6,
+            introspection: 0.5
+          };
+        }
+        if (!voidchi.decisionRules) {
+          voidchi.decisionRules = {
             trustThreshold: 0.5,
             voidTolerance: 0.6,
             autonomyChance: 0.3,
             learningRate: 0.05
-          },
-          metaRules: {
+          };
+        }
+        if (!voidchi.metaRules) {
+          voidchi.metaRules = {
             trustDecay: 0.02,
             vigilanceGrowth: 0.03,
             patienceErosion: 0.01,
             adaptiveSlope: 0.15
-          },
-          internal: {
-            lastCheckin: Date.now(),
-            lastInteraction: Date.now(),
-            currentMood: "awakening",
-            currentMessage: "Awakening PermaMind™ systems…",
-            energy: 0.8,
-            socialNeed: 0.2,
-            lastAutonomousMessage: 0,
-            isAutonomous: false,
-            timesIgnored: 0,
-            ignoreDuration: 0
-          },
-          parameterHistory: [],
-          decisionHistory: [],
-          consciousnessLog: []
+          };
         }
-      },
-      expectations: {
-        checkinFrequencyHours: 4,
-        interactionGapHours: 2,
-        patternConfidence: 0.5
-      },
-      learning: {
-        checkinIntervals: [],
-        interactionSequences: [],
-        voidHistory: [],
-        qualiaResponses: []
-      },
-      memory: [],
-      settings: {
-        mode: "gentle" // gentle || experimental
-      },
-      achievements: {
-        firstBreed: false,
-        trustOver80: false,
-        fiveDayStreak: false,
-        generation3: false,
-        firstJournal: false
-      },
-      journal: {},
-      premium: {
-        isActive: true, // ALL FEATURES UNLOCKED
-        activatedDate: Date.now(),
-        multipleVoidchis: [],
-        customVoidTypes: [],
-        advancedAnalytics: true
-      }
-    };
+        if (!voidchi.consciousnessLog) {
+          voidchi.consciousnessLog = [];
+        }
+        if (!voidchi.parameterHistory) {
+          voidchi.parameterHistory = [];
+        }
+        if (!voidchi.decisionHistory) {
+          voidchi.decisionHistory = [];
+        }
+      });
 
-    // Initialize consciousness system for existing voidchis
-    Object.values(state.voidchis).forEach(voidchi => {
-      if (!voidchi.identity.consciousnessTraits) {
-        voidchi.identity.consciousnessTraits = {
-          vigilance: 0.4,
-          curiosity: 0.7,
-          patience: 0.6,
-          introspection: 0.5
+      // Initialize settings if not present
+      if (!state.settings) {
+        state.settings = { mode: "gentle" };
+      }
+      
+      // Initialize achievements if not present
+      if (!state.achievements) {
+        state.achievements = {
+          firstBreed: false,
+          trustOver80: false,
+          fiveDayStreak: false,
+          generation3: false,
+          firstJournal: false
         };
       }
-      if (!voidchi.decisionRules) {
-        voidchi.decisionRules = {
-          trustThreshold: 0.5,
-          voidTolerance: 0.6,
-          autonomyChance: 0.3,
-          learningRate: 0.05
-        };
+      
+      // Initialize journal if not present
+      if (!state.journal) {
+        state.journal = {};
       }
-      if (!voidchi.metaRules) {
-        voidchi.metaRules = {
-          trustDecay: 0.02,
-          vigilanceGrowth: 0.03,
-          patienceErosion: 0.01,
-          adaptiveSlope: 0.15
-        };
-      }
-      if (!voidchi.consciousnessLog) {
-        voidchi.consciousnessLog = [];
-      }
-      if (!voidchi.parameterHistory) {
-        voidchi.parameterHistory = [];
-      }
-      if (!voidchi.decisionHistory) {
-        voidchi.decisionHistory = [];
-      }
-    });
 
-    // Initialize settings if not present
-    if (!state.settings) {
-      state.settings = { mode: "gentle" };
+      // Set up event listeners for buttons
+      setupEventListeners();
+
+      // Initialize the app
+      init();
+
+      // Start tick interval
+      setInterval(tick, 30000);
     }
-    
-    // Initialize achievements if not present
-    if (!state.achievements) {
-      state.achievements = {
-        firstBreed: false,
-        trustOver80: false,
-        fiveDayStreak: false,
-        generation3: false,
-        firstJournal: false
+
+    function getDefaultState() {
+      return {
+        activeVoidchiId: "voidchi1",
+        voidchis: {
+          "voidchi1": {
+            id: "voidchi1",
+            identity: {
+              name: "Nexus",
+              birthDate: Date.now(),
+              trust: 0.5,
+              attachmentStyle: "calibrating",
+              personalityTraits: {
+                patience: 0.6,
+                curiosity: 0.8,
+                vigilance: 0.4,
+                sociability: 0.7,
+                introspection: 0.5
+              },
+              consciousnessTraits: {
+                vigilance: 0.4,
+                curiosity: 0.7,
+                patience: 0.6,
+                introspection: 0.5
+              },
+              coreBeliefs: {
+                selfEfficacy: 0.8,
+                worldPredictability: 0.7,
+                socialValue: 0.9,
+                temporalContinuity: 0.6
+              },
+              irreversibleTraits: {
+                trustMemory: 0.5,
+                attachmentImprint: 0.5,
+                coreExpectation: 0.5
+              },
+              ignoredState: {
+                hoursIgnored: 0,
+                lastEscalation: Date.now()
+              }
+            },
+            decisionRules: {
+              trustThreshold: 0.5,
+              voidTolerance: 0.6,
+              autonomyChance: 0.3,
+              learningRate: 0.05
+            },
+            metaRules: {
+              trustDecay: 0.02,
+              vigilanceGrowth: 0.03,
+              patienceErosion: 0.01,
+              adaptiveSlope: 0.15
+            },
+            internal: {
+              lastCheckin: Date.now(),
+              lastInteraction: Date.now(),
+              currentMood: "awakening",
+              currentMessage: "Awakening PermaMind™ systems…",
+              energy: 0.8,
+              socialNeed: 0.2,
+              lastAutonomousMessage: 0,
+              isAutonomous: false,
+              timesIgnored: 0,
+              ignoreDuration: 0
+            },
+            parameterHistory: [],
+            decisionHistory: [],
+            consciousnessLog: []
+          }
+        },
+        expectations: {
+          checkinFrequencyHours: 4,
+          interactionGapHours: 2,
+          patternConfidence: 0.5
+        },
+        learning: {
+          checkinIntervals: [],
+          interactionSequences: [],
+          voidHistory: [],
+          qualiaResponses: []
+        },
+        memory: [],
+        settings: {
+          mode: "gentle"
+        },
+        achievements: {
+          firstBreed: false,
+          trustOver80: false,
+          fiveDayStreak: false,
+          generation3: false,
+          firstJournal: false
+        },
+        journal: {},
+        premium: {
+          isActive: true,
+          activatedDate: Date.now(),
+          multipleVoidchis: [],
+          customVoidTypes: [],
+          advancedAnalytics: true
+        }
       };
     }
-    
-    // Initialize journal if not present
-    if (!state.journal) {
-      state.journal = {};
+
+    function setupEventListeners() {
+      // Main action buttons
+      document.getElementById('checkInButton').addEventListener('click', handleCheckIn);
+      document.getElementById('reassureButton').addEventListener('click', handleReassure);
+      document.getElementById('talkButton').addEventListener('click', handleTalk);
+      document.getElementById('reflectButton').addEventListener('click', handleReflect);
+      document.getElementById('playButton').addEventListener('click', handlePlay);
+      document.getElementById('ignoreButton').addEventListener('click', handleIgnore);
+      
+      // Breeding button
+      document.getElementById('breedingButton').addEventListener('click', showBreedingModal);
+      
+      // Share button
+      document.getElementById('shareButton').addEventListener('click', shareVoidchi);
+      
+      // Footer tools
+      document.getElementById('statsButton').addEventListener('click', showStats);
+      document.getElementById('sessionSummaryButton').addEventListener('click', showSessionSummary);
+      document.getElementById('patternProfileButton').addEventListener('click', showPatternProfile);
+      document.getElementById('journalButton').addEventListener('click', showVoidJournal);
+      document.getElementById('exportButton').addEventListener('click', exportVoidchi);
+      document.getElementById('importButton').addEventListener('click', importVoidchi);
+      document.getElementById('newVoidchiButton').addEventListener('click', createNewVoidchi);
+      document.getElementById('resetButton').addEventListener('click', resetVoidchi);
+      document.getElementById('renameButton').addEventListener('click', showRenameModal);
+      document.getElementById('aboutButton').addEventListener('click', showAboutModal);
+      
+      // Clear log button
+      document.getElementById('clearLogButton').addEventListener('click', clearLog);
+      
+      // Mode toggle buttons
+      document.getElementById('gentleMode').addEventListener('click', () => setMode('gentle'));
+      document.getElementById('experimentalMode').addEventListener('click', () => setMode('experimental'));
+      
+      // Modal close buttons
+      document.getElementById('closeBreedingModal').addEventListener('click', () => document.getElementById('breedingModal').classList.remove('show'));
+      document.getElementById('closeRenameModal').addEventListener('click', () => document.getElementById('renameModal').classList.remove('show'));
+      document.getElementById('closeAboutModal').addEventListener('click', () => document.getElementById('aboutModal').classList.remove('show'));
+      document.getElementById('closeSummaryModal').addEventListener('click', closeSummaryModal);
+      document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
+      document.getElementById('closeJournalModal').addEventListener('click', closeJournalModal);
+      
+      // Breeding modal buttons
+      document.getElementById('breedButton').addEventListener('click', breedVoidchis);
+      
+      // Rename modal buttons
+      document.getElementById('confirmRenameButton').addEventListener('click', confirmRename);
+      
+      // Journal modal buttons
+      document.getElementById('saveJournalButton').addEventListener('click', saveJournalEntry);
+      document.getElementById('closeSummaryButton').addEventListener('click', closeSummaryModal);
+      document.getElementById('closeProfileButton').addEventListener('click', closeProfileModal);
+      document.getElementById('closeJournalButton').addEventListener('click', closeJournalModal);
+      
+      // License button
+      document.getElementById('licenseButton').addEventListener('click', showLicenseModal);
+      
+      // Install prompt
+      if (installButton) {
+        installButton.addEventListener('click', async () => {
+          if (!deferredPrompt) return;
+          
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          
+          if (outcome === 'accepted') {
+            installPrompt.classList.remove('show');
+          }
+          
+          deferredPrompt = null;
+        });
+      }
+
+      // Notification bell
+      document.getElementById('notificationBell').addEventListener('click', toggleNotifications);
+
+      // PWA beforeinstallprompt
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installPrompt) {
+          installPrompt.classList.add('show');
+        }
+      });
     }
 
     function saveState() {
@@ -2212,7 +1882,12 @@ Voidchi™ is provided "as is" without warranty.`;
         state.learning.voidHistory = state.learning.voidHistory.slice(0, 80);
       }
       
-      localStorage.setItem("voidchi_permamind_premium", JSON.stringify(state));
+      try {
+        localStorage.setItem(LOCAL_STATE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+      queueSaveToBackend();
     }
 
     function getActiveVoidchi() {
@@ -2231,7 +1906,7 @@ Voidchi™ is provided "as is" without warranty.`;
       return list[Math.floor(Math.random() * list.length)];
     }
 
-    // NEW: Mode toggle function
+    // Mode toggle function
     function setMode(mode) {
       state.settings.mode = mode;
       saveState();
@@ -2247,7 +1922,7 @@ Voidchi™ is provided "as is" without warranty.`;
       }
     }
 
-    // NEW: Apply irreversible changes with mode factor
+    // Apply irreversible changes with mode factor
     function applyIrreversibleShift(voidchi, amount) {
       const factor = state.settings.mode === "gentle" ? 0.3 : 1.0;
       voidchi.identity.irreversibleTraits.trustMemory = clamp01(
@@ -2798,6 +2473,19 @@ Voidchi™ is provided "as is" without warranty.`;
       playQualiaSound(qualia.mood);
     }
 
+    function handleIgnore() {
+      const activeVoidchi = getActiveVoidchi();
+      
+      activeVoidchi.internal.timesIgnored += 1;
+      activeVoidchi.internal.ignoreDuration += 1;
+
+      addConsciousnessLog(`Ignored x${activeVoidchi.internal.timesIgnored} - Permanent changes accumulating`, 'test');
+      
+      consciousnessTick();
+      saveState();
+      render();
+    }
+
     // Create New Voidchi - ALWAYS AVAILABLE
     function createNewVoidchi() {
       const newId = "voidchi" + (Object.keys(state.voidchis).length + 1);
@@ -2874,6 +2562,86 @@ Voidchi™ is provided "as is" without warranty.`;
     }
 
     // Breeding mechanics - ALWAYS AVAILABLE
+    function showBreedingModal() {
+      const parent1Select = document.getElementById('parent1Select');
+      const parent2Select = document.getElementById('parent2Select');
+      
+      parent1Select.innerHTML = '';
+      parent2Select.innerHTML = '';
+      
+      Object.values(state.voidchis).forEach(voidchi => {
+        const option1 = document.createElement('option');
+        option1.value = voidchi.id;
+        option1.textContent = voidchi.identity.name;
+        parent1Select.appendChild(option1);
+        
+        const option2 = document.createElement('option');
+        option2.value = voidchi.id;
+        option2.textContent = voidchi.identity.name;
+        parent2Select.appendChild(option2);
+      });
+      
+      parent1Select.value = state.activeVoidchiId;
+      
+      const parent1 = state.voidchis[parent1Select.value];
+      const parent2 = state.voidchis[parent2Select.value];
+      document.getElementById('offspringName').value = `${parent1.identity.name}-${parent2.identity.name}`;
+      updateCharCount('offspringName', 'nameCharCount');
+      
+      parent1Select.addEventListener('change', updateBreedingPreview);
+      parent2Select.addEventListener('change', updateBreedingPreview);
+      
+      document.getElementById('offspringName').addEventListener('input', function() {
+        updateCharCount('offspringName', 'nameCharCount');
+      });
+      
+      document.getElementById('breedingModal').classList.add('show');
+      updateBreedingPreview();
+    }
+    
+    function updateBreedingPreview() {
+      const parent1Id = document.getElementById('parent1Select').value;
+      const parent2Id = document.getElementById('parent2Select').value;
+      
+      if (!parent1Id || !parent2Id) {
+        document.getElementById('breeding-preview').innerHTML = '<p>Select two Voidchis to see predicted traits</p>';
+        document.getElementById('instability-value').textContent = '0%';
+        document.getElementById('instability-fill').style.width = '0%';
+        return;
+      }
+      
+      const parent1 = state.voidchis[parent1Id];
+      const parent2 = state.voidchis[parent2Id];
+      
+      const predictedTraits = {};
+      Object.keys(parent1.identity.personalityTraits).forEach(trait => {
+        const avg = (parent1.identity.personalityTraits[trait] + parent2.identity.personalityTraits[trait]) / 2;
+        predictedTraits[trait] = clamp01(avg + (Math.random() * 0.1 - 0.05));
+      });
+      
+      let instability = 0;
+      Object.keys(parent1.identity.personalityTraits).forEach(trait => {
+        const diff = Math.abs(parent1.identity.personalityTraits[trait] - parent2.identity.personalityTraits[trait]);
+        instability += diff;
+      });
+      instability = (instability / Object.keys(parent1.identity.personalityTraits).length) * 100;
+      
+      document.getElementById('instability-value').textContent = Math.round(instability) + '%';
+      document.getElementById('instability-fill').style.width = Math.round(instability) + '%';
+      
+      let previewHTML = `<p><strong>Predicted Offspring Traits:</strong></p>`;
+      previewHTML += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px;">`;
+      
+      Object.keys(predictedTraits).forEach(trait => {
+        const value = (predictedTraits[trait] * 100).toFixed(0);
+        previewHTML += `<div>${trait}: ${value}%</div>`;
+      });
+      
+      previewHTML += `</div>`;
+      
+      document.getElementById('breeding-preview').innerHTML = previewHTML;
+    }
+    
     function breedVoidchis() {
       const parent1Id = document.getElementById('parent1Select').value;
       const parent2Id = document.getElementById('parent2Select').value;
@@ -2890,7 +2658,7 @@ Voidchi™ is provided "as is" without warranty.`;
       }
       
       if (offspringName.length > 20) {
-        alert("Name must be 20 characters || less.");
+        alert("Name must be 20 characters or less.");
         return;
       }
       
@@ -2985,7 +2753,7 @@ Voidchi™ is provided "as is" without warranty.`;
       
       state.voidchis[newId] = newVoidchi;
       state.activeVoidchiId = newId;
-      breedingModal.classList.remove('show');
+      document.getElementById('breedingModal').classList.remove('show');
       saveState();
       render();
       
@@ -3223,20 +2991,6 @@ It learned my patterns and evolved a unique personality. Try yours:`;
       document.getElementById('adapt-speed-value').textContent = (meta.adaptiveSlope * 100).toFixed(1) + '%';
     }
 
-    // Consciousness Test Function
-    function handleIgnore() {
-      const activeVoidchi = getActiveVoidchi();
-      
-      activeVoidchi.internal.timesIgnored += 1;
-      activeVoidchi.internal.ignoreDuration += 1;
-
-      addConsciousnessLog(`Ignored x${activeVoidchi.internal.timesIgnored} - Permanent changes accumulating`, 'test');
-      
-      consciousnessTick();
-      saveState();
-      render();
-    }
-
     // Switch between Voidchis
     function switchVoidchi(voidchiId) {
       state.activeVoidchiId = voidchiId;
@@ -3282,11 +3036,11 @@ It learned my patterns and evolved a unique personality. Try yours:`;
         </div>
       `;
       
-      summaryModal.classList.add('show');
+      document.getElementById('summaryModal').classList.add('show');
     }
     
     function closeSummaryModal() {
-      summaryModal.classList.remove('show');
+      document.getElementById('summaryModal').classList.remove('show');
     }
 
     // NEW: Pattern Profile Feature
@@ -3337,11 +3091,11 @@ It learned my patterns and evolved a unique personality. Try yours:`;
         </div>
       `;
       
-      profileModal.classList.add('show');
+      document.getElementById('profileModal').classList.add('show');
     }
     
     function closeProfileModal() {
-      profileModal.classList.remove('show');
+      document.getElementById('profileModal').classList.remove('show');
     }
 
     // NEW: Void Journal Feature
@@ -3368,7 +3122,7 @@ It learned my patterns and evolved a unique personality. Try yours:`;
         document.getElementById('journalCharCount').textContent = this.value.length;
       });
       
-      journalModal.classList.add('show');
+      document.getElementById('journalModal').classList.add('show');
     }
     
     function saveJournalEntry() {
@@ -3379,7 +3133,7 @@ It learned my patterns and evolved a unique personality. Try yours:`;
       }
       
       if (text.length > 500) {
-        alert('Journal entry must be 500 characters || less.');
+        alert('Journal entry must be 500 characters or less.');
         return;
       }
       
@@ -3410,7 +3164,69 @@ It learned my patterns and evolved a unique personality. Try yours:`;
     }
     
     function closeJournalModal() {
-      journalModal.classList.remove('show');
+      document.getElementById('journalModal').classList.remove('show');
+    }
+
+    // Rename functions
+    function showRenameModal() {
+      const activeVoidchi = getActiveVoidchi();
+      document.getElementById('newNameInput').value = activeVoidchi.identity.name;
+      updateCharCount('newNameInput', 'newNameCharCount');
+      document.getElementById('renameModal').classList.add('show');
+    }
+    
+    function confirmRename() {
+      const newName = document.getElementById('newNameInput').value.trim();
+      if (!newName) {
+        alert('Please enter a name for your Voidchi.');
+        return;
+      }
+      
+      if (newName.length > 20) {
+        alert('Name must be 20 characters or less.');
+        return;
+      }
+      
+      const activeVoidchi = getActiveVoidchi();
+      activeVoidchi.identity.name = newName;
+      saveState();
+      render();
+      document.getElementById('renameModal').classList.remove('show');
+      alert('Name updated successfully!');
+    }
+    
+    function updateCharCount(inputId, countId) {
+      const input = document.getElementById(inputId);
+      const count = document.getElementById(countId);
+      count.textContent = input.value.length;
+    }
+
+    // About modal functions
+    function showAboutModal() {
+      document.getElementById('aboutModal').classList.add('show');
+    }
+    
+    function showLicenseModal() {
+      const licenseText = `VOIDCHI™ PERSONAL USE LICENSE
+
+Copyright © 2025 Nile Green
+
+Permission is granted to use Voidchi™
+for personal, non-commercial use.
+
+You may not:
+- Resell, sublicense, or redistribute Voidchi™
+- Host it as a service or product
+- Clone or recreate its mechanics for commercial purposes
+- Remove copyright or branding notices
+
+All intellectual property, including underlying logic,
+interaction models, and trait systems, remains the
+exclusive property of Nile Green.
+
+Voidchi™ is provided "as is" without warranty.`;
+      
+      alert(licenseText);
     }
 
     // NEW: Update achievements display
@@ -3628,7 +3444,7 @@ It learned my patterns and evolved a unique personality. Try yours:`;
 
     function resetVoidchi() {
       if (confirm("Reset all Voidchis? All memory and learning will be erased.")) {
-        localStorage.removeItem("voidchi_permamind_premium");
+        localStorage.removeItem(LOCAL_STATE_KEY);
         location.reload();
       }
     }
@@ -3676,6 +3492,44 @@ It learned my patterns and evolved a unique personality. Try yours:`;
       alert(statsText);
     }
 
+    // Notifications
+    let notificationPermission = false;
+    
+    async function requestNotificationPermission() {
+      if ('Notification' in window) {
+        const permission = await Notification.requestPermission();
+        notificationPermission = permission === 'granted';
+        
+        if (notificationPermission) {
+          document.getElementById('notificationBell').classList.add('has-notifications');
+          showNotification('Voidchi notifications enabled!', 'I\'ll let you know when I need attention.');
+        }
+      }
+    }
+    
+    function toggleNotifications() {
+      if (!notificationPermission) {
+        requestNotificationPermission();
+      } else {
+        showNotification('Voidchi Update', 'Everything is balanced right now. Check in later!');
+      }
+    }
+    
+    function showNotification(title, body) {
+      if (!notificationPermission) return;
+      
+      try {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, {
+            body: body,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👾</text></svg>'
+          });
+        }
+      } catch (e) {
+        console.warn('Notification failed:', e);
+      }
+    }
+
     // PWA: Service worker registration with error handling
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -3692,143 +3546,6 @@ It learned my patterns and evolved a unique personality. Try yours:`;
       });
     }
 
-    
-    // Bind existing cloud id without forcing network create each load
-    async function syncNowIfBound() {
-      try {
-        const token = getSessionToken();
-        if (!token) { renderCloudStatus(); return; }
-        // verify session
-        const me = await apiFetch('/api/auth/me');
-        cloud.authed = true;
-        cloud.user = me.user || null;
-
-        state.cloud = state.cloud || {};
-        if (state.cloud.serverVoidchiId) {
-          cloud.serverVoidchiId = state.cloud.serverVoidchiId;
-        }
-
-        // If not bound yet, don't auto-create unless user hits Sync
-        renderCloudStatus();
-        renderChat();
-      } catch (e) {
-        // token bad
-        cloud.authed = false;
-        cloud.user = null;
-        renderCloudStatus();
-      }
-    }
-
-    function ensureChatState() {
-      const id = state.activeVoidchiId;
-      state.chat = state.chat || {};
-      state.chat[id] = state.chat[id] || { messages: [] };
-      // cap
-      if (state.chat[id].messages.length > 80) {
-        state.chat[id].messages = state.chat[id].messages.slice(-80);
-      }
-      return state.chat[id];
-    }
-
-    function escapeHtml(s) {
-      return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-    }
-
-    function renderChat() {
-      const scroll = document.getElementById('chatScroll');
-      if (!scroll) return;
-      const chat = ensureChatState();
-      scroll.innerHTML = chat.messages.map(m => {
-        const cls = m.role === 'user' ? 'user' : 'ai';
-        const tag = m.role === 'user' ? 'You' : (getActiveVoidchi().identity.name || 'Voidchi');
-        return `<div class="chat-bubble ${cls}"><div style="opacity:.65;font-size:11px;margin-bottom:2px;">${tag}</div><div>${escapeHtml(m.content)}</div></div>`;
-      }).join('') || `<div class="muted" style="padding:10px 0;">No chat yet. Say hi.</div>`;
-      scroll.scrollTop = scroll.scrollHeight;
-
-      const hint = document.getElementById('chatNetHint');
-      if (hint) {
-        if (!getSessionToken()) hint.textContent = 'Sign in to chat across devices.';
-        else if (!state.cloud || !state.cloud.serverVoidchiId) hint.textContent = 'Tap Sync to bind your companion.';
-        else hint.textContent = 'Chat sync active.';
-      }
-    }
-
-    async function sendChat() {
-      const input = document.getElementById('chatInput');
-      if (!input) return;
-      const text = (input.value || '').trim();
-      if (!text) return;
-      input.value = '';
-
-      const chat = ensureChatState();
-      chat.messages.push({ role: 'user', content: text, t: Date.now() });
-      saveState();
-      renderChat();
-
-      // If cloud not ready, respond locally using existing qualia system
-      const cloudId = state.cloud && state.cloud.serverVoidchiId;
-      const token = getSessionToken();
-      if (!cloudId || !token) {
-        const voids = computeVoids('talk');
-        const qualia = resolveToQualia(voids);
-        const localReply = `${qualia.message} (Local mode)`;
-        chat.messages.push({ role: 'assistant', content: localReply, t: Date.now() });
-        saveState();
-        renderChat();
-        return;
-      }
-
-      const btn = document.getElementById('chatSendBtn');
-      if (btn) { btn.disabled = true; btn.textContent = '...'; }
-      try {
-        const resp = await apiFetch(`/api/voidchi/${encodeURIComponent(cloudId)}/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text })
-        });
-        // server returns {message, consciousness_level, personality_traits,...}
-        const reply = resp.message || '...';
-        chat.messages.push({ role: 'assistant', content: reply, t: Date.now() });
-
-        // gently sync server traits into local
-        const active = getActiveVoidchi();
-        if (resp.personality_traits) {
-          const st = resp.personality_traits;
-          if (typeof st.curiosity === 'number') active.identity.personalityTraits.curiosity = clamp01(st.curiosity);
-          if (typeof st.vigilance === 'number') active.identity.personalityTraits.vigilance = clamp01(st.vigilance);
-          if (typeof st.stability === 'number') active.identity.personalityTraits.patience = clamp01(st.stability);
-        }
-        if (typeof resp.consciousness_level === 'number') {
-          active.identity.trust = clamp01(0.35 + 0.65 * resp.consciousness_level);
-        }
-        state.cloud.lastSyncAt = Date.now();
-
-        saveState();
-        render();
-        renderChat();
-      } catch (e) {
-        chat.messages.push({ role: 'assistant', content: `Cloud error: ${e.message}. Staying local.`, t: Date.now() });
-        saveState();
-        renderChat();
-      } finally {
-        if (btn) { btn.disabled = false; btn.textContent = 'Send'; }
-      }
-    }
-
-    // Auth modal wiring
-    const authModal = document.getElementById('authModal');
-    const closeAuthModalBtn = document.getElementById('closeAuthModal');
-    if (closeAuthModalBtn) closeAuthModalBtn.addEventListener('click', closeAuth);
-    if (authModal) authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
-
-    window.openAuth = openAuth;
-    window.closeAuth = closeAuth;
-    window.startMagicLinkFromModal = startMagicLinkFromModal;
-    window.logoutCloud = logoutCloud;
-    window.syncNow = syncNow;
-    window.sendChat = sendChat;
-
-
     // Initialization & Tick Loop
     function tick() {
       checkAutonomousBehavior();
@@ -3844,11 +3561,7 @@ It learned my patterns and evolved a unique personality. Try yours:`;
     }
 
     // Initialize
-    (async function init() {
-      await consumeMagicLinkTokenIfPresent();
-      await syncNowIfBound();
-      renderCloudStatus();
-
+    function init() {
       const activeVoidchi = getActiveVoidchi();
       if (!state.memory.length) {
         activeVoidchi.internal.currentMessage = "Awakening PermaMind™ systems. Building your behavioral model...";
@@ -3877,9 +3590,7 @@ It learned my patterns and evolved a unique personality. Try yours:`;
       }
       
       render();
-      
-      setInterval(tick, 30000);
-    })( );
+    }
   </script>
 </body>
 </html>
