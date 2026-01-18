@@ -1556,7 +1556,7 @@
     async function loadStateFromBackend() {
       try {
         const sid = getSessionId();
-        const res = await fetch("/api/companion/state", {
+        const res = await fetch(API_BASE_URL + "/api/companion/state", {
           method: "GET",
           headers: { "X-Session-Id": sid }
         });
@@ -1575,7 +1575,7 @@
       _saveTimer = setTimeout(async () => {
         try {
           const sid = getSessionId();
-          const res = await fetch("/api/companion/state", {
+          const res = await fetch(API_BASE_URL + "/api/companion/state", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
