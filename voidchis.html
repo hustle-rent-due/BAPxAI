@@ -1426,15 +1426,38 @@
         return;
       }
 
-      panel.innerHTML = notes.map(n => `
-        <div class="note-card">
-          <div class="note-head">
-            <div><strong style="color:var(--void-text);">${escapeHtml(n.author || 'user')}</strong></div>
-            <div style="opacity:0.85;">${escapeHtml(n.created_at || '')}</div>
+      panel.innerHTML = notes.map(n => {
+        const author = n.author || 'user';
+        const content = n.content || '';
+        const isUser = author === 'user';
+        const isSystem = author === 'system';
+        
+        let borderColor = 'var(--void-accent)';
+        let bgColor = 'rgba(37, 99, 235, 0.05)';
+        let authorColor = 'var(--void-accent)';
+        
+        if (!isUser && !isSystem) {
+          borderColor = 'var(--void-purple)';
+          bgColor = 'rgba(139, 92, 246, 0.05)';
+          authorColor = 'var(--void-purple)';
+        } else if (isSystem) {
+          borderColor = 'var(--void-orange)';
+          bgColor = 'rgba(245, 158, 11, 0.05)';
+          authorColor = 'var(--void-orange)';
+        }
+        
+        return `
+          <div class="note-card" style="border-left: 2px solid ${borderColor}; background: ${bgColor};">
+            <div class="note-head">
+              <div><strong style="color:${authorColor};">${escapeHtml(author)}</strong></div>
+              <div style="opacity:0.85; font-size: 11px;">${escapeHtml(n.created_at || '')}</div>
+            </div>
+            <div class="note-content">${escapeHtml(content)}</div>
           </div>
-          <div class="note-content">${escapeHtml(n.content || '')}</div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+      
+      panel.scrollTop = panel.scrollHeight;
     }
 
     async function reloadNotes() {
@@ -1473,32 +1496,67 @@
       if (!content) return;
 
       input.value = '';
+      input.disabled = true;
+      const sendBtn = document.getElementById('sendNoteBtn');
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'AI Thinking...';
 
       try {
-        // ✅ BACKEND MATCH: POST /api/voidchi/<id>/notes
-        const res = await fetch(`${API}/voidchi/${selectedSingle}/notes`, {
+        // ✅ CHAT ENDPOINT: AI responds with personality
+        const res = await fetch(`${API}/voidchi/${selectedSingle}/chat`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           credentials: 'omit',
-          body: JSON.stringify({ content, author: 'user' })
+          body: JSON.stringify({ message: content })
         });
 
         const text = await res.text();
-        if (!res.ok) throw new Error(`HTTP ${res.status}: ${text}`);
+        if (!res.ok) {
+          let errorMsg = `HTTP ${res.status}`;
+          try {
+            const errorData = JSON.parse(text);
+            errorMsg = errorData.error || errorMsg;
+          } catch (e) {
+            errorMsg = text || errorMsg;
+          }
+          throw new Error(errorMsg);
+        }
+        
         const data = JSON.parse(text);
 
         const existing = notesCache[selectedSingle] || [];
-        notesCache[selectedSingle] = [data.note, ...existing].slice(0, 50);
+        if (data.user_message) {
+          notesCache[selectedSingle] = [data.user_message, ...existing];
+        }
+        if (data.ai_response) {
+          notesCache[selectedSingle] = [data.ai_response, ...notesCache[selectedSingle]];
+        }
+        notesCache[selectedSingle] = notesCache[selectedSingle].slice(0, 50);
         renderNotes(notesCache[selectedSingle]);
 
         if (data.server_boot_id) {
-          document.getElementById('bootIdLabel').textContent =
-            `${data.server_boot_id}`;
+          document.getElementById('bootIdLabel').textContent = `${data.server_boot_id}`;
         }
+        
+        console.log('✅ AI Response:', data.ai_response.content);
 
       } catch (e) {
-        console.error('Message send error:', e);
-        alert('Send failed: ' + e.message);
+        console.error('Chat error:', e);
+        const errorNote = {
+          id: 'error-' + Date.now(),
+          voidchi_id: selectedSingle,
+          author: 'system',
+          content: `⚠️ Chat failed: ${e.message}`,
+          created_at: new Date().toISOString()
+        };
+        const existing = notesCache[selectedSingle] || [];
+        notesCache[selectedSingle] = [errorNote, ...existing].slice(0, 50);
+        renderNotes(notesCache[selectedSingle]);
+      } finally {
+        input.disabled = false;
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+        input.focus();
       }
     }
 
