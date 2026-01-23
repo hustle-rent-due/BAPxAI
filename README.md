@@ -1,4 +1,4 @@
-[README-5.md](https://github.com/user-attachments/files/24829132/README-5.md)
+
 # 🌌 PermaMind / Voidchi Universe™
 
 <div align="center">
