@@ -902,7 +902,7 @@
     const API = `${ORIGIN}/api`;
 
     // Public safety: hide internal vectors unless you explicitly enable dev mode
-    const DEV_MODE = false; // Production: never expose internal vectors client-side
+    const DEV_MODE = new URLSearchParams(window.location.search).get('dev') === '1';
 
     // IMPORTANT: Railway + Werkzeug often breaks the websocket upgrade path for Socket.IO.
     // Force long-polling to keep the live feed stable.
@@ -957,16 +957,6 @@
       notesCache[selectedSingle] = [note, ...existing].slice(0, 50);
       renderNotes(notesCache[selectedSingle]);
     });
-
-    // Fallback: if Socket.IO is disconnected, poll notes occasionally so the chat doesn't "stall"
-    setInterval(() => {
-      try {
-        if (selectedSingle && socket && socket.disconnected) {
-          reloadNotes();
-        }
-      } catch (e) {}
-    }, 10000);
-
 
     function updateStatus(connected) {
       const statusEl = document.querySelector('.status');
@@ -1139,14 +1129,7 @@
             ${traitsHtml}
           </div>
 
-<div class="traits cognition">
-  <div class="traits-header">Cognition</div>
-  <div class="mono">Goal: <span id="goal-${v.id}">${escapeHtml(String(v.last_goal || '—'))}</span> · Strategy: <span id="strategy-${v.id}">${escapeHtml(String(v.last_strategy || '—'))}</span></div>
-  <div class="mono">Self-model: C=<span id="sm-conf-${v.id}">${formatPct((v.self_model && v.self_model.confidence) ?? null)}</span> · S=<span id="sm-stab-${v.id}">${formatPct((v.self_model && v.self_model.stability) ?? null)}</span> · P=<span id="sm-plas-${v.id}">${formatPct((v.self_model && v.self_model.plasticity) ?? null)}</span> · R=<span id="sm-rel-${v.id}">${formatPct((v.self_model && v.self_model.reliability) ?? null)}</span></div>
-  <div class="mono">Drives: Stab=<span id="drv-stab-${v.id}">${formatPct((v.drives && v.drives.stability) ?? null)}</span> · Nov=<span id="drv-nov-${v.id}">${formatPct((v.drives && v.drives.novelty) ?? null)}</span> · Coh=<span id="drv-coh-${v.id}">${formatPct((v.drives && v.drives.coherence) ?? null)}</span> · Mas=<span id="drv-mas-${v.id}">${formatPct((v.drives && v.drives.mastery) ?? null)}</span></div>
-</div>
-
-<div id="gap-container-${v.id}"></div>
+          <div id="gap-container-${v.id}"></div>
 
           <div class="immutable-section">
             <span class="immutable-label">Core Identity</span>
@@ -1235,36 +1218,6 @@
         if (traitValue) traitValue.textContent = `${(value * 100).toFixed(0)}%`;
         if (traitFill)  traitFill.style.width = `${value * 100}%`;
       });
-
-// --- Cognition fields (goal / strategy / self-model / drives) ---
-const goalEl = document.getElementById(`goal-${id}`);
-const stratEl = document.getElementById(`strategy-${id}`);
-if (goalEl) goalEl.textContent = String(result.goal ?? result.last_goal ?? '—');
-if (stratEl) stratEl.textContent = String(result.strategy ?? result.last_strategy ?? '—');
-
-const sm = (result.self_model && typeof result.self_model === 'object') ? result.self_model : null;
-const drv = (result.drives && typeof result.drives === 'object') ? result.drives : null;
-
-const setPct = (elId, val) => {
-  const el = document.getElementById(elId);
-  if (!el) return;
-  const n = Number(val);
-  el.textContent = Number.isFinite(n) ? `${(n * 100).toFixed(1)}%` : '—';
-};
-
-if (sm) {
-  setPct(`sm-conf-${id}`, sm.confidence);
-  setPct(`sm-stab-${id}`, sm.stability);
-  setPct(`sm-plas-${id}`, sm.plasticity);
-  setPct(`sm-rel-${id}`, sm.reliability);
-}
-
-if (drv) {
-  setPct(`drv-stab-${id}`, drv.stability);
-  setPct(`drv-nov-${id}`, drv.novelty);
-  setPct(`drv-coh-${id}`, drv.coherence);
-  setPct(`drv-mas-${id}`, drv.mastery);
-}
     }
 
     function showGapVisualization(id, result) {
@@ -1277,17 +1230,6 @@ if (drv) {
       const le = (result && typeof result === 'object') ? (result.learning_event || null) : null;
 
       const wasAccurate = !!result.was_accurate;
-
-
-const goal = String(result.goal ?? (le && le.goal) ?? '—');
-const strategy = String(result.strategy ?? (le && le.strategy) ?? '—');
-const sm = (result.self_model && typeof result.self_model === 'object') ? result.self_model : null;
-const drv = (result.drives && typeof result.drives === 'object') ? result.drives : null;
-
-const fmtPct = (v) => {
-  const n = Number(v);
-  return Number.isFinite(n) ? `${(n * 100).toFixed(1)}%` : '—';
-};
 
       // Some backends return gap_magnitude=0 while still returning prediction/reality vectors.
       // Compute a fallback "prediction error" so the UI always reflects learning.
@@ -1367,13 +1309,6 @@ const fmtPct = (v) => {
               <div class="mono">&nbsp;&nbsp;Prediction Accuracy: ${acc.toFixed(1)}%</div>
               <div class="mono">&nbsp;&nbsp;State Evolution: ${sign}${Number(stateEv).toFixed(4)}</div>
 
-
-<div class="mono" style="margin-top:10px;"><strong>Cognition:</strong></div>
-<div class="mono">&nbsp;&nbsp;Goal: ${escapeHtml(goal)}</div>
-<div class="mono">&nbsp;&nbsp;Strategy: ${escapeHtml(strategy)}</div>
-<div class="mono">&nbsp;&nbsp;Self-model: C=${escapeHtml(fmtPct(sm && sm.confidence))} · S=${escapeHtml(fmtPct(sm && sm.stability))} · P=${escapeHtml(fmtPct(sm && sm.plasticity))} · R=${escapeHtml(fmtPct(sm && sm.reliability))}</div>
-<div class="mono">&nbsp;&nbsp;Drives: Stab=${escapeHtml(fmtPct(drv && drv.stability))} · Nov=${escapeHtml(fmtPct(drv && drv.novelty))} · Coh=${escapeHtml(fmtPct(drv && drv.coherence))} · Mas=${escapeHtml(fmtPct(drv && drv.mastery))}</div>
-
               <div class="mono" style="margin-top:10px;"><strong>Progress:</strong></div>
               <div class="mono">&nbsp;&nbsp;Total Experience: ${total !== null ? escapeHtml(String(total)) : '—'} events</div>
               <div class="mono">&nbsp;&nbsp;Meta-Learning: ${escapeHtml(String(metaLabel))} (${escapeHtml(String(metaCount))}/${escapeHtml(String(metaReq))} needed)</div>
@@ -1383,9 +1318,6 @@ const fmtPct = (v) => {
               <div class="mono">&nbsp;&nbsp;Accuracy: [${escapeHtml(fmtAccArr.join(', '))}]</div>
 
               <div class="pill-row" style="margin-top:10px;">
-
-${pill(`goal: ${goal}`)}
-${pill(`strategy: ${strategy}`)}
                 ${pill(`prediction_error: ${gap.toFixed(4)}`)}
                 ${pill(`state_delta: ${Number(stateEv).toFixed(4)}`)}
                 ${total !== null ? pill(`total_events: ${total}`) : ''}
@@ -1455,13 +1387,6 @@ ${pill(`strategy: ${strategy}`)}
     }
 
     function cssEscape(str) { return (str || '').replaceAll('"', '\\"'); }
-
-function formatPct(v) {
-  const n = Number(v);
-  if (!Number.isFinite(n)) return '—';
-  return `${(n * 100).toFixed(1)}%`;
-}
-
 
     function setNotesSelectedLabel() {
       const label = document.getElementById('notesSelectedLabel');
