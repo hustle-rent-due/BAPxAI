@@ -902,7 +902,7 @@
     const API = `${ORIGIN}/api`;
 
     // Public safety: hide internal vectors unless you explicitly enable dev mode
-    const DEV_MODE = new URLSearchParams(window.location.search).get('dev') === '1';
+    const DEV_MODE = false; // Production: never expose internal vectors client-side
 
     // IMPORTANT: Railway + Werkzeug often breaks the websocket upgrade path for Socket.IO.
     // Force long-polling to keep the live feed stable.
@@ -957,6 +957,16 @@
       notesCache[selectedSingle] = [note, ...existing].slice(0, 50);
       renderNotes(notesCache[selectedSingle]);
     });
+
+    // Fallback: if Socket.IO is disconnected, poll notes occasionally so the chat doesn't "stall"
+    setInterval(() => {
+      try {
+        if (selectedSingle && socket && socket.disconnected) {
+          reloadNotes();
+        }
+      } catch (e) {}
+    }, 10000);
+
 
     function updateStatus(connected) {
       const statusEl = document.querySelector('.status');
