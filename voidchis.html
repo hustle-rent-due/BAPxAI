@@ -748,6 +748,103 @@
       .concept-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
+  
+    /* Runtime Status (System View) */
+    .runtime-panel {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(37, 99, 235, 0.10));
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 18px 0 28px;
+    }
+
+    .runtime-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .runtime-title {
+      font-size: 14px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--void-green);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .runtime-title span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--void-green);
+      display: inline-block;
+      box-shadow: 0 0 18px rgba(16,185,129,0.35);
+    }
+
+    .runtime-subtitle {
+      font-size: 12px;
+      color: var(--void-text-light);
+      opacity: 0.9;
+    }
+
+    .runtime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .runtime-metric {
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 78px;
+    }
+
+    .runtime-label {
+      font-size: 11px;
+      color: var(--void-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+      opacity: 0.85;
+      font-weight: 600;
+    }
+
+    .runtime-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--void-text);
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      line-height: 1.1;
+    }
+
+    .runtime-value .unit {
+      font-size: 12px;
+      color: var(--void-text-light);
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    .runtime-note {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--void-text-light);
+      opacity: 0.85;
+    }
+
+    .pill.good { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.08); }
+    .pill.warn { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.08); }
+
   </style>
 </head>
 
@@ -808,6 +905,62 @@
         </div>
       </div>
     </div>
+
+    <!-- ===========================
+         SYSTEM VIEW (Runtime Status)
+         =========================== -->
+    <div class="runtime-panel" id="runtimePanel">
+      <div class="runtime-top">
+        <div>
+          <div class="runtime-title"><span class="dot"></span>PermaMind Runtime Status</div>
+          <div class="runtime-subtitle">System-level telemetry for the entire persistent agent fleet (not a single-session chat).</div>
+        </div>
+        <div class="pill-row" style="margin-top:0;">
+          <span class="pill good" id="rtBadgeMode">mode: production</span>
+          <span class="pill" id="rtBadgeTransport">transport: polling</span>
+          <span class="pill" id="rtBadgeBoot">boot: -</span>
+        </div>
+      </div>
+
+      <div class="runtime-grid">
+        <div class="runtime-metric">
+          <div class="runtime-label">Agents Alive</div>
+          <div class="runtime-value"><span id="rtAgentsAlive">-</span><span class="unit">instances</span></div>
+          <div class="runtime-note" id="rtAgentsNote">Independent, stateful identities with durable memory.</div>
+        </div>
+
+        <div class="runtime-metric">
+          <div class="runtime-label">Uptime (fleet)</div>
+          <div class="runtime-value"><span id="rtUptime">-</span><span class="unit"></span></div>
+          <div class="runtime-note">Continuous runtime since oldest agent creation timestamp.</div>
+        </div>
+
+        <div class="runtime-metric">
+          <div class="runtime-label">Learning Throughput</div>
+          <div class="runtime-value"><span id="rtLearningRate">-</span><span class="unit">events/min</span></div>
+          <div class="runtime-note">Derived from global learning events (when available).</div>
+        </div>
+
+        <div class="runtime-metric">
+          <div class="runtime-label">Avg Prediction Error</div>
+          <div class="runtime-value"><span id="rtAvgError">-</span><span class="unit"></span></div>
+          <div class="runtime-note">Population mean from recent learning events (derived).</div>
+        </div>
+
+        <div class="runtime-metric">
+          <div class="runtime-label">Fresh Updates</div>
+          <div class="runtime-value"><span id="rtFreshPct">-</span><span class="unit">%</span></div>
+          <div class="runtime-note">Percent of agents updated within last 15 minutes.</div>
+        </div>
+
+        <div class="runtime-metric">
+          <div class="runtime-label">Stale Agents</div>
+          <div class="runtime-value"><span id="rtStaleCount">-</span><span class="unit">agents</span></div>
+          <div class="runtime-note">Agents with no update in &gt; 6 hours (health signal).</div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="concept-section">
       <h2>Production Architecture</h2>
@@ -923,6 +1076,86 @@
     let notesCache = {};        // { voidchiId: [notes...] }
     let systemStartTime = null;
 
+
+    // ---------------- RUNTIME DERIVED METRICS (SYSTEM VIEW) ----------------
+    let lastGlobalStats = null;
+    const recentErrors = []; // rolling window of recent prediction errors (from learning events)
+
+    function pushRecentError(err) {
+      const n = Number(err);
+      if (!Number.isFinite(n)) return;
+      recentErrors.push(n);
+      while (recentErrors.length > 50) recentErrors.shift();
+    }
+
+    function mean(arr) {
+      if (!arr || arr.length === 0) return null;
+      let s = 0, c = 0;
+      for (const v of arr) {
+        const n = Number(v);
+        if (!Number.isFinite(n)) continue;
+        s += n; c += 1;
+      }
+      return c ? (s / c) : null;
+    }
+
+    function formatUptimeFromStart(startDate) {
+      if (!startDate) return '-';
+      const now = new Date();
+      const diffMs = now - startDate;
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      return `${days}d ${hours}h ${mins}m`;
+    }
+
+    function updateSystemView() {
+      const alive = Array.isArray(voidchis) ? voidchis.length : 0;
+      const elAlive = document.getElementById('rtAgentsAlive');
+      if (elAlive) elAlive.textContent = alive;
+
+      const elUptime = document.getElementById('rtUptime');
+      if (elUptime) elUptime.textContent = formatUptimeFromStart(systemStartTime);
+
+      const now = new Date();
+      let fresh = 0;
+      let stale = 0;
+      for (const v of (voidchis || [])) {
+        const t = v.updated_at ? new Date(v.updated_at) : null;
+        if (!t || Number.isNaN(t.getTime())) { stale += 1; continue; }
+        const ageMin = (now - t) / 60000;
+        if (ageMin <= 15) fresh += 1;
+        if (ageMin > 360) stale += 1; // 6 hours
+      }
+      const elFresh = document.getElementById('rtFreshPct');
+      const elStale = document.getElementById('rtStaleCount');
+      const pct = alive ? Math.round((fresh / alive) * 100) : 0;
+      if (elFresh) elFresh.textContent = alive ? pct : '-';
+      if (elStale) elStale.textContent = alive ? stale : '-';
+
+      const elLR = document.getElementById('rtLearningRate');
+      if (elLR) {
+        if (lastGlobalStats && typeof lastGlobalStats.total_learning_events === 'number' && systemStartTime) {
+          const mins = Math.max(1, (now - systemStartTime) / 60000);
+          const rate = lastGlobalStats.total_learning_events / mins;
+          elLR.textContent = rate.toFixed(2);
+        } else {
+          elLR.textContent = '-';
+        }
+      }
+
+      const elErr = document.getElementById('rtAvgError');
+      const m = mean(recentErrors);
+      if (elErr) elErr.textContent = (m === null) ? '-' : m.toFixed(4);
+
+      const bt = document.getElementById('rtBadgeTransport');
+      if (bt) bt.textContent = `transport: polling`;
+      const bb = document.getElementById('rtBadgeBoot');
+      const boot = document.getElementById('bootIdLabel')?.textContent || '-';
+      if (bb) bb.textContent = `boot: ${boot}`;
+    }
+
+
     // ---------------- SOCKET ----------------
     socket.on('connect', () => {
       console.log('✅ Connected');
@@ -995,6 +1228,7 @@
         }
 
         render();
+        updateSystemView();
         loadStats();
         setNotesSelectedLabel();
 
@@ -1021,6 +1255,7 @@
     }
 
     function updateStatsDisplay(stats) {
+      lastGlobalStats = stats || null;
       document.getElementById('total').textContent = stats.total_voidchis || 0;
       // backend exposes total_learning_events; keep the UI label "Learning Events"
       document.getElementById('gapsProcessed').textContent = stats.total_learning_events || 0;
@@ -1046,10 +1281,16 @@
       
       document.getElementById('runtimeLabel').textContent = 
         `${diffDays}d ${diffHours}h (${systemStartTime.toLocaleDateString()})`;
+    
+      updateSystemView();
     }
+
 
     // Update runtime every hour
     setInterval(updateRuntimeDisplay, 3600000);
+
+    // Update system view more frequently (fleet health)
+    setInterval(updateSystemView, 30000);
 
     // ---------------- RENDER ----------------
     function render() {
@@ -1188,6 +1429,8 @@
 
         updateVoidchiImmediately(id, result);
         showGapVisualization(id, result);
+        pushRecentError(result.gap_magnitude ?? result.gap);
+        updateSystemView();
 
         setTimeout(() => card.classList.remove('updating'), 900);
 
@@ -1639,6 +1882,8 @@
     // ---------------- STARTUP ----------------
     loadVoidchis();
     loadBootInfo();
+    // initial system view render (best-effort)
+    setTimeout(updateSystemView, 800);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -1652,4 +1897,3 @@
   </script>
 </body>
 </html>
-
