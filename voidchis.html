@@ -1774,7 +1774,7 @@
         if (data.ai_response) {
           notesCache[selectedSingle] = [data.ai_response, ...notesCache[selectedSingle]];
         }
-        notesCache[selectedSingle] = notesCache[selectedSingle].slice(0, 50);
+        notesCache[selectedSingle] = (Array.isArray(notesCache[selectedSingle]) ? notesCache[selectedSingle] : []).slice(0, 50);
         renderNotes(notesCache[selectedSingle]);
 
         if (data.server_boot_id) {
