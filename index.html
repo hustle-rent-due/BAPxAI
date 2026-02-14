@@ -27,6 +27,7 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      transition: background 0.5s ease;
     }
 
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -381,6 +382,7 @@
     </div>
   </footer>
 
+  <!-- Existing smooth scroll script + Easter eggs -->
   <script>
     // smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -392,6 +394,34 @@
         }
       });
     });
+
+    // --- EASTER EGG 1: Konami Code ---
+    (function() {
+      const konami = [38,38,40,40,37,39,37,39,66,65];
+      let index = 0;
+      document.addEventListener('keydown', function(e) {
+        if (e.keyCode === konami[index]) {
+          index++;
+          if (index === konami.length) {
+            // Trigger the egg
+            alert('🕹️ PermaMind: Persistent memory unlocked! Now go build something that lasts.');
+            // Visual feedback: slightly darker background for 2 seconds
+            document.body.style.backgroundColor = '#050508';
+            setTimeout(() => {
+              document.body.style.backgroundColor = '';
+            }, 2000);
+            // Also log a secret in console
+            console.log('%c🧠 You activated the Konami code! Persistence level: OVER 9000', 'font-size:14px; color:#10B981;');
+            index = 0;
+          }
+        } else {
+          index = 0;
+        }
+      });
+    })();
+
+    // --- EASTER EGG 2: Console message (always visible) ---
+    console.log('%c🔍 PermaMind says: "Try the Konami code if you dare... ↑↑↓↓←→←→BA"', 'font-size:14px; color:#6366F1;');
   </script>
 </body>
 </html>
