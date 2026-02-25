@@ -1781,7 +1781,7 @@
           document.getElementById('bootIdLabel').textContent = `${data.server_boot_id}`;
         }
         
-        console.log('✅ AI Response:', data.ai_response.content);
+        console.log('✅ AI Response:', data.ai_response?.content);
 
       } catch (e) {
         console.error('Chat error:', e);
