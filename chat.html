@@ -285,7 +285,7 @@
         </div>
 
         <div class="card">
-            <div class="section-title">📈 THERMODYNAMIC DRIFT · baseline rising (Φ₀)</div>
+            <div class="section-title">📈 STATE HISTORY · Φ₀ over real engine responses</div>
             <div class="graph-box">
                 <canvas id="driftChartCanvas" width="600" height="150" style="width:100%; height:150px"></canvas>
             </div>
@@ -296,7 +296,7 @@
     <!-- RIGHT COLUMN -->
     <div class="right-stack">
         <div class="card" style="text-align: center;">
-            <div class="section-title">⚡ ENTROPY / NOVELTY RESPONSE</div>
+            <div class="section-title">⚡ NOVELTY (distance from baseline)</div>
             <div class="gauge-container">
                 <canvas id="entropyCanvas" width="160" height="160"></canvas>
                 <div class="gauge-label" id="entropyValueDisplay">novelty: 0.00</div>
@@ -314,14 +314,13 @@
             <div class="section-title">⚙️ COGNITION SUBSTRATE IDENTITY</div>
             <div class="explanation-box">
                 “This is not a transformer.<br>
-                No tokens.<br>
-                No embeddings.<br>
-                No context window.<br>
-                This is a dynamical cognition engine with persistent internal state.<br>
-                Each input updates the system’s thermodynamic state vector.<br>
-                Repeated inputs cause attractor collapse.<br>
-                Novel inputs cause state jumps.<br>
-                The system maintains identity across the entire session.”
+                No tokens, no context window — text is converted to a 3-number vector by a deterministic formula, not a language model.<br>
+                (Optional: the third number can use a real sentence-embedding model when enabled — see engine docs.)<br>
+                This is a persistent state engine: each session's numeric state is saved and reloaded across separate calls.<br>
+                Each input deterministically updates the reality vector — the same input always produces the same vector.<br>
+                Identical repeated input produces zero change in the reality vector itself (verified).<br>
+                The engine's internal prediction state can still drift between calls due to live system factors — the reality vector and the prediction are not the same thing.<br>
+                Whether this vector space captures anything semantically meaningful is not yet established — see the project's published methodology notes.”
             </div>
         </div>
 
@@ -343,187 +342,37 @@
     // However modular generate script.js content.
     // Entire simulation engine & UI
     (function(){
-        // ---------- DYNAMICAL COGNITION ENGINE (client-side physics, deterministic) ----------
-        // persistent internal state: 3D vector, previous input text, history
-        let stateVector = [0.42, 0.31, 0.67];   // initial chaotic attractor
-        let prevInputText = "";
-        let entropyValue = 0.43;               // 0..1
-        
+        // ---------- LIVE STATE (populated only from the real ThermoMind engine) ----------
+        // No local simulation, no fake fallback. If the engine is unreachable,
+        // the UI shows an explicit error state instead of fabricating numbers.
+        let stateVector = null;   // null until the first real engine response arrives
+        let noveltyValue = null;  // this is what the UI calls "Entropy" — see note below.
+                                   // It is NOT Shannon entropy. It's the engine's `novelty`
+                                   // field: Euclidean distance of the reality vector from a
+                                   // fixed baseline [0.5, 0.5, 0.5]. Labeled accurately in
+                                   // the UI as "Novelty" rather than "Entropy" (see below).
+
         // history of state vectors for attractor & drift graphs (max 50)
         let stateHistory = [];     // store clones of state vectors
         let maxHistory = 45;
-        
+
         // timeline entries storage
         let timelineEntries = [];
-        
+
         // last vector for delta calculation
-        let lastLoggedVector = [...stateVector];
+        let lastLoggedVector = null;
         
-        // helper: string similarity (novelty detection: repeats → attractor collapse)
-        function stringSimilarity(a, b) {
-            if (a === b) return 1.0;
-            if (!a || !b) return 0.0;
-            const len = Math.max(a.length, b.length);
-            if (len === 0) return 1.0;
-            let matches = 0;
-            const minLen = Math.min(a.length, b.length);
-            for (let i = 0; i < minLen; i++) {
-                if (a[i] === b[i]) matches++;
-            }
-            // robust fuzzy ratio + case normalization
-            const baseSim = matches / len;
-            const setSim = (new Set(a.split('')).size + new Set(b.split('')).size) / (2*Math.max(1, new Set(a+b).size));
-            return Math.min(1.0, (baseSim * 0.6 + setSim * 0.4));
-        }
-        
-        // attractor fixed point (collapse basin)
-        const ATTRACTOR_POINT = [0.25, 0.45, 0.72];
-        
-        // apply attractor collapse based on repetition factor & novelty
-        function applyAttractorCollapse(currentVec, similarityScore) {
-            let newVec = [...currentVec];
-            // if high similarity (repetition / semantic repeat) → attractor pull
-            if (similarityScore > 0.68) {
-                const strength = Math.min(0.65, 0.3 + similarityScore * 0.4);
-                for (let i = 0; i < 3; i++) {
-                    newVec[i] = newVec[i] * (1 - strength) + ATTRACTOR_POINT[i] * strength;
-                }
-            }
-            // for moderate similarity, slight convergence
-            else if (similarityScore > 0.4) {
-                const weakPull = 0.12;
-                for (let i = 0; i < 3; i++) {
-                    newVec[i] = newVec[i] * (1 - weakPull) + ATTRACTOR_POINT[i] * weakPull;
-                }
-            }
-            return newVec;
-        }
-        
-        // novelty response: jump when input is fresh, divergence
-        function noveltyJump(currentVec, noveltyFactor, rawInputHash) {
-            let newVec = [...currentVec];
-            // high novelty = strong jump, exploring new regions
-            const jumpMagnitude = Math.min(0.48, noveltyFactor * 0.65);
-            // pseudo-random but deterministic based on input string & prior state
-            let seed = 0;
-            for (let i = 0; i < rawInputHash.length; i++) seed += rawInputHash.charCodeAt(i);
-            const r1 = Math.sin(seed * 0.317) * 0.5 + 0.5;
-            const r2 = Math.cos(seed * 0.937) * 0.5 + 0.5;
-            const r3 = Math.sin(seed * 1.233) * 0.5 + 0.5;
-            const dir = [(r1 - 0.5)*2, (r2 - 0.5)*2, (r3 - 0.5)*2];
-            if (noveltyFactor > 0.55) {
-                for (let i = 0; i < 3; i++) {
-                    newVec[i] += dir[i] * jumpMagnitude * (0.8 + noveltyFactor*0.5);
-                }
-            }
-            // boundary constraints [0.05, 0.95] to keep visible range
-            for (let i=0;i<3;i++) {
-                newVec[i] = Math.min(0.95, Math.max(0.05, newVec[i]));
-            }
-            return newVec;
-        }
-        
-        // entropy calculation based on novelty & repetition history
-        function computeEntropy(similarityScore, isFirstInput) {
-            if (isFirstInput) return 0.78;
-            let rawEntropy = 1.0 - similarityScore;   // high novelty = max entropy
-            // dynamic modulation, spikes on new inputs, drops on repeats
-            rawEntropy = Math.pow(rawEntropy, 0.9);
-            // smoothing: entropy drifts towards baseline if very repetitive
-            if (similarityScore > 0.85) rawEntropy = rawEntropy * 0.35;
-            if (similarityScore > 0.95) rawEntropy *= 0.2;
-            return Math.min(0.96, Math.max(0.08, rawEntropy));
-        }
-        
-        // --- main engine: process user input & return new state vector & entropy ---
-        function processUserInput(inputText) {
-            const isFirst = prevInputText === "";
-            let similarity = 0.0;
-            if (!isFirst) {
-                similarity = stringSimilarity(prevInputText.toLowerCase(), inputText.toLowerCase());
-            }
-            
-            // novelty factor: 1 - similarity, but clamped
-            let novelty = isFirst ? 0.85 : (1.0 - similarity);
-            novelty = Math.min(0.99, Math.max(0.05, novelty));
-            
-            // 1) attractor collapse effect (repetition drives convergence)
-            let newVec = applyAttractorCollapse(stateVector, similarity);
-            // 2) novelty driven jump
-            newVec = noveltyJump(newVec, novelty, inputText);
-            
-            // 3) small thermodynamic drift incorporated on update? no, drift will run separately (thermo drift meter)
-            // but we also preserve identity.
-            
-            // ensure range
-            for (let i=0; i<3; i++) newVec[i] = Math.min(0.96, Math.max(0.04, newVec[i]));
-            
-            // compute new entropy
-            let newEntropy = computeEntropy(similarity, isFirst);
-            
-            // delta from previous vector before update
-            const deltaNorm = Math.hypot(newVec[0] - stateVector[0], newVec[1] - stateVector[1], newVec[2] - stateVector[2]);
-            
-            // update global state
-            const oldVectorForDelta = [...stateVector];
-            stateVector = newVec;
-            entropyValue = newEntropy;
-            
-            // timeline entry
-            const entry = {
-                timestamp: Date.now(),
-                input: inputText.length > 48 ? inputText.slice(0,45)+"..." : inputText,
-                vector: [...stateVector],
-                delta: deltaNorm,
-                entropy: entropyValue
-            };
-            timelineEntries.unshift(entry);
-            if (timelineEntries.length > 27) timelineEntries.pop();
-            renderTimeline();
-            
-            // store previous input text
-            prevInputText = inputText;
-            
-            // push state into history (for graphs)
-            stateHistory.push([...stateVector]);
-            if (stateHistory.length > maxHistory) stateHistory.shift();
-            
-            // update UI components
-            updateBars();
-            updateAttractorChart();
-            updateDriftChart();
-            updateEntropyGauge();
-            
-            return { vector: stateVector, entropy: entropyValue, delta: deltaNorm };
-        }
-        
-        // ---- thermodynamic drift: continuously updates Φ₀ (index 0) baseline rising ----
-        let driftInterval = null;
-        function startThermodynamicDrift() {
-            if (driftInterval) clearInterval(driftInterval);
-            driftInterval = setInterval(() => {
-                // slow drifting: baseline rising predominantly + tiny stochastic
-                let driftDelta = 0.0032;   // positive bias rising
-                // add small random walk ±0.0015 for realistic
-                driftDelta += (Math.random() - 0.45) * 0.0028;
-                let newVal = stateVector[0] + driftDelta;
-                newVal = Math.min(0.94, Math.max(0.06, newVal));
-                if (Math.abs(newVal - stateVector[0]) > 0.0001) {
-                    stateVector[0] = newVal;
-                    // update history and graphs
-                    stateHistory.push([...stateVector]);
-                    if (stateHistory.length > maxHistory) stateHistory.shift();
-                    updateBars();
-                    updateAttractorChart();
-                    updateDriftChart();
-                    // entropy unchanged, timeline not polluted
-                }
-            }, 3800);
-        }
+        // ---- thermodynamic drift chart: plots the REAL history of engine
+        // responses over time. No synthetic/simulated movement — this only
+        // updates when a real response comes back from callStateUpdate().
+        // The previous version of this function injected a hardcoded
+        // positive bias every 3.8 seconds regardless of engine state or
+        // user input, which is why the chart always trended upward. Removed.
         
         // ---------- UI rendering ----------
         // bars
         function updateBars() {
+            if (!stateVector) return;
             const bar0 = document.getElementById('bar0');
             const bar1 = document.getElementById('bar1');
             const bar2 = document.getElementById('bar2');
@@ -631,10 +480,8 @@
         }
         
         function updateEntropyGauge() {
-            if (!ctxGauge) return;
-            const target = entropyValue;
-            let current = target;
-            drawEntropyGauge(target);
+            if (!ctxGauge || noveltyValue === null) return;
+            drawEntropyGauge(noveltyValue);
         }
         
         // timeline rendering
@@ -648,11 +495,11 @@
             logDiv.innerHTML = timelineEntries.map(entry => {
                 const vecStr = `[${entry.vector[0].toFixed(4)}, ${entry.vector[1].toFixed(4)}, ${entry.vector[2].toFixed(4)}]`;
                 const deltaFormatted = entry.delta.toFixed(5);
-                const entropyFormatted = entry.entropy.toFixed(4);
+                const noveltyFormatted = entry.novelty.toFixed(4);
                 return `<div class="log-entry">
                     <span class="input-highlight">⤷ “${escapeHtml(entry.input)}”</span><br>
                     <span class="vector-mono">| vector ${vecStr}</span><br>
-                    <span>Δ change: <span class="delta-val">${deltaFormatted}</span> &nbsp;| Entropy: <span class="entropy-val">${entropyFormatted}</span></span>
+                    <span>Δ change: <span class="delta-val">${deltaFormatted}</span> &nbsp;| Novelty: <span class="entropy-val">${noveltyFormatted}</span></span>
                 </div>`;
             }).join('');
         }
@@ -663,73 +510,68 @@
         const ENGINE_URL = "https://thermomind-production.up.railway.app";
 
         async function callStateUpdate(message) {
-            try {
-                // Hit the live engine with the message as a query param
-                const res = await fetch(`${ENGINE_URL}/public/run?message=${encodeURIComponent(message)}`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
-                if (!res.ok) throw new Error(`Engine HTTP ${res.status}`);
-                const data = await res.json();
+            const res = await fetch(`${ENGINE_URL}/public/run?message=${encodeURIComponent(message)}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+            if (!res.ok) throw new Error(`Engine HTTP ${res.status}`);
+            const data = await res.json();
 
-                // Map engine response to vector + entropy
-                // reality_vector is the 3D state, gap is informational deficit (D), novelty is entropy proxy
-                const vec = Array.isArray(data.reality_vector) ? data.reality_vector : [data.reality_vector, 0.5, data.gap || 0.1];
-                const entropy = typeof data.novelty === "number" ? data.novelty : (typeof data.gap === "number" ? data.gap : 0.5);
+            if (!Array.isArray(data.reality_vector) || data.reality_vector.length !== 3) {
+                throw new Error("Engine response missing a valid 3-element reality_vector — refusing to display fabricated data.");
+            }
 
-                // Still run local attractor/novelty logic for visual richness
-                // but seed it with real engine values
-                stateVector = [
-                    Math.min(0.95, Math.max(0.05, vec[0])),
-                    Math.min(0.95, Math.max(0.05, vec.length > 1 ? vec[1] : 0.5)),
-                    Math.min(0.95, Math.max(0.05, vec.length > 2 ? vec[2] : data.surplus_energy || 0.3))
-                ];
-                entropyValue = Math.min(0.96, Math.max(0.08, entropy));
+            const vec = data.reality_vector;
+            // "novelty" here is the engine's own novelty field: Euclidean
+            // distance of the reality vector from a fixed baseline
+            // [0.5, 0.5, 0.5]. It is NOT Shannon entropy. Displayed and
+            // labeled as "Novelty" throughout the UI, not "Entropy".
+            const novelty = typeof data.novelty === "number" ? data.novelty : null;
+            if (novelty === null) {
+                throw new Error("Engine response missing novelty field — refusing to display fabricated data.");
+            }
 
-                // delta from last vector
-                const deltaNorm = Math.hypot(
+            stateVector = [
+                Math.min(0.95, Math.max(0.05, vec[0])),
+                Math.min(0.95, Math.max(0.05, vec[1])),
+                Math.min(0.95, Math.max(0.05, vec[2]))
+            ];
+            noveltyValue = Math.min(0.96, Math.max(0.0, novelty));
+
+            // delta from last vector — only meaningful once we have a
+            // real previous vector to compare against.
+            const deltaNorm = lastLoggedVector
+                ? Math.hypot(
                     stateVector[0] - lastLoggedVector[0],
                     stateVector[1] - lastLoggedVector[1],
                     stateVector[2] - lastLoggedVector[2]
-                );
+                  )
+                : 0;
 
-                // log to timeline
-                const entry = {
-                    timestamp: Date.now(),
-                    input: message.length > 48 ? message.slice(0,45)+"..." : message,
-                    vector: [...stateVector],
-                    delta: deltaNorm,
-                    entropy: entropyValue
-                };
-                timelineEntries.unshift(entry);
-                if (timelineEntries.length > 27) timelineEntries.pop();
-                renderTimeline();
+            const entry = {
+                timestamp: Date.now(),
+                input: message.length > 48 ? message.slice(0,45)+"..." : message,
+                vector: [...stateVector],
+                delta: deltaNorm,
+                novelty: noveltyValue
+            };
+            timelineEntries.unshift(entry);
+            if (timelineEntries.length > 27) timelineEntries.pop();
+            renderTimeline();
 
-                // push to history
-                lastLoggedVector = [...stateVector];
-                prevInputText = message;
-                stateHistory.push([...stateVector]);
-                if (stateHistory.length > maxHistory) stateHistory.shift();
+            lastLoggedVector = [...stateVector];
+            stateHistory.push([...stateVector]);
+            if (stateHistory.length > maxHistory) stateHistory.shift();
 
-                updateBars();
-                updateAttractorChart();
-                updateDriftChart();
-                updateEntropyGauge();
+            updateBars();
+            updateAttractorChart();
+            updateDriftChart();
+            updateEntropyGauge();
 
-                return { vector: stateVector, entropy: entropyValue };
+            const el = document.getElementById('engineStatus');
+            if (el) { el.textContent = "⚡ ThermoMind engine LIVE"; el.style.color = "#4affff"; }
 
-            } catch (err) {
-                // Fallback to local simulation if engine unreachable
-                console.warn("[ThermoMind] Engine unreachable, falling back to local sim:", err.message);
-                const statusEl = document.getElementById('engineStatus');
-                if (statusEl) { statusEl.textContent = "⚠ local sim (engine offline)"; statusEl.style.color = "#ff9944"; }
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        const result = processUserInput(message);
-                        resolve({ vector: result.vector, entropy: result.entropy });
-                    }, 80);
-                });
-            }
+            return { vector: stateVector, novelty: noveltyValue };
         }
         
         // ---- send handler ----
@@ -738,17 +580,20 @@
             const rawMsg = inputField.value.trim();
             if (!rawMsg) return;
             inputField.value = '';
-            // disable button briefly
             const btn = document.getElementById('sendBtn');
             btn.disabled = true;
             btn.innerText = '⌛';
+            const el = document.getElementById('engineStatus');
             try {
-                const response = await callStateUpdate(rawMsg);
-                // update UI already via processUserInput internal updates, but additionally ensure bar / gauge / log updated and fetch extra;
-                // processUserInput already called within callStateUpdate, so all charts, timeline, bars refreshed.
-                // just to be safe force extra sync: 
-                updateBars(); updateAttractorChart(); updateDriftChart(); updateEntropyGauge();
-            } catch(e) { console.warn(e); }
+                await callStateUpdate(rawMsg);
+            } catch(e) {
+                console.error("[ThermoMind] Engine call failed:", e.message);
+                if (el) {
+                    el.textContent = "⚠ ENGINE UNREACHABLE — no data shown is fabricated. Try again.";
+                    el.style.color = "#ff4444";
+                    el.style.fontWeight = "bold";
+                }
+            }
             finally {
                 btn.disabled = false;
                 btn.innerText = '⟳ SEND';
@@ -756,14 +601,12 @@
             }
         }
         
-        // push initial state to history
+        // no synthetic initial state — history starts empty until the
+        // first real response arrives from the engine
         function initHistory() {
-            stateHistory.push([...stateVector]);
-            lastLoggedVector = [...stateVector];
             updateBars();
             if (attractorChart) updateAttractorChart();
             if (driftChart) updateDriftChart();
-            updateEntropyGauge();
         }
         
         window.onload = () => {
@@ -772,11 +615,9 @@
             entropyCanvas.width = 160; entropyCanvas.height = 160;
             initCharts();
             initHistory();
-            startThermodynamicDrift();
             
             document.getElementById('sendBtn').addEventListener('click', onSendMessage);
             document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') onSendMessage(); });
-            updateEntropyGauge();
 
             // ping engine on load
             fetch("https://thermomind-production.up.railway.app/public/run")
@@ -787,7 +628,11 @@
                 })
                 .catch(() => {
                     const el = document.getElementById('engineStatus');
-                    if (el) { el.textContent = "⚠ engine offline · local sim active"; el.style.color = "#ff9944"; }
+                    if (el) {
+                        el.textContent = "⚠ ENGINE UNREACHABLE — this demo shows no fabricated data. Check the API is running.";
+                        el.style.color = "#ff4444";
+                        el.style.fontWeight = "bold";
+                    }
                 });
         };
     })();
